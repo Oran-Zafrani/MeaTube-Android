@@ -70,6 +70,13 @@
                 android:text="Upload Picture"
                 android:layout_marginBottom="16dp" />
 
+            <ImageView
+                android:id="@+id/ivSelectedImage"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop" />
+
             <Button
                 android:id="@+id/btnSignUp"
                 android:layout_width="match_parent"
