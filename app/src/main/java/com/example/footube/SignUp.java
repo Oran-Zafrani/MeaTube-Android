@@ -2,6 +2,7 @@ package com.example.footube;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,12 +10,12 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 public class SignUp extends AppCompatActivity {
 
@@ -83,8 +84,13 @@ public class SignUp extends AppCompatActivity {
 //            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(intent, CAMERA_REQUEST_CODE);
         } catch (Exception e) {
-            ActivityCompat.requestPermissions(SignUp.this, new String[] {android.Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
-            Toast.makeText(this, "no camera", Toast.LENGTH_SHORT).show();
+            ActivityCompat.requestPermissions(SignUp.this, new String[]
+                    {android.Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
+                    == PackageManager.PERMISSION_DENIED){
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, CAMERA_REQUEST_CODE);
+            }
         }
     }
 
@@ -93,7 +99,7 @@ public class SignUp extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            if (requestCode == CAMERA_REQUEST_CODE) {
                 Bitmap userphoto = (Bitmap) data.getExtras().get("data");
                 ImageView imageV = findViewById(R.id.ivSelectedImage);
                 imageV.setImageBitmap(userphoto);
