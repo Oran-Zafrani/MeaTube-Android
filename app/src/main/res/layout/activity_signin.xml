@@ -22,7 +22,7 @@
             android:textStyle="bold"
             android:layout_marginBottom="24dp" />
 
-        <TextView
+        <EditText
             android:id="@+id/tvUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
             android:layout_marginBottom="16dp"
             android:inputType="text" />
 
-        <TextView
+        <EditText
             android:id="@+id/tvPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -64,6 +64,16 @@
             android:textColor="@android:color/holo_blue_light"
             android:clickable="true"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/errorTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Password is incorrect"
+            android:textColor="#FF0000"
+            android:visibility="gone"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

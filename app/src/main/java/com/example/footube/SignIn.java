@@ -10,9 +10,12 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import java.util.Objects;
+
 public class SignIn extends AppCompatActivity {
     private static final String PREFS_NAME = "theme_prefs";
     private static final String PREF_DARK_MODE = "dark_mode";
+    UserManager userManager = new UserManager();
     TextView linkToSignUp;
     Button login;
     @Override
@@ -23,9 +26,6 @@ public class SignIn extends AppCompatActivity {
         Intent SignUpintent = new Intent(this, SignUp.class);
         linkToSignUp = findViewById(R.id.tvSignUpLink);
 
-        Intent SignInintent = new Intent(this, MoviesList.class);
-        login = findViewById(R.id.btnLogin);
-
         linkToSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -33,12 +33,28 @@ public class SignIn extends AppCompatActivity {
             }
         });
 
+        Intent SignInintent = new Intent(this, MoviesList.class);
+        login = findViewById(R.id.btnLogin);
+        TextView username = findViewById(R.id.tvUsername);
+        TextView password = findViewById(R.id.tvPassword);
+        TextView errorTextView = findViewById(R.id.errorTextView);
+
+        String user = username.getText().toString();
+        String pass = password.getText().toString();
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(SignInintent);
+
+                if (CorrectSignIn(user,pass))
+                    startActivity(SignInintent);
+                else
+                    errorTextView.setVisibility(View.VISIBLE);
             }
         });
+
+
+        //dark mode
 
         Button themeToggleButton = findViewById(R.id.btnDarkMode);
         themeToggleButton.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +83,13 @@ public class SignIn extends AppCompatActivity {
 
         // Recreate activity to apply the new theme
         recreate();
+    }
+
+
+    private boolean CorrectSignIn(String user, String password)
+    {
+        String pass =  userManager.getPassword(user);
+        return Objects.equals(pass, password);
     }
 
 }
