@@ -1,30 +1,32 @@
 package com.example.footube;
 
 public class User {
-    private String id;
-    private String name;
+    private String username;
+    private String displayName;
     private String password;
+    private String image;
 
-    public User(String id, String name, String password) {
-        this.id = id;
-        this.name = name;
+    public User(String username, String displayName, String password, String image) {
+        this.username = username;
+        this.displayName = displayName;
         this.password = password;
+        this.image = image;
     }
 
-    public String getId() {
-        return id;
+    public String getUsername() {
+        return username;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getName() {
-        return name;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public String getPassword() {
@@ -35,12 +37,21 @@ public class User {
         this.password = password;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     @Override
     public String toString() {
         return "User{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
+                "username='" + username + '\'' +
+                ", displayName='" + displayName + '\'' +
                 ", password='" + password + '\'' +
+                ", image='" + image + '\'' +
                 '}';
     }
 }

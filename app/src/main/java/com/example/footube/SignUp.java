@@ -40,11 +40,11 @@ public class SignUp extends AppCompatActivity {
             }
         });
 
+        Intent SignInintent = new Intent(this, SignIn.class);
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle sign up logic
-                // e.g., validate inputs, register user, etc.
+                startActivity(SignInintent);
             }
         });
     }

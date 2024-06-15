@@ -45,7 +45,7 @@ public class SignIn extends AppCompatActivity {
                 String user = username.getText().toString();
                 String pass = password.getText().toString();
 
-                if (userManager.CorrectSignIn(user,pass))
+                if (userManager.correctSignIn(user,pass))
                     startActivity(SignInintent);
                 else
                     errorTextView.setVisibility(View.VISIBLE);
