@@ -3,8 +3,10 @@ package com.example.footube;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +25,7 @@ public class SignIn extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
 
+
         Intent SignUpintent = new Intent(this, SignUp.class);
         linkToSignUp = findViewById(R.id.tvSignUpLink);
 
@@ -35,16 +38,15 @@ public class SignIn extends AppCompatActivity {
 
         Intent SignInintent = new Intent(this, MoviesList.class);
         login = findViewById(R.id.btnLogin);
-        TextView username = findViewById(R.id.tvUsername);
-        TextView password = findViewById(R.id.tvPassword);
+        EditText username = findViewById(R.id.tvUsername);
+        EditText password = findViewById(R.id.tvPassword);
         TextView errorTextView = findViewById(R.id.errorTextView);
-
-        String user = username.getText().toString();
-        String pass = password.getText().toString();
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String user = username.getText().toString();
+                String pass = password.getText().toString();
 
                 if (CorrectSignIn(user,pass))
                     startActivity(SignInintent);
@@ -88,7 +90,9 @@ public class SignIn extends AppCompatActivity {
 
     private boolean CorrectSignIn(String user, String password)
     {
+
         String pass =  userManager.getPassword(user);
+        Log.d("login", "passwords: " + pass + " " + password);
         return Objects.equals(pass, password);
     }
 

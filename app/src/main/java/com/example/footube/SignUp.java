@@ -92,7 +92,7 @@ public class SignUp extends AppCompatActivity {
                 startActivityForResult(intent, CAMERA_REQUEST_CODE);
             }
         }
-    }
+    }   
 
 
     @Override

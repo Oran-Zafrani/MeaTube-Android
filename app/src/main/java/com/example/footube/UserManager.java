@@ -8,6 +8,7 @@ public class UserManager {
 
     public UserManager() {
         userMap = new HashMap<>();
+        userMap.put("bar", "123");
     }
 
     // Add a user to the map

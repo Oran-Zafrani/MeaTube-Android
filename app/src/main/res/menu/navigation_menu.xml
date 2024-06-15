@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/beef"
+        android:title="Beef"/>
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/chicken"
+        android:title="Chicken"/>
+</menu>
