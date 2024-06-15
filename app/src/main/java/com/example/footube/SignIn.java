@@ -3,7 +3,6 @@ package com.example.footube;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,8 +10,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-
-import java.util.Objects;
 
 public class SignIn extends AppCompatActivity {
     private static final String PREFS_NAME = "theme_prefs";
@@ -48,7 +45,7 @@ public class SignIn extends AppCompatActivity {
                 String user = username.getText().toString();
                 String pass = password.getText().toString();
 
-                if (CorrectSignIn(user,pass))
+                if (userManager.CorrectSignIn(user,pass))
                     startActivity(SignInintent);
                 else
                     errorTextView.setVisibility(View.VISIBLE);
@@ -86,14 +83,4 @@ public class SignIn extends AppCompatActivity {
         // Recreate activity to apply the new theme
         recreate();
     }
-
-
-    private boolean CorrectSignIn(String user, String password)
-    {
-
-        String pass =  userManager.getPassword(user);
-        Log.d("login", "passwords: " + pass + " " + password);
-        return Objects.equals(pass, password);
-    }
-
 }

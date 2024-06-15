@@ -2,6 +2,7 @@ package com.example.footube;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class UserManager {
     private Map<String, String> userMap;
@@ -41,5 +42,11 @@ public class UserManager {
         return "UserManager{" +
                 "userMap=" + userMap +
                 '}';
+    }
+
+    public boolean CorrectSignIn(String user, String password)
+    {
+        String pass =  getPassword(user);
+        return Objects.equals(pass, password);
     }
 }
