@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 public class MoviesList extends AppCompatActivity {
     TextView login;
     private DrawerLayout drawerLayout;
@@ -19,6 +21,20 @@ public class MoviesList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movies_list);
+
+//        Button btnAddMovie = findViewById(R.id.btnAddMovie);
+//        btnAddMovie.setOnClickListener(view -> {
+//            Intent intent = new Intent(this, AddMovie.class);
+//            startActivity(intent);
+//        });
+
+        FloatingActionButton btnAddMovie = findViewById(R.id.btnAddMovie);
+
+        btnAddMovie.setOnClickListener(view -> {
+            // Create an Intent to start the new activity
+            Intent intent = new Intent(this, AddMovie.class);
+            startActivity(intent);
+        });
 
 
         drawerLayout = findViewById(R.id.drawer_layout);

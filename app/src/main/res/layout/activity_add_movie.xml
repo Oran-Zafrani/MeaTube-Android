@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddMovie">
+
+    <!-- Header -->
+    <ImageView
+        android:id="@+id/meatube_logo"
+        android:layout_width="130dp"
+        android:layout_height="50dp"
+        android:src="@drawable/meatube_logo_with_text_removebg_preview"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerInside"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tvTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Movie"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/meatube_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Movie Name EditText -->
+    <EditText
+        android:id="@+id/editTextMovieName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Movie Name"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        app:layout_constraintHorizontal_bias="0.5"/>
+
+    <!-- Movie Description EditText -->
+    <EditText
+        android:id="@+id/editTextMovieDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Movie Description"
+        android:padding="16dp"
+        android:inputType="textMultiLine"
+        android:gravity="top"
+        app:layout_constraintTop_toBottomOf="@id/editTextMovieName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintHorizontal_bias="0.5"/>
+
+    <!-- View for Uploaded Movie -->
+    <ImageView
+        android:id="@+id/imageViewUploadedMovie"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:src="@drawable/beef"
+        android:scaleType="fitCenter"
+        app:layout_constraintTop_toBottomOf="@id/editTextMovieDescription"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Upload Button -->
+    <Button
+        android:id="@+id/buttonUploadMovie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload Movie"
+        app:layout_constraintTop_toBottomOf="@id/imageViewUploadedMovie"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        app:layout_constraintHorizontal_bias="0.5"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

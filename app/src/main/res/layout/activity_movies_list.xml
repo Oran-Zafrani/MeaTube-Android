@@ -104,6 +104,17 @@
                 tools:listitem="@layout/item_movie"/>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnAddMovie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/add_new_item"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="10pt"
+            android:backgroundTint="@color/bright_red"
+            android:src="@drawable/baseline_add"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- NavigationView for the side menu -->
