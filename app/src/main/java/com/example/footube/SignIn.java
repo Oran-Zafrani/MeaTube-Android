@@ -33,7 +33,7 @@ public class SignIn extends AppCompatActivity {
             }
         });
 
-        Intent SignInIntent = new Intent(this, MoviesList.class);
+        Intent MoviesListIntent = new Intent(this, MoviesList.class);
         login = findViewById(R.id.btnLogin);
         EditText username = findViewById(R.id.tvUsername);
         EditText password = findViewById(R.id.tvPassword);
@@ -46,7 +46,9 @@ public class SignIn extends AppCompatActivity {
                 String pass = password.getText().toString();
 
                 if (userManager.correctSignIn(user, pass)) {
-                    startActivity(SignInIntent);
+                    User userInstance = userManager.getUser(user);
+                    MoviesListIntent.putExtra("user", userInstance);
+                    startActivity(MoviesListIntent);
                 } else {
                     errorTextView.setVisibility(View.VISIBLE);
                 }

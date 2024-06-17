@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.io.ByteArrayOutputStream;
+
 public class SignUp extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -25,6 +28,7 @@ public class SignUp extends AppCompatActivity {
 
     private static final int CAMERA_REQUEST_CODE = 22;
     private Uri imageUri;
+    private String imagePath;
     private ImageView ivSelectedImage;
 
     UserManager userManager = UserManager.getInstance(); // Get the singleton instance
@@ -58,7 +62,7 @@ public class SignUp extends AppCompatActivity {
                 String pass = password.getText().toString();
                 String image = imageUri != null ? imageUri.toString() : "default_profile.jpg";
 
-                userManager.addUser(user, display, pass, image);
+                userManager.addUser(user, display, pass, imagePath);
                 startActivity(SignInIntent);
             }
         });
@@ -110,11 +114,19 @@ public class SignUp extends AppCompatActivity {
             if (requestCode == CAMERA_REQUEST_CODE) {
                 Bitmap userphoto = (Bitmap) data.getExtras().get("data");
                 ivSelectedImage.setImageBitmap(userphoto);
+                imagePath = bitmapToBase64(userphoto);
                 // Save the bitmap to a Uri if needed
             } else if (requestCode == REQUEST_IMAGE_PICK) {
                 imageUri = data.getData();
                 ivSelectedImage.setImageURI(imageUri);
             }
         }
+    }
+
+    public static String bitmapToBase64(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 }
