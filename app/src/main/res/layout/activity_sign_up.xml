@@ -79,6 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Upload Picture"
+                android:backgroundTint="@color/red"
                 android:layout_marginBottom="16dp" />
 
             <ImageView
@@ -92,6 +93,7 @@
                 android:id="@+id/btnSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/red"
                 android:text="Sign Up" />
 
         </LinearLayout>

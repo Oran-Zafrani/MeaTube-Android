@@ -4,10 +4,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,6 +31,14 @@ public class AddMovie extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_movie);
 
+        Intent intent = getIntent();
+        User user = (User) intent.getSerializableExtra("user");
+
+        TextView creator = findViewById(R.id.creator);
+        creator.setText("Movie Creator: " + user.getUsername());
+        creator.setGravity(Gravity.CENTER);
+
+
         editTextMovieName = findViewById(R.id.editTextMovieName);
         editTextMovieDescription = findViewById(R.id.editTextMovieDescription);
         editTextMovieCategory = findViewById(R.id.editTextMovieCategory);
@@ -38,11 +51,54 @@ public class AddMovie extends AppCompatActivity {
                 chooseVideoFromGallery();
             }
         });
+
+        Button buttonaddMovie = findViewById(R.id.buttonaddMovie);
+        buttonaddMovie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addMovieToManager();
+                finish();
+            }
+        });
     }
 
     private void chooseVideoFromGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, REQUEST_VIDEO_PICK);
+    }
+
+    private void addMovieToManager() {
+        Intent intent = getIntent();
+        User user = (User) intent.getSerializableExtra("user");
+        String username = user.getUsername();
+        String movieName = editTextMovieName.getText().toString();
+        String movieDescription = editTextMovieDescription.getText().toString();
+        String movieCategory = editTextMovieCategory.getText().toString();
+
+        if (movieName.isEmpty() || movieDescription.isEmpty() || movieCategory.isEmpty() || videoUri == null) {
+            // Handle case where any field is empty or videoUri is null
+            // Typically show a Toast or error message
+            Toast.makeText(this, "Please fill all fields and upload a video.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Create a Movie object with the entered details
+        Movie newMovie = new Movie(username, movieName, movieDescription, movieCategory, videoUri.toString());
+
+        // Add the movie to MoviesManager
+        MoviesManager.getInstance().addMovie(newMovie);
+        Toast.makeText(this, "Movie added successfully!", Toast.LENGTH_SHORT).show();
+
+        Log.d("new movie",MoviesManager.getInstance().toString());
+
+        // Optionally, clear the input fields and reset the VideoView
+        editTextMovieName.setText("");
+        editTextMovieDescription.setText("");
+        editTextMovieCategory.setText("");
+        videoViewUploadedMovie.setVideoURI(null); // Clear the video
+
+        // Provide feedback to the user (e.g., Toast message) that the movie was added successfully
+        // Optionally navigate to another activity or perform additional actions
     }
 
     @Override

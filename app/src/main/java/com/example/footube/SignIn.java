@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -56,7 +57,7 @@ public class SignIn extends AppCompatActivity {
         });
 
         // Dark mode
-        Button themeToggleButton = findViewById(R.id.btnDarkMode);
+        ImageButton themeToggleButton = findViewById(R.id.btnDarkMode);
         themeToggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

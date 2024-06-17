@@ -63,9 +63,15 @@ public class MoviesList extends AppCompatActivity {
 
         FloatingActionButton btnAddMovie = findViewById(R.id.btnAddMovie);
         btnAddMovie.setOnClickListener(view -> {
-            // Create an Intent to start the new activity
-            Intent addMovieIntent = new Intent(this, AddMovie.class);
-            startActivity(addMovieIntent);
+            try {
+                // Create an Intent to start the new activity
+                Intent addMovieIntent = new Intent(this, AddMovie.class);
+                addMovieIntent.putExtra("user", user);
+                startActivity(addMovieIntent);
+            }catch (Exception e){
+                Intent signInIntent = new Intent(MoviesList.this, SignIn.class);
+                startActivity(signInIntent);
+            }
         });
 
         drawerLayout = findViewById(R.id.drawer_layout);

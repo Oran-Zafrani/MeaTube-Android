@@ -43,6 +43,23 @@
                 android:text="Movie Description"
                 android:layout_marginTop="4dp"
                 android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/movie_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Movie Category"
+                android:layout_marginTop="4dp"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/movie_creator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Movie Creator"
+                android:layout_marginTop="4dp"
+                android:textSize="14sp" />
+
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
