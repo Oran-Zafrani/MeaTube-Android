@@ -45,10 +45,10 @@
                 android:inputType="text" />
 
             <EditText
-                android:id="@+id/etName"
+                android:id="@+id/etDisplayName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Name"
+                android:hint="Display Name"
                 android:padding="10dp"
                 android:background="@android:drawable/edit_text"
                 android:layout_marginBottom="16dp"

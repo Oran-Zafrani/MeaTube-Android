@@ -14,26 +14,26 @@ import androidx.appcompat.app.AppCompatDelegate;
 public class SignIn extends AppCompatActivity {
     private static final String PREFS_NAME = "theme_prefs";
     private static final String PREF_DARK_MODE = "dark_mode";
-    UserManager userManager = new UserManager();
+    UserManager userManager = UserManager.getInstance(); // Get the singleton instance
     TextView linkToSignUp;
     Button login;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
 
-
-        Intent SignUpintent = new Intent(this, SignUp.class);
+        Intent SignUpIntent = new Intent(this, SignUp.class);
         linkToSignUp = findViewById(R.id.tvSignUpLink);
 
         linkToSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(SignUpintent);
+                startActivity(SignUpIntent);
             }
         });
 
-        Intent SignInintent = new Intent(this, MoviesList.class);
+        Intent SignInIntent = new Intent(this, MoviesList.class);
         login = findViewById(R.id.btnLogin);
         EditText username = findViewById(R.id.tvUsername);
         EditText password = findViewById(R.id.tvPassword);
@@ -45,16 +45,15 @@ public class SignIn extends AppCompatActivity {
                 String user = username.getText().toString();
                 String pass = password.getText().toString();
 
-                if (userManager.correctSignIn(user,pass))
-                    startActivity(SignInintent);
-                else
+                if (userManager.correctSignIn(user, pass)) {
+                    startActivity(SignInIntent);
+                } else {
                     errorTextView.setVisibility(View.VISIBLE);
+                }
             }
         });
 
-
-        //dark mode
-
+        // Dark mode
         Button themeToggleButton = findViewById(R.id.btnDarkMode);
         themeToggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,10 +61,7 @@ public class SignIn extends AppCompatActivity {
                 toggleTheme();
             }
         });
-
-
     }
-
 
     private void toggleTheme() {
         SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);

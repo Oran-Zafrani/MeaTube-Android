@@ -5,13 +5,23 @@ import java.util.Map;
 import java.util.Objects;
 
 public class UserManager {
+    private static UserManager instance;
     private Map<String, User> userMap;
 
-    public UserManager() {
+    // Private constructor to prevent instantiation
+    private UserManager() {
         userMap = new HashMap<>();
         // Adding a sample user for demonstration
         User sampleUser = new User("bar", "Bar User", "123456", "default_profile.jpg");
         addUser(sampleUser);
+    }
+
+    // Method to get the single instance of UserManager
+    public static synchronized UserManager getInstance() {
+        if (instance == null) {
+            instance = new UserManager();
+        }
+        return instance;
     }
 
     // Add a user to the map

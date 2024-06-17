@@ -22,6 +22,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
@@ -63,17 +64,20 @@
         android:layout_marginTop="8dp"
         app:layout_constraintHorizontal_bias="0.5"/>
 
-    <!-- View for Uploaded Movie -->
-    <ImageView
-        android:id="@+id/imageViewUploadedMovie"
+    <!-- Movie Description EditText -->
+    <EditText
+        android:id="@+id/editTextMovieCategory"
         android:layout_width="0dp"
-        android:layout_height="200dp"
-        android:src="@drawable/beef"
-        android:scaleType="fitCenter"
+        android:layout_height="wrap_content"
+        android:hint="Movie Category"
+        android:padding="16dp"
+        android:inputType="textMultiLine"
+        android:gravity="top"
         app:layout_constraintTop_toBottomOf="@id/editTextMovieDescription"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="8dp"
+        app:layout_constraintHorizontal_bias="0.5"/>
 
     <!-- Upload Button -->
     <Button
@@ -81,10 +85,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Upload Movie"
-        app:layout_constraintTop_toBottomOf="@id/imageViewUploadedMovie"
+        app:layout_constraintTop_toBottomOf="@id/editTextMovieCategory"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
         app:layout_constraintHorizontal_bias="0.5"/>
+
+    <!-- View for Uploaded Movie -->
+    <ImageView
+        android:id="@+id/imageViewUploadedMovie"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:src="@drawable/beef"
+        android:scaleType="fitCenter"
+        app:layout_constraintTop_toBottomOf="@id/buttonUploadMovie"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
@@ -24,6 +25,9 @@ public class SignUp extends AppCompatActivity {
 
     private static final int CAMERA_REQUEST_CODE = 22;
     private Uri imageUri;
+    private ImageView ivSelectedImage;
+
+    UserManager userManager = UserManager.getInstance(); // Get the singleton instance
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,7 @@ public class SignUp extends AppCompatActivity {
 
         Button btnUploadPicture = findViewById(R.id.btnUploadPicture);
         Button btnSignUp = findViewById(R.id.btnSignUp);
+        ivSelectedImage = findViewById(R.id.ivSelectedImage);
 
         btnUploadPicture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,11 +45,21 @@ public class SignUp extends AppCompatActivity {
             }
         });
 
-        Intent SignInintent = new Intent(this, SignIn.class);
+        Intent SignInIntent = new Intent(this, SignIn.class);
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(SignInintent);
+                EditText username = findViewById(R.id.etUsername);
+                EditText displayName = findViewById(R.id.etDisplayName);
+                EditText password = findViewById(R.id.etPassword);
+
+                String user = username.getText().toString();
+                String display = displayName.getText().toString();
+                String pass = password.getText().toString();
+                String image = imageUri != null ? imageUri.toString() : "default_profile.jpg";
+
+                userManager.addUser(user, display, pass, image);
+                startActivity(SignInIntent);
             }
         });
     }
@@ -79,21 +94,14 @@ public class SignUp extends AppCompatActivity {
     }
 
     private void takePhotoFromCamera() {
-        try {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(SignUp.this, new String[]{android.Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
+        } else {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(intent, CAMERA_REQUEST_CODE);
-        } catch (Exception e) {
-            ActivityCompat.requestPermissions(SignUp.this, new String[]
-                    {android.Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
-                    == PackageManager.PERMISSION_DENIED){
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, CAMERA_REQUEST_CODE);
-            }
         }
-    }   
-
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -101,11 +109,11 @@ public class SignUp extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == CAMERA_REQUEST_CODE) {
                 Bitmap userphoto = (Bitmap) data.getExtras().get("data");
-                ImageView imageV = findViewById(R.id.ivSelectedImage);
-                imageV.setImageBitmap(userphoto);
+                ivSelectedImage.setImageBitmap(userphoto);
+                // Save the bitmap to a Uri if needed
             } else if (requestCode == REQUEST_IMAGE_PICK) {
                 imageUri = data.getData();
-                // Process the picked image
+                ivSelectedImage.setImageURI(imageUri);
             }
         }
     }
