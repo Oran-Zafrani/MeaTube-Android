@@ -10,25 +10,40 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 
 public class MoviesList extends AppCompatActivity {
+    private static final int REQUEST_CODE_ADD_MOVIE = 1;
+
     private DrawerLayout drawerLayout;
     private ImageButton sideMenuButton;
     private ImageButton signInButton;
     private ImageView userImage;
     private TextView userName;
+    private RecyclerView recyclerView;
+    private MovieAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movies_list);
+
+        // Initialize RecyclerView
+        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Create and set the adapter
+        adapter = new MovieAdapter(MoviesManager.getInstance().getMovies());
+        recyclerView.setAdapter(adapter);
 
         // Retrieve the User object from the Intent
         Intent intent = getIntent();
@@ -65,10 +80,15 @@ public class MoviesList extends AppCompatActivity {
         btnAddMovie.setOnClickListener(view -> {
             try {
                 // Create an Intent to start the new activity
-                Intent addMovieIntent = new Intent(this, AddMovie.class);
-                addMovieIntent.putExtra("user", user);
-                startActivity(addMovieIntent);
-            }catch (Exception e){
+                if (user != null) {
+                    Intent addMovieIntent = new Intent(this, AddMovie.class);
+                    addMovieIntent.putExtra("user", user);
+                    startActivityForResult(addMovieIntent, REQUEST_CODE_ADD_MOVIE);
+                } else {
+                    Intent signInIntent = new Intent(MoviesList.this, SignIn.class);
+                    startActivity(signInIntent);
+                }
+            } catch (Exception e) {
                 Intent signInIntent = new Intent(MoviesList.this, SignIn.class);
                 startActivity(signInIntent);
             }
@@ -85,6 +105,22 @@ public class MoviesList extends AppCompatActivity {
                 drawerLayout.openDrawer(GravityCompat.START);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Update the RecyclerView with the latest movies
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_ADD_MOVIE && resultCode == RESULT_OK) {
+            // Update the RecyclerView with the latest movies
+            adapter.notifyDataSetChanged();
+        }
     }
 
     public static Bitmap base64ToBitmap(String base64Str) throws IllegalArgumentException {
@@ -108,5 +144,4 @@ public class MoviesList extends AppCompatActivity {
             userImage.setImageResource(R.drawable.signin_man); // Default image resource
         }
     }
-
 }

@@ -8,7 +8,6 @@
     android:layout_height="match_parent"
     tools:context=".MoviesList">
 
-    <!-- Main content -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -24,14 +23,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <!-- Place a LinearLayout inside Toolbar for horizontal alignment -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
-                <!-- Side menu button -->
                 <ImageButton
                     android:id="@+id/side_menu_button"
                     android:layout_width="48dp"
@@ -43,7 +40,6 @@
                     android:scaleType="centerInside"
                     android:src="@drawable/menu"/>
 
-                <!-- SearchView -->
                 <androidx.appcompat.widget.SearchView
                     android:id="@+id/search_view"
                     android:layout_width="0dp"
@@ -56,7 +52,6 @@
                     app:searchIcon="@drawable/ic_search_black"
                     style="@style/AppSearchViewStyle"/>
 
-                <!-- Sign-in button -->
                 <ImageButton
                     android:id="@+id/signin"
                     android:layout_width="48dp"
@@ -68,7 +63,6 @@
                     android:scaleType="centerInside"
                     android:src="@drawable/signin_man"/>
 
-                <!-- User profile image -->
                 <ImageView
                     android:id="@+id/user_image"
                     android:layout_width="48dp"
@@ -80,7 +74,6 @@
                     android:scaleType="centerInside"
                     android:visibility="gone"/>
 
-                <!-- User name -->
                 <TextView
                     android:id="@+id/user_name"
                     android:layout_width="wrap_content"
@@ -107,7 +100,6 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <!-- SwipeRefreshLayout wrapping RecyclerView for movies list -->
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh_layout"
             android:layout_width="0dp"
@@ -138,7 +130,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- NavigationView for the side menu -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation_view"
         android:layout_width="wrap_content"

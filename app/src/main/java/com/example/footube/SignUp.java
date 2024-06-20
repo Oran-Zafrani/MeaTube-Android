@@ -1,5 +1,6 @@
 package com.example.footube;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,9 +10,11 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -45,6 +48,7 @@ public class SignUp extends AppCompatActivity {
         btnUploadPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                closeKeyboard(v);
                 showPictureDialog();
             }
         });
@@ -66,6 +70,17 @@ public class SignUp extends AppCompatActivity {
                 startActivity(SignInIntent);
             }
         });
+    }
+
+    public void closeKeyboard(View view) {
+        // Check if no view has focus
+        View currentView = this.getCurrentFocus();
+        if (currentView != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(currentView.getWindowToken(), 0);
+        } else {
+            Toast.makeText(this, "No view has focus", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void showPictureDialog() {

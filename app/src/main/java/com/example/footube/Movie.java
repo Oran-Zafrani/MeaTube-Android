@@ -1,18 +1,30 @@
 package com.example.footube;
 
-public class Movie {
+import java.io.Serializable;
+
+public class Movie implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String creator;
     private String name;
     private String description;
     private String category;
     private String movie;
 
-    public Movie(String creator,String name, String description, String category, String movie) {
+    public Movie(String creator, String name, String description, String category, String movie) {
         this.creator = creator;
         this.name = name;
         this.description = description;
         this.category = category;
         this.movie = movie;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
     }
 
     public String getName() {
