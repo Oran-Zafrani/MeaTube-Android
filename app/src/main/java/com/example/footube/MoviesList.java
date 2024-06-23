@@ -21,7 +21,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 
-public class MoviesList extends AppCompatActivity {
+public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovieClickListener {
     private static final int REQUEST_CODE_ADD_MOVIE = 1;
 
     private DrawerLayout drawerLayout;
@@ -42,7 +42,7 @@ public class MoviesList extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Create and set the adapter
-        adapter = new MovieAdapter(MoviesManager.getInstance().getMovies());
+        adapter = new MovieAdapter(MoviesManager.getInstance().getMovies(),this);
         recyclerView.setAdapter(adapter);
 
         // Retrieve the User object from the Intent
@@ -143,5 +143,17 @@ public class MoviesList extends AppCompatActivity {
             // Handle case where imagePath is null or empty
             userImage.setImageResource(R.drawable.signin_man); // Default image resource
         }
+    }
+
+    @Override
+    public void onMovieClick(Movie movie) {
+        Intent movieDetailIntent = new Intent(this, VideoPlayerActivity.class); //replace to movie view
+        movieDetailIntent.putExtra("movie", movie);
+        startActivity(movieDetailIntent);
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        super.onPointerCaptureChanged(hasCapture);
     }
 }

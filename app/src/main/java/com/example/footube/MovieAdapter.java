@@ -20,17 +20,23 @@ import java.io.IOException;
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
-    private List<Movie> movies;
+    private static List<Movie> movies;
+    private OnMovieClickListener onMovieClickListener;
 
-    public MovieAdapter(List<Movie> movies) {
+    public interface OnMovieClickListener {
+        void onMovieClick(Movie movie);
+    }
+
+    public MovieAdapter(List<Movie> movies, OnMovieClickListener listener) {
         this.movies = movies;
+        this.onMovieClickListener = listener;
     }
 
     @NonNull
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie, parent, false);
-        return new MovieViewHolder(view);
+        return new MovieViewHolder(view, onMovieClickListener);
     }
 
     @Override
@@ -97,13 +103,23 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         TextView creatorTextView;  // Add a TextView for the creator
         ImageView movieImageView;
 
-        MovieViewHolder(View itemView) {
+        MovieViewHolder(View itemView, final OnMovieClickListener listener) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.movie_title);
             descriptionTextView = itemView.findViewById(R.id.movie_description);
             genreTextView = itemView.findViewById(R.id.movie_category);
             creatorTextView = itemView.findViewById(R.id.movie_creator);  // Initialize the creator TextView
             movieImageView = itemView.findViewById(R.id.movie_image);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (listener != null && position != RecyclerView.NO_POSITION) {
+                        listener.onMovieClick(movies.get(position));
+                    }
+                }
+            });
         }
     }
 }

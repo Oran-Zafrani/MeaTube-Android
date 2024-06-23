@@ -9,7 +9,6 @@
         android:required="false" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="34" />
@@ -25,7 +24,7 @@
         android:theme="@style/Theme.FooTube"
         tools:targetApi="31">
         <activity
-            android:name=".WatchMovieActivity"
+            android:name=".VideoPlayerActivity"
             android:exported="false" />
         <activity
             android:name=".AddMovie"
