@@ -1,9 +1,12 @@
 package com.example.footube;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -15,6 +18,9 @@ import android.widget.VideoView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 public class AddMovie extends AppCompatActivity {
 
@@ -85,6 +91,27 @@ public class AddMovie extends AppCompatActivity {
         // Create a Movie object with the entered details
         Movie newMovie = new Movie(username, movieName, movieDescription, movieCategory, videoUri.toString());
 
+        Bitmap thumbnail = null;
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+
+        try {
+            // Use itemView's context to set data source
+            retriever.setDataSource(this, videoUri);
+
+            // Get the thumbnail
+            thumbnail = retriever.getFrameAtTime();
+        } catch (Exception e) {
+            Log.e("AddMovie", "Failed to retrieve thumbnail for movie: " + movieName, e);
+        } finally {
+            try {
+                retriever.release();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        newMovie.setMovieImage(bitmapToBase64(thumbnail));
+
         // Add the movie to MoviesManager
         MoviesManager.getInstance().addMovie(newMovie);
         Toast.makeText(this, "Movie added successfully!", Toast.LENGTH_SHORT).show();
@@ -100,6 +127,15 @@ public class AddMovie extends AppCompatActivity {
         // Provide feedback to the user (e.g., Toast message) that the movie was added successfully
         // Optionally navigate to another activity or perform additional actions
     }
+
+    public static String bitmapToBase64(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

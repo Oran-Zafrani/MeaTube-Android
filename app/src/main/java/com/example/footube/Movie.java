@@ -1,6 +1,8 @@
 package com.example.footube;
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Movie implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -10,6 +12,9 @@ public class Movie implements Serializable {
     private String description;
     private String category;
     private String movie;
+    private Date uploadtime;
+    private int likes;
+    private String image;
 
     public Movie(String creator, String name, String description, String category, String movie) {
         this.creator = creator;
@@ -17,10 +22,28 @@ public class Movie implements Serializable {
         this.description = description;
         this.category = category;
         this.movie = movie;
+        this.likes = 0;
+        this.uploadtime = Calendar.getInstance().getTime();
     }
 
     public String getCreator() {
         return creator;
+    }
+
+    public Date GetUploadTime() {
+        return this.uploadtime;
+    }
+
+    public String GetImage() {
+        return this.image;
+    }
+
+    public void SetImage(String image){
+        this.image = image;
+    }
+
+    public int GetLikes(){
+        return this.likes;
     }
 
     public void setCreator(String creator) {
@@ -59,6 +82,10 @@ public class Movie implements Serializable {
         this.movie = movie;
     }
 
+    public void setMovieImage(String image) {
+        this.image = image;
+    }
+
     @Override
     public String toString() {
         return "Movie{" +
@@ -67,6 +94,8 @@ public class Movie implements Serializable {
                 ", description='" + description + '\'' +
                 ", category='" + category + '\'' +
                 ", movieUri='" + movie + '\'' +
+                ", uploadtime='" + this.uploadtime + '\'' +
+                ", likes='" + this.likes + '\'' +
                 '}';
     }
 }
