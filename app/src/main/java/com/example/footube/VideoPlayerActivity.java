@@ -48,8 +48,8 @@ public class VideoPlayerActivity extends AppCompatActivity {
 
         movies = MoviesManager.getInstance();
         position = (int) getIntent().getSerializableExtra("movie_index");
-        //user = ((User) getIntent().getSerializableExtra("user"));
-        //userName = user.getUsername();
+        user = ((User) getIntent().getSerializableExtra("username"));
+        userName = user.getUsername();
         // Retrieve the movie object from the Intent
         movie = movies.getMovie(position);
 
@@ -68,7 +68,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String commentText = editTextComment.getText().toString().trim();
                 if (!commentText.isEmpty()) {
-                    Comment newComment = new Comment("userName", commentText);
+                    Comment newComment = new Comment(userName, commentText);
                     movies.addCommentToMovie(movie.getName(), newComment); // Add to movie
                     Log.d("movie123", movies.getMovie(position).toString());
                     commentsAdapter.notifyItemInserted(commentList.size() - 1);

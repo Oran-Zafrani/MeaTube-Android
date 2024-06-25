@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -49,6 +50,7 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         // Retrieve the User object from the Intent
         Intent intent = getIntent();
         user = (User) intent.getSerializableExtra("user");
+        Log.d("MoviesList", "user loged in: " + user);
 
         // Initialize the views
         signInButton = findViewById(R.id.signin);
