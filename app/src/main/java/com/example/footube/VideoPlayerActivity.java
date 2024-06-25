@@ -2,6 +2,7 @@ package com.example.footube;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -59,7 +60,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String commentText = editTextComment.getText().toString().trim();
                 if (!commentText.isEmpty()) {
-                    Comment newComment = new Comment("Username", commentText); // Replace "Username" with actual username
+                    Comment newComment = new Comment(movie.getCreator(), commentText);
                     commentList.add(newComment);
                     commentsAdapter.notifyItemInserted(commentList.size() - 1);
                     editTextComment.setText("");
@@ -71,6 +72,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
     private void setupVideoPlayer(String videoUri) {
         Uri uri = Uri.parse(videoUri);
         videoView.setVideoURI(uri);
+        Log.d("URI: ", uri.toString());
         videoView.start();
     }
 

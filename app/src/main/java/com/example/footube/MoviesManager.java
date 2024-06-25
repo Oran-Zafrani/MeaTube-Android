@@ -10,10 +10,6 @@ public class MoviesManager {
 
     private MoviesManager() {
         movies = new ArrayList<>();
-        // Add some sample movies for testing
-//        movies.add(new Movie("Sample Movie 1", "Description 1", "Action", null));
-//        movies.add(new Movie("Sample Movie 2", "Description 2", "Comedy", null));
-//        movies.add(new Movie("Sample Movie 3", "Description 3", "Drama", null));
     }
 
     public static synchronized MoviesManager getInstance() {
@@ -46,6 +42,22 @@ public class MoviesManager {
             return movies.get(position);
         }
         return null;
+    }
+
+    public Movie findMovieByName(String name) {
+        for (Movie movie : movies) {
+            if (movie.getName().equalsIgnoreCase(name)) {
+                return movie;
+            }
+        }
+        return null;
+    }
+
+    public void addCommentToMovie(String movieName, Comment comment) {
+        Movie movie = findMovieByName(movieName);
+        if (movie != null) {
+            movie.AddComment(comment);
+        }
     }
 
     public int getMoviesCount() {

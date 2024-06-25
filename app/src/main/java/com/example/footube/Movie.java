@@ -1,8 +1,10 @@
 package com.example.footube;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class Movie implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -15,6 +17,7 @@ public class Movie implements Serializable {
     private Date uploadtime;
     private int likes;
     private String image;
+    private List<Comment> comments;
 
     public Movie(String creator, String name, String description, String category, String movie) {
         this.creator = creator;
@@ -24,6 +27,15 @@ public class Movie implements Serializable {
         this.movie = movie;
         this.likes = 0;
         this.uploadtime = Calendar.getInstance().getTime();
+        this.comments = new ArrayList<Comment>();
+    }
+
+    public void AddComment(Comment comment){
+        this.comments.add(comment);
+    }
+
+    public List<Comment> GetComments(){
+        return this.comments;
     }
 
     public String getCreator() {

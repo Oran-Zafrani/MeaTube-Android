@@ -1,5 +1,6 @@
 package com.example.footube;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
@@ -21,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class AddMovie extends AppCompatActivity {
 
@@ -88,6 +90,8 @@ public class AddMovie extends AppCompatActivity {
             return;
         }
 
+
+        //String base64Video = videoUriToBase64(getContentResolver(), videoUri);
         // Create a Movie object with the entered details
         Movie newMovie = new Movie(username, movieName, movieDescription, movieCategory, videoUri.toString());
 
@@ -135,6 +139,54 @@ public class AddMovie extends AppCompatActivity {
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 
+    public static String videoUriToBase64(ContentResolver contentResolver, Uri videoUri) {
+        InputStream inputStream = null;
+        ByteArrayOutputStream byteArrayOutputStream = null;
+
+        try {
+            // Open an InputStream from the URI
+            inputStream = contentResolver.openInputStream(videoUri);
+
+            if (inputStream == null) {
+                return null;
+            }
+
+            byteArrayOutputStream = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+
+            // Read the video file into the byte array output stream
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                byteArrayOutputStream.write(buffer, 0, bytesRead);
+            }
+
+            // Convert the byte array output stream to a byte array
+            byte[] videoBytes = byteArrayOutputStream.toByteArray();
+
+            // Encode the byte array to Base64
+            return Base64.encodeToString(videoBytes, Base64.DEFAULT);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // Close streams to avoid memory leaks
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (byteArrayOutputStream != null) {
+                try {
+                    byteArrayOutputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 
 
     @Override
@@ -144,6 +196,7 @@ public class AddMovie extends AppCompatActivity {
             if (data != null) {
                 videoUri = data.getData();
                 videoViewUploadedMovie.setVideoURI(videoUri);
+                Log.d("URI1: ", videoUri.toString());
                 videoViewUploadedMovie.start();
             }
         }
