@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class VideoPlayerActivity extends AppCompatActivity {
@@ -28,6 +27,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
     private Button buttonAddComment;
     private CommentsAdapter commentsAdapter;
     private List<Comment> commentList;
+    private Movie movie; // Add a field to store the movie object
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
         buttonAddComment = findViewById(R.id.buttonAddComment);
 
         // Retrieve the movie object from the Intent
-        Movie movie = (Movie) getIntent().getSerializableExtra("movie");
+        movie = (Movie) getIntent().getSerializableExtra("movie");
 
         if (movie != null) {
             setupVideoPlayer(movie.getMovieUri());
@@ -61,7 +61,8 @@ public class VideoPlayerActivity extends AppCompatActivity {
                 String commentText = editTextComment.getText().toString().trim();
                 if (!commentText.isEmpty()) {
                     Comment newComment = new Comment(movie.getCreator(), commentText);
-                    commentList.add(newComment);
+                    movie.AddComment(newComment); // Add to movie
+                    Log.d("movie123", movie.toString());
                     commentsAdapter.notifyItemInserted(commentList.size() - 1);
                     editTextComment.setText("");
                 }
@@ -77,7 +78,8 @@ public class VideoPlayerActivity extends AppCompatActivity {
     }
 
     private void setupCommentsRecyclerView() {
-        commentList = new ArrayList<>();
+        // Retrieve comments from the movie object
+        commentList = movie.GetComments();
         commentsAdapter = new CommentsAdapter(commentList);
         commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         commentsRecyclerView.setAdapter(commentsAdapter);

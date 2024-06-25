@@ -98,6 +98,15 @@ public class Movie implements Serializable {
         this.image = image;
     }
 
+    public String commentsstring(){
+        String s="{";
+        for (int i = 0; i < this.comments.size(); i++) {
+            s+="{"+this.comments.get(i).getUsername() + "," + this.comments.get(i).getComment() + "}";
+        }
+        s+="}";
+        return s;
+    }
+
     @Override
     public String toString() {
         return "Movie{" +
@@ -108,6 +117,7 @@ public class Movie implements Serializable {
                 ", movieUri='" + movie + '\'' +
                 ", uploadtime='" + this.uploadtime + '\'' +
                 ", likes='" + this.likes + '\'' +
+                ", comments='" + commentsstring() + '\'' +
                 '}';
     }
 }
