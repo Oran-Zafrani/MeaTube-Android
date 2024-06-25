@@ -28,6 +28,10 @@ public class VideoPlayerActivity extends AppCompatActivity {
     private CommentsAdapter commentsAdapter;
     private List<Comment> commentList;
     private Movie movie; // Add a field to store the movie object
+    private MoviesManager movies; // Add a field to store the movie object
+    private int position;
+    private User user;
+    private String userName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,8 +46,12 @@ public class VideoPlayerActivity extends AppCompatActivity {
         editTextComment = findViewById(R.id.editTextComment);
         buttonAddComment = findViewById(R.id.buttonAddComment);
 
+        movies = MoviesManager.getInstance();
+        position = (int) getIntent().getSerializableExtra("movie_index");
+        //user = ((User) getIntent().getSerializableExtra("user"));
+        //userName = user.getUsername();
         // Retrieve the movie object from the Intent
-        movie = (Movie) getIntent().getSerializableExtra("movie");
+        movie = movies.getMovie(position);
 
         if (movie != null) {
             setupVideoPlayer(movie.getMovieUri());
@@ -60,9 +68,9 @@ public class VideoPlayerActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String commentText = editTextComment.getText().toString().trim();
                 if (!commentText.isEmpty()) {
-                    Comment newComment = new Comment(movie.getCreator(), commentText);
-                    movie.AddComment(newComment); // Add to movie
-                    Log.d("movie123", movie.toString());
+                    Comment newComment = new Comment("userName", commentText);
+                    movies.addCommentToMovie(movie.getName(), newComment); // Add to movie
+                    Log.d("movie123", movies.getMovie(position).toString());
                     commentsAdapter.notifyItemInserted(commentList.size() - 1);
                     editTextComment.setText("");
                 }

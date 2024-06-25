@@ -31,6 +31,7 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
     private TextView userName;
     private RecyclerView recyclerView;
     private MovieAdapter adapter;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +48,7 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
 
         // Retrieve the User object from the Intent
         Intent intent = getIntent();
-        User user = (User) intent.getSerializableExtra("user");
+        user = (User) intent.getSerializableExtra("user");
 
         // Initialize the views
         signInButton = findViewById(R.id.signin);
@@ -145,10 +146,11 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         }
     }
 
-    @Override
-    public void onMovieClick(Movie movie) {
-        Intent movieDetailIntent = new Intent(this, VideoPlayerActivity.class); //replace to movie view
-        movieDetailIntent.putExtra("movie", movie);
+
+    public void onMovieClick(int position) {
+        Intent movieDetailIntent = new Intent(this, VideoPlayerActivity.class);
+        movieDetailIntent.putExtra("movie_index", position);
+        movieDetailIntent.putExtra("username", user);
         startActivity(movieDetailIntent);
     }
 
