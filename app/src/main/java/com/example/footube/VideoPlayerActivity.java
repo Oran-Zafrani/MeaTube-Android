@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -31,8 +32,8 @@ public class VideoPlayerActivity extends AppCompatActivity {
     private Button buttonAddComment;
     private CommentsAdapter commentsAdapter;
     private List<Comment> commentList;
-    private Movie movie; // Add a field to store the movie object
-    private MoviesManager movies; // Add a field to store the movie object
+    private Movie movie;
+    private MoviesManager movies;
     private int position;
     private User user;
     private String userName;
@@ -51,10 +52,9 @@ public class VideoPlayerActivity extends AppCompatActivity {
         buttonAddComment = findViewById(R.id.buttonAddComment);
 
         movies = MoviesManager.getInstance();
-        position = (int) getIntent().getSerializableExtra("movie_index");
-        user = ((User) getIntent().getSerializableExtra("username"));
+        position = getIntent().getIntExtra("movie_index", -1);
+        user = (User) getIntent().getSerializableExtra("username");
         userName = user.getUsername();
-        // Retrieve the movie object from the Intent
         movie = movies.getMovie(position);
 
         if (movie != null) {
@@ -62,19 +62,16 @@ public class VideoPlayerActivity extends AppCompatActivity {
             videoTitle.setText(movie.getName());
             videoCreator.setText(movie.getCreator());
             videoDescription.setText(movie.getDescription());
-
             setupCommentsRecyclerView();
         }
 
-        // Add a new comment
         buttonAddComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String commentText = editTextComment.getText().toString().trim();
                 if (!commentText.isEmpty()) {
                     Comment newComment = new Comment(userName, commentText);
-                    movies.addCommentToMovie(movie.getName(), newComment); // Add to movie
-//                    Log.d("movie123", movies.getMovie(position).toString());
+                    movies.addCommentToMovie(movie.getName(), newComment);
                     commentsAdapter.notifyItemInserted(commentList.size() - 1);
                     editTextComment.setText("");
                 }
@@ -82,18 +79,8 @@ public class VideoPlayerActivity extends AppCompatActivity {
         });
     }
 
-//    private void setupVideoPlayer(String videoUri) {
-//        Uri uri = Uri.parse(videoUri);
-//        videoView.setVideoURI(uri);
-//        Log.d("URI: ", uri.toString());
-//        videoView.start();
-//    }
-
     private void setupVideoPlayer(String base64Video) {
-        // Decode Base64 string to byte array
         byte[] videoBytes = Base64.decode(base64Video, Base64.DEFAULT);
-
-        // Write the byte array to a temporary file
         File tempFile = null;
         try {
             tempFile = File.createTempFile("tempVideo", ".mp4", getCacheDir());
@@ -105,18 +92,21 @@ public class VideoPlayerActivity extends AppCompatActivity {
             return;
         }
 
-        // Set the VideoView to play the video from the temporary file
         if (tempFile != null) {
             Uri uri = Uri.fromFile(tempFile);
             videoView.setVideoURI(uri);
+
+            // Create a MediaController and set it to the VideoView
+            MediaController mediaController = new MediaController(this);
+            mediaController.setAnchorView(videoView);
+            videoView.setMediaController(mediaController);
+
             Log.d("VideoPlayerActivity", "Playing video from temp file: " + uri.toString());
             videoView.start();
         }
     }
 
-
     private void setupCommentsRecyclerView() {
-        // Retrieve comments from the movie object
         commentList = movie.GetComments();
         commentsAdapter = new CommentsAdapter(commentList);
         commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
