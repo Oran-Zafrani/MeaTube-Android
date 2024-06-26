@@ -153,7 +153,6 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         Intent movieDetailIntent = new Intent(this, VideoPlayerActivity.class);
         movieDetailIntent.putExtra("movie_index", position);
         movieDetailIntent.putExtra("username", user);
-        Log.d("hello", "ofri");
         startActivity(movieDetailIntent);
     }
 

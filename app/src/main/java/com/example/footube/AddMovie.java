@@ -91,9 +91,9 @@ public class AddMovie extends AppCompatActivity {
         }
 
 
-        //String base64Video = videoUriToBase64(getContentResolver(), videoUri);
+        String base64Video = videoUriToBase64(getContentResolver(), videoUri);
         // Create a Movie object with the entered details
-        Movie newMovie = new Movie(username, movieName, movieDescription, movieCategory, videoUri.toString());
+        Movie newMovie = new Movie(username, movieName, movieDescription, movieCategory, base64Video);
 
         Bitmap thumbnail = null;
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
@@ -196,7 +196,7 @@ public class AddMovie extends AppCompatActivity {
             if (data != null) {
                 videoUri = data.getData();
                 videoViewUploadedMovie.setVideoURI(videoUri);
-                Log.d("URI1: ", videoUri.toString());
+//                Log.d("URI1: ", videoUri.toString());
                 videoViewUploadedMovie.start();
             }
         }

@@ -74,7 +74,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         } else {
             //Bitmap image =
             holder.movieImageView.setImageBitmap(base64ToBitmap(movie.GetImage()));  // Placeholder image
-            Log.d("wtf", Uri.parse(movie.getMovieUri()).toString());
+//            Log.d("wtf", Uri.parse(movie.getMovieUri()).toString());
         }
     }
 
