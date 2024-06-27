@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -30,6 +31,9 @@ public class VideoPlayerActivity extends AppCompatActivity {
     private RecyclerView commentsRecyclerView;
     private EditText editTextComment;
     private Button buttonAddComment;
+    private ImageView likeButton;
+    private ImageView unlikeButton;
+    private TextView numberOfLikes;
     private CommentsAdapter commentsAdapter;
     private List<Comment> commentList;
     private Movie movie;
@@ -37,6 +41,8 @@ public class VideoPlayerActivity extends AppCompatActivity {
     private int position;
     private User user;
     private String userName;
+    private boolean isLiked = false;
+    private boolean isUnliked = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,6 +56,9 @@ public class VideoPlayerActivity extends AppCompatActivity {
         commentsRecyclerView = findViewById(R.id.commentsRecyclerView);
         editTextComment = findViewById(R.id.editTextComment);
         buttonAddComment = findViewById(R.id.buttonAddComment);
+        likeButton = findViewById(R.id.likeButton);
+        unlikeButton = findViewById(R.id.unlikeButton);
+        numberOfLikes = findViewById(R.id.number_of_likes);
 
         movies = MoviesManager.getInstance();
         position = getIntent().getIntExtra("movie_index", -1);
@@ -63,6 +72,7 @@ public class VideoPlayerActivity extends AppCompatActivity {
             videoCreator.setText(movie.getCreator());
             videoDescription.setText(movie.getDescription());
             setupCommentsRecyclerView();
+            numberOfLikes.setText(String.valueOf(movie.GetLikes()));
         }
 
         buttonAddComment.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +85,49 @@ public class VideoPlayerActivity extends AppCompatActivity {
                     commentsAdapter.notifyItemInserted(commentList.size() - 1);
                     editTextComment.setText("");
                 }
+            }
+        });
+
+        likeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isLiked) {
+                    isLiked = false;
+                    likeButton.setImageResource(R.drawable.ic_thumb_up);
+                    movie.setLikes(movie.getLikes() - 1);
+                } else {
+                    isLiked = true;
+                    likeButton.setImageResource(R.drawable.ic_thumb_up_blue);
+                    movie.setLikes(movie.GetLikes() + 1);
+                    numberOfLikes.setTextColor(getResources().getColor(R.color.blue));
+                    if (isUnliked) {
+                        isUnliked = false;
+                        unlikeButton.setImageResource(R.drawable.ic_thumb_down);
+                        movie.setUnlikes(movie.getLikes() - 1);
+                    }
+                }
+                numberOfLikes.setText(String.valueOf(movie.GetLikes()));
+            }
+        });
+
+        unlikeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isUnliked) {
+                    isUnliked = false;
+                    unlikeButton.setImageResource(R.drawable.ic_thumb_down);
+                } else {
+                    isUnliked = true;
+                    unlikeButton.setImageResource(R.drawable.ic_thumb_down_fill_red);
+                    movie.setUnlikes(movie.getLikes() + 1);
+                    movie.setLikes(movie.getLikes() - 1);
+                    if (isLiked) {
+                        isLiked = false;
+                        likeButton.setImageResource(R.drawable.ic_thumb_up);
+                        movie.setLikes(movie.getLikes() - 1);
+                    }
+                }
+//                numberOfLikes.setText(String.valueOf(movie.GetLikes()-1));
             }
         });
     }

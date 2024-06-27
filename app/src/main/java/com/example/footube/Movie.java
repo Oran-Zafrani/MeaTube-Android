@@ -16,6 +16,7 @@ public class Movie implements Serializable {
     private String movie;
     private Date uploadtime;
     private int likes;
+    private int unlikes;
     private String image;
     private List<Comment> comments;
 
@@ -36,6 +37,22 @@ public class Movie implements Serializable {
 
     public List<Comment> GetComments(){
         return this.comments;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    public void setUnlikes(int unlikes) {
+        this.unlikes = unlikes;
+    }
+
+    public int getUnlikes() {
+        return unlikes;
+    }
+
+    public int getLikes() {
+        return likes;
     }
 
     public String getCreator() {

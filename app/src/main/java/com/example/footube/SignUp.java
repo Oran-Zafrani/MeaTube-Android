@@ -136,7 +136,6 @@ public class SignUp extends AppCompatActivity {
                 ivSelectedImage.setImageURI(imageUri);
                 Bitmap userphoto = getBitmapFromImageView(ivSelectedImage);
                 imagePath = bitmapToBase64(userphoto);
-
             }
         }
     }

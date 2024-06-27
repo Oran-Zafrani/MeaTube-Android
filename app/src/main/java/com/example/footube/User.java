@@ -1,18 +1,24 @@
 package com.example.footube;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class User implements Serializable {
     private String username;
     private String displayName;
     private String password;
     private String image;
+    private List<Movie> likes;
+    private List<Movie> unlikes;
 
     public User(String username, String displayName, String password, String image) {
         this.username = username;
         this.displayName = displayName;
         this.password = password;
         this.image = image;
+        this.likes = new ArrayList<>();
+        this.unlikes = new ArrayList<>();
     }
 
     public String getUsername() {
@@ -21,6 +27,38 @@ public class User implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public List<Movie> getLikes() {
+        return likes;
+    }
+
+    public List<Movie> getUnlikes() {
+        return unlikes;
+    }
+
+    public void setLikes(List<Movie> likes) {
+        this.likes = likes;
+    }
+
+    public void setUnlikes(List<Movie> unlikes) {
+        this.unlikes = unlikes;
+    }
+
+    public void AddLike(Movie movie){
+        this.likes.add(movie);
+    }
+
+    public void AddUnLike(Movie movie){
+        this.unlikes.add(movie);
+    }
+
+    public void RemoveUnLike(Movie movie){
+        this.unlikes.remove(movie);
+    }
+
+    public void RemoveLike(Movie movie){
+        this.likes.remove(movie);
     }
 
     public String getDisplayName() {
