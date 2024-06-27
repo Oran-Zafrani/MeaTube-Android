@@ -134,9 +134,21 @@ public class SignUp extends AppCompatActivity {
             } else if (requestCode == REQUEST_IMAGE_PICK) {
                 imageUri = data.getData();
                 ivSelectedImage.setImageURI(imageUri);
+                Bitmap userphoto = getBitmapFromImageView(ivSelectedImage);
+                imagePath = bitmapToBase64(userphoto);
+
             }
         }
     }
+
+    private Bitmap getBitmapFromImageView(ImageView imageView) {
+        imageView.setDrawingCacheEnabled(true);
+        imageView.buildDrawingCache();
+        Bitmap bitmap = Bitmap.createBitmap(imageView.getDrawingCache());
+        imageView.setDrawingCacheEnabled(false);
+        return bitmap;
+    }
+
 
     public static String bitmapToBase64(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
