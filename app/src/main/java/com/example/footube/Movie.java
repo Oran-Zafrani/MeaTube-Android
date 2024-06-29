@@ -17,6 +17,7 @@ public class Movie implements Serializable {
     private Date uploadtime;
     private int likes;
     private int unlikes;
+    private int views;
     private String image;
     private List<Comment> comments;
 
@@ -27,8 +28,18 @@ public class Movie implements Serializable {
         this.category = category;
         this.movie = movie;
         this.likes = 0;
+        this.unlikes = 0;
+        this.views = 0;
         this.uploadtime = Calendar.getInstance().getTime();
         this.comments = new ArrayList<Comment>();
+    }
+
+    public int getViews() {
+        return views;
+    }
+
+    public void AddView(){
+        this.views++;
     }
 
     public void AddComment(Comment comment){
@@ -37,22 +48,6 @@ public class Movie implements Serializable {
 
     public List<Comment> GetComments(){
         return this.comments;
-    }
-
-    public void setLikes(int likes) {
-        this.likes = likes;
-    }
-
-    public void setUnlikes(int unlikes) {
-        this.unlikes = unlikes;
-    }
-
-    public int getUnlikes() {
-        return unlikes;
-    }
-
-    public int getLikes() {
-        return likes;
     }
 
     public String getCreator() {
@@ -71,8 +66,20 @@ public class Movie implements Serializable {
         this.image = image;
     }
 
-    public int GetLikes(){
+    public int getLikes(){
         return this.likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    public int getUnlikes() {
+        return unlikes;
+    }
+
+    public void setUnlikes(int unlikes) {
+        this.unlikes = unlikes;
     }
 
     public void setCreator(String creator) {

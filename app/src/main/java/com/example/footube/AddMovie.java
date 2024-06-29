@@ -13,6 +13,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -120,7 +121,7 @@ public class AddMovie extends AppCompatActivity {
         MoviesManager.getInstance().addMovie(newMovie);
         Toast.makeText(this, "Movie added successfully!", Toast.LENGTH_SHORT).show();
 
-        Log.d("new movie",MoviesManager.getInstance().toString());
+//        Log.d("new movie",MoviesManager.getInstance().toString());
 
         // Optionally, clear the input fields and reset the VideoView
         editTextMovieName.setText("");
@@ -196,7 +197,12 @@ public class AddMovie extends AppCompatActivity {
             if (data != null) {
                 videoUri = data.getData();
                 videoViewUploadedMovie.setVideoURI(videoUri);
-//                Log.d("URI1: ", videoUri.toString());
+
+                // Create a MediaController and set it to the VideoView
+                MediaController mediaController = new MediaController(this);
+                mediaController.setAnchorView(videoViewUploadedMovie);
+                videoViewUploadedMovie.setMediaController(mediaController);
+
                 videoViewUploadedMovie.start();
             }
         }

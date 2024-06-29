@@ -63,8 +63,16 @@
                 android:id="@+id/upload_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="205dp"
                 android:text="Uploaded 1 day ago"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/views"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="1dp"
+                android:text="1 Views"
                 android:textSize="14sp" />
 
         </LinearLayout>
@@ -187,6 +195,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Post"
+                android:backgroundTint="@color/red"
                 android:layout_marginBottom="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

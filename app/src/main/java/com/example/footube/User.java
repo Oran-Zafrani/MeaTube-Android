@@ -3,6 +3,7 @@ package com.example.footube;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class User implements Serializable {
     private String username;
@@ -23,6 +24,24 @@ public class User implements Serializable {
 
     public String getUsername() {
         return username;
+    }
+
+    public boolean searchlike(Movie m){
+        for (Movie temp : this.likes){
+            if(Objects.equals(temp.getName(), m.getName()) && temp.GetUploadTime() == m.GetUploadTime()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean searchunlike(Movie m){
+        for (Movie temp : this.unlikes){
+            if(Objects.equals(temp.getName(), m.getName()) && temp.GetUploadTime() == m.GetUploadTime()){
+                return true;
+            }
+        }
+        return false;
     }
 
     public void setUsername(String username) {
@@ -92,6 +111,7 @@ public class User implements Serializable {
                 ", displayName='" + displayName + '\'' +
                 ", password='" + password + '\'' +
                 ", image='" + image + '\'' +
+                ", likes='" + likes + '\'' +
                 '}';
     }
 }

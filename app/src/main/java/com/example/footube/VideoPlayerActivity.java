@@ -20,14 +20,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-public class VideoPlayerActivity extends AppCompatActivity {
+public class VideoPlayerActivity extends AppCompatActivity implements CommentsAdapter.OnDeleteCommentListener, CommentsAdapter.OnEditCommentListener {
 
     private VideoView videoView;
     private TextView videoTitle;
     private TextView videoCreator;
     private TextView videoDescription;
+    private TextView TViews;
     private RecyclerView commentsRecyclerView;
     private EditText editTextComment;
     private Button buttonAddComment;
@@ -38,7 +41,9 @@ public class VideoPlayerActivity extends AppCompatActivity {
     private List<Comment> commentList;
     private Movie movie;
     private MoviesManager movies;
+    private UserManager users;
     private int position;
+    private int Views = 0;
     private User user;
     private String userName;
     private boolean isLiked = false;
@@ -59,12 +64,16 @@ public class VideoPlayerActivity extends AppCompatActivity {
         likeButton = findViewById(R.id.likeButton);
         unlikeButton = findViewById(R.id.unlikeButton);
         numberOfLikes = findViewById(R.id.number_of_likes);
+        TViews = findViewById(R.id.views);
 
         movies = MoviesManager.getInstance();
         position = getIntent().getIntExtra("movie_index", -1);
         user = (User) getIntent().getSerializableExtra("username");
         userName = user.getUsername();
+        user = UserManager.getInstance().getUser(userName);
         movie = movies.getMovie(position);
+        movie.AddView();
+        TViews.setText(movie.getViews() + " Views");
 
         if (movie != null) {
             setupVideoPlayer(movie.getMovieUri());
@@ -72,8 +81,16 @@ public class VideoPlayerActivity extends AppCompatActivity {
             videoCreator.setText(movie.getCreator());
             videoDescription.setText(movie.getDescription());
             setupCommentsRecyclerView();
-            numberOfLikes.setText(String.valueOf(movie.GetLikes()));
+            numberOfLikes.setText(String.valueOf(movie.getLikes()));
         }
+
+        numberOfLikes.setTextColor(getResources().getColor(R.color.black));
+        PrivateLikesLogic();
+
+        TextView uploadTimeTextView = findViewById(R.id.upload_time);
+        Date uploadDate = movie.GetUploadTime();
+        String relativeTime = getRelativeTime(uploadDate);
+        uploadTimeTextView.setText(relativeTime);
 
         buttonAddComment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,21 +111,39 @@ public class VideoPlayerActivity extends AppCompatActivity {
                 if (isLiked) {
                     isLiked = false;
                     likeButton.setImageResource(R.drawable.ic_thumb_up);
+                    numberOfLikes.setTextColor(getResources().getColor(R.color.black));
+                    if(user.searchlike(movie)){
+                        user.RemoveLike(movie);
+                    }
+                    user.RemoveLike(movie);
                     movie.setLikes(movie.getLikes() - 1);
                 } else {
                     isLiked = true;
                     likeButton.setImageResource(R.drawable.ic_thumb_up_blue);
-                    movie.setLikes(movie.GetLikes() + 1);
+                    movie.setLikes(movie.getLikes() + 1);
                     numberOfLikes.setTextColor(getResources().getColor(R.color.blue));
+                    if(user.searchunlike(movie)){
+                        user.RemoveUnLike(movie);
+                    }
+                    user.AddLike(movie);
                     if (isUnliked) {
                         isUnliked = false;
                         unlikeButton.setImageResource(R.drawable.ic_thumb_down);
-                        movie.setUnlikes(movie.getLikes() - 1);
+                        movie.setUnlikes(movie.getUnlikes() - 1);
                     }
                 }
-                numberOfLikes.setText(String.valueOf(movie.GetLikes()));
+                numberOfLikes.setText(String.valueOf(movie.getLikes()));
             }
         });
+
+
+//        DeleteComment = findViewById(R.id.deleteCommentTextView);
+//        DeleteComment.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
 
         unlikeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,20 +151,31 @@ public class VideoPlayerActivity extends AppCompatActivity {
                 if (isUnliked) {
                     isUnliked = false;
                     unlikeButton.setImageResource(R.drawable.ic_thumb_down);
+                    numberOfLikes.setTextColor(getResources().getColor(R.color.black));
+                    if(user.searchunlike(movie)){
+                        user.RemoveUnLike(movie);
+                    }
+                    user.RemoveUnLike(movie);
+                    movie.setUnlikes(movie.getUnlikes() - 1);
                 } else {
                     isUnliked = true;
                     unlikeButton.setImageResource(R.drawable.ic_thumb_down_fill_red);
-                    movie.setUnlikes(movie.getLikes() + 1);
-                    movie.setLikes(movie.getLikes() - 1);
+                    numberOfLikes.setTextColor(getResources().getColor(R.color.black));
+                    movie.setUnlikes(movie.getUnlikes() + 1);
+                    if(user.searchlike(movie)){
+                        user.RemoveLike(movie);
+                    }
+                    user.AddUnLike(movie);
                     if (isLiked) {
                         isLiked = false;
                         likeButton.setImageResource(R.drawable.ic_thumb_up);
                         movie.setLikes(movie.getLikes() - 1);
                     }
                 }
-//                numberOfLikes.setText(String.valueOf(movie.GetLikes()-1));
+                numberOfLikes.setText(String.valueOf(movie.getLikes()));
             }
         });
+
     }
 
     private void setupVideoPlayer(String base64Video) {
@@ -154,15 +200,69 @@ public class VideoPlayerActivity extends AppCompatActivity {
             mediaController.setAnchorView(videoView);
             videoView.setMediaController(mediaController);
 
-            Log.d("VideoPlayerActivity", "Playing video from temp file: " + uri.toString());
             videoView.start();
         }
     }
 
     private void setupCommentsRecyclerView() {
         commentList = movie.GetComments();
-        commentsAdapter = new CommentsAdapter(commentList);
+        commentsAdapter = new CommentsAdapter(commentList, this, this);
         commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         commentsRecyclerView.setAdapter(commentsAdapter);
+    }
+
+    private void PrivateLikesLogic(){
+        if (user.searchlike(movie)){
+            Log.d("videoplayeractivity", "work!");
+            isLiked = true;
+            likeButton.setImageResource(R.drawable.ic_thumb_up_blue);
+            numberOfLikes.setTextColor(getResources().getColor(R.color.blue));
+        }
+        if (user.searchunlike(movie)){
+            isUnliked = true;
+            Log.d("videoplayeractivity", "work2!");
+            unlikeButton.setImageResource(R.drawable.ic_thumb_down_fill_red);
+        }
+    }
+
+    @Override
+    public void onDeleteComment(int position) {
+        Comment commentToDelete = commentList.get(position);
+//        movies.removeCommentFromMovie(movie.getName(), commentToDelete);
+        commentList.remove(position);
+        commentsAdapter.notifyItemRemoved(position);
+    }
+
+    @Override
+    public void onEditComment(int position, String newComment) {
+        movie.GetComments().get(position).setComment(newComment);
+        commentsAdapter.notifyItemChanged(position);
+    }
+
+    public static String getRelativeTime(Date uploadDate) {
+        long uploadTime = uploadDate.getTime();
+        long currentTime = System.currentTimeMillis();
+        long duration = currentTime - uploadTime;
+
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(duration);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(duration);
+        long hours = TimeUnit.MILLISECONDS.toHours(duration);
+        long days = TimeUnit.MILLISECONDS.toDays(duration);
+
+        if (seconds < 60) {
+            return seconds == 1 ? "1 second ago" : seconds + " seconds ago";
+        } else if (minutes < 60) {
+            return minutes == 1 ? "1 minute ago" : minutes + " minutes ago";
+        } else if (hours < 24) {
+            return hours == 1 ? "1 hour ago" : hours + " hours ago";
+        } else if (days < 30) {
+            return days == 1 ? "1 day ago" : days + " days ago";
+        } else if (days < 365) {
+            long months = days / 30;
+            return months == 1 ? "1 month ago" : months + " months ago";
+        } else {
+            long years = days / 365;
+            return years == 1 ? "1 year ago" : years + " years ago";
+        }
     }
 }
