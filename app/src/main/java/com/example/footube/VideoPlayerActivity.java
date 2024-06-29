@@ -227,6 +227,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
 
     @Override
     public void onDeleteComment(int position) {
+//        if (commentsAdapter.ge)
         Comment commentToDelete = commentList.get(position);
 //        movies.removeCommentFromMovie(movie.getName(), commentToDelete);
         commentList.remove(position);

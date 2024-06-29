@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -17,6 +17,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -33,12 +34,14 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
     private RecyclerView recyclerView;
     private MovieAdapter adapter;
     private User user;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movies_list);
 
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         // Initialize RecyclerView
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -50,7 +53,6 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         // Retrieve the User object from the Intent
         Intent intent = getIntent();
         user = (User) intent.getSerializableExtra("user");
-        Log.d("MoviesList", "user loged in: " + user);
 
         // Initialize the views
         signInButton = findViewById(R.id.signin);
@@ -108,6 +110,34 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
                 drawerLayout.openDrawer(GravityCompat.START);
             }
         });
+
+        // Set up the refresh listener
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Perform the refresh operation
+                refreshData();
+            }
+        });
+
+    }
+
+    private void refreshData() {
+        // Simulate a refresh operation (e.g., fetch new data)
+        // After the operation is complete, call setRefreshing(false) to stop the animation
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Stop the refresh animation
+                swipeRefreshLayout.setRefreshing(false);
+
+//                adapter = new MovieAdapter(MoviesManager.getInstance().getMovies(),this);
+//                recyclerView.setAdapter(adapter);
+
+                // Update your data (e.g., notify your adapter of data changes)
+                // yourAdapter.notifyDataSetChanged();
+            }
+        }, 2000); // Simulate a delay
     }
 
     @Override
