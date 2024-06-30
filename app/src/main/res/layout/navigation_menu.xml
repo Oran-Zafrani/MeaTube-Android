@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ImageView
+        android:id="@+id/meatube_logo"
+        android:layout_width="130dp"
+        android:layout_height="50dp"
+        android:src="@drawable/meatube_logo_with_text_removebg_preview"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerInside"/>
+    <item
+        android:id="@+id/beef"
+        android:icon="@drawable/beef"
+        android:title="Beef"/>
+    <item
+        android:id="@+id/chicken"
+        android:icon="@drawable/chicken"
+        android:title="Chicken"/>
+    <item
+        android:id="@+id/lamb"
+        android:icon="@drawable/lamb"
+        android:title="Lamb"/>
+    <item
+        android:id="@+id/pork"
+        android:icon="@drawable/pork"
+        android:title="Pork"/>
+    <item
+        android:id="@+id/fish"
+        android:icon="@drawable/fish"
+        android:title="Fish"/>
+    <item
+        android:id="@+id/vegan"
+        android:icon="@drawable/vegan"
+        android:title="Vegan"/>
+
+</menu>
