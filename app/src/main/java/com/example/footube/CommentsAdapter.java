@@ -115,6 +115,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         return commentList.size();
     }
 
+
     class CommentViewHolder extends RecyclerView.ViewHolder {
         TextView usernameTextView;
         TextView commentTextView;

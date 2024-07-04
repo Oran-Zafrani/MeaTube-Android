@@ -9,6 +9,7 @@ import android.util.Base64;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import androidx.appcompat.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -120,6 +121,23 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
             }
         });
 
+        SearchView searchView = findViewById(R.id.search_view);
+
+        searchView.setQuery("", true);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                adapter.filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.filter(newText);
+                return false;
+            }
+        });
+
     }
 
     private void refreshData() {
@@ -182,7 +200,12 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
     public void onMovieClick(int position) {
         Intent movieDetailIntent = new Intent(this, VideoPlayerActivity.class);
         movieDetailIntent.putExtra("movie_index", position);
-        movieDetailIntent.putExtra("username", user);
+        if(user != null){
+            movieDetailIntent.putExtra("username", user);
+            movieDetailIntent.putExtra("Guest", 0);
+        }else {
+            movieDetailIntent.putExtra("Guest", 1);
+        }
         startActivity(movieDetailIntent);
     }
 

@@ -44,6 +44,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
     private UserManager users;
     private int position;
     private int Views = 0;
+    private int Guest;
     private User user;
     private String userName;
     private boolean isLiked = false;
@@ -68,9 +69,15 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
 
         movies = MoviesManager.getInstance();
         position = getIntent().getIntExtra("movie_index", -1);
-        user = (User) getIntent().getSerializableExtra("username");
-        userName = user.getUsername();
-        user = UserManager.getInstance().getUser(userName);
+        Guest = getIntent().getIntExtra("Guest", -1);
+        if (Guest == 0){
+            user = (User) getIntent().getSerializableExtra("username");
+            userName = user.getUsername();
+            user = UserManager.getInstance().getUser(userName);
+        }else {
+            user = new User("Guest","Guest", "", "");
+            userName = user.getUsername();
+        }
         movie = movies.getMovie(position);
         movie.AddView();
         TViews.setText(movie.getViews() + " Views");
@@ -196,9 +203,14 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
             videoView.setVideoURI(uri);
 
             // Create a MediaController and set it to the VideoView
-            MediaController mediaController = new MediaController(this);
-            mediaController.setAnchorView(videoView);
-            videoView.setMediaController(mediaController);
+//            MediaController mediaController = new MediaController(this);
+//            mediaController.setAnchorView(videoView);
+//            videoView.setMediaController(mediaController);
+
+            CustomMediaController customMediaController = new CustomMediaController(this);
+            customMediaController.setVideoView(videoView);
+            customMediaController.setAnchorView(findViewById(R.id.frame)); // Ensure the anchor view is set to the FrameLayout
+            videoView.setMediaController(customMediaController);
 
             videoView.start();
         }

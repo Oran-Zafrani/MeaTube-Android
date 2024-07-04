@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">meaTube</string>
     <string name="add_new_item">Add new item</string>
+    <string name="prev">prev</string>
+    <string name="play_pause">play_pause</string>
+    <string name="next">next</string>
 </resources>

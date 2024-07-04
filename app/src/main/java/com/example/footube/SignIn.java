@@ -17,6 +17,7 @@ public class SignIn extends AppCompatActivity {
     private static final String PREF_DARK_MODE = "dark_mode";
     UserManager userManager = UserManager.getInstance(); // Get the singleton instance
     TextView linkToSignUp;
+    TextView linkToSigninguest;
     Button login;
 
     @Override
@@ -33,6 +34,17 @@ public class SignIn extends AppCompatActivity {
                 startActivity(SignUpIntent);
             }
         });
+
+        //Sign in as a guess
+        Intent Signinguest = new Intent(this, MoviesList.class);
+        linkToSigninguest = findViewById(R.id.Signinguest);
+        linkToSigninguest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(Signinguest);
+            }
+        });
+
 
         Intent MoviesListIntent = new Intent(this, MoviesList.class);
         login = findViewById(R.id.btnLogin);
