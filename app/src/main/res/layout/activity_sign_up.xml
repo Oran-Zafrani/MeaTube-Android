@@ -96,6 +96,16 @@
                 android:backgroundTint="@color/red"
                 android:text="Sign Up" />
 
+            <TextView
+                android:id="@+id/errorTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Password is incorrect"
+                android:textColor="#FF0000"
+                android:visibility="gone"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp" />
+
         </LinearLayout>
     </ScrollView>
 
