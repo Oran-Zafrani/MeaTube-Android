@@ -51,6 +51,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
                 holder.editCommentEditText.setVisibility(View.VISIBLE);
                 holder.editCommentEditText.setText(comment.getComment());
                 holder.editCommentButton.setVisibility(View.VISIBLE);
+//                holder.editmovie.setVisibility(View.GONE);
                 holder.editCommentEditText.requestFocus();
             }
         });
@@ -64,7 +65,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
                     holder.commentTextView.setText(newComment);
                     holder.commentTextView.setVisibility(View.VISIBLE);
                     holder.editCommentEditText.setVisibility(View.GONE);
-                    holder.editCommentButton.setVisibility(View.GONE);
+                    holder.editCommentButton.setVisibility(View.VISIBLE);
                 }
             }
             return true;
@@ -82,6 +83,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
                         holder.commentTextView.setVisibility(View.VISIBLE);
                         holder.editCommentEditText.setVisibility(View.GONE);
                         holder.editCommentButton.setVisibility(View.GONE);
+//                        holder.editmovie.setVisibility(View.GONE);
                     }
                 }else {
                     int position1 = holder.getAdapterPosition();
@@ -123,6 +125,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         Button editCommentButton;
         TextView editCommentTextView;
         TextView deleteCommentTextView;
+        Button editmovie;
 
         CommentViewHolder(View itemView) {
             super(itemView);
@@ -132,6 +135,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
             editCommentTextView = itemView.findViewById(R.id.editCommentTextView);
             deleteCommentTextView = itemView.findViewById(R.id.deleteCommentTextView);
             editCommentButton = itemView.findViewById(R.id.buttonEditComment);
+            editmovie = itemView.findViewById(R.id.editmovie);
         }
     }
 }

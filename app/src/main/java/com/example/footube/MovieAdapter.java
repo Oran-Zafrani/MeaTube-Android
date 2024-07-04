@@ -31,7 +31,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     public MovieAdapter(List<Movie> movies, OnMovieClickListener listener) {
         this.movies = movies;
-        this.filteredMovies = new ArrayList<>(movies);
+//        this.filteredMovies = new ArrayList<>(movies);
         this.onMovieClickListener = listener;
     }
 
@@ -97,8 +97,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public int getItemCount() {
-//        return movies.size();
-        return filteredMovies.size();
+        return movies.size();
+//        return filteredMovies.size();
     }
 
     public void filter(String query) {

@@ -121,22 +121,22 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
             }
         });
 
-        SearchView searchView = findViewById(R.id.search_view);
+//        SearchView searchView = findViewById(R.id.search_view);
 
-        searchView.setQuery("", true);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                adapter.filter(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                adapter.filter(newText);
-                return false;
-            }
-        });
+//        searchView.setQuery("", true);
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                adapter.filter(query);
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                adapter.filter(newText);
+//                return false;
+//            }
+//        });
 
     }
 

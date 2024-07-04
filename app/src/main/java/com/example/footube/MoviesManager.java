@@ -53,6 +53,11 @@ public class MoviesManager {
         return null;
     }
 
+    public void UpdateMovie(Movie m, Movie mnew){
+        Movie movie = findMovieByName(m.getName());
+        movie.SetMovie(mnew);
+    }
+
     public void addCommentToMovie(String movieName, Comment comment) {
         Movie movie = findMovieByName(movieName);
         if (movie != null) {

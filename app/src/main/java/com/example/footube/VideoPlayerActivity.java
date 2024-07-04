@@ -1,5 +1,6 @@
 package com.example.footube;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
@@ -36,6 +37,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
     private Button buttonAddComment;
     private ImageView likeButton;
     private ImageView unlikeButton;
+    private Button beditmovie;
     private TextView numberOfLikes;
     private CommentsAdapter commentsAdapter;
     private List<Comment> commentList;
@@ -183,6 +185,20 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
             }
         });
 
+
+        beditmovie = findViewById(R.id.editmovie);
+
+        beditmovie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent EditMovieInIntent = new Intent(VideoPlayerActivity.this, EditMovie.class);
+                EditMovieInIntent.putExtra("movie_index", position);
+                EditMovieInIntent.putExtra("user", user);
+                finish();
+                startActivity(EditMovieInIntent);
+            }
+        });
+
     }
 
     private void setupVideoPlayer(String base64Video) {
@@ -248,6 +264,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
 
     @Override
     public void onEditComment(int position, String newComment) {
+        beditmovie.setVisibility(View.GONE);
         movie.GetComments().get(position).setComment(newComment);
         commentsAdapter.notifyItemChanged(position);
     }

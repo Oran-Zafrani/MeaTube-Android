@@ -34,6 +34,15 @@ public class Movie implements Serializable {
         this.comments = new ArrayList<Comment>();
     }
 
+
+    public void SetMovie(Movie m){
+        this.name = m.getName();
+        this.description = m.getDescription();
+        this.category = m.getCategory();
+        this.image = m.image;
+        this.movie = m.getMovieUri();
+    }
+
     public int getViews() {
         return views;
     }

@@ -12,7 +12,7 @@ public class UserManager {
     private UserManager() {
         userMap = new HashMap<>();
         // Adding a sample user for demonstration
-        User sampleUser = new User("bar", "Bar User", "123456", "default_profile.jpg");
+        User sampleUser = new User("ba", "Bar User", "123", "default_profile.jpg");
         addUser(sampleUser);
     }
 
