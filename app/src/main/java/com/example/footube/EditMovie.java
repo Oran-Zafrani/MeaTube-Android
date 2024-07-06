@@ -5,6 +5,7 @@ import static com.example.footube.AddMovie.bitmapToBase64;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
@@ -107,8 +108,10 @@ public class EditMovie extends AppCompatActivity {
         String base64Video;
         if (videoUri != null){
             base64Video = videoUriToBase64(getContentResolver(), videoUri);
+            Log.d("editmovie111", base64Video);
         }else {
             base64Video = movie.getMovieUri();
+            Log.d("editmovie222", base64Video);
         }
         // Create a Movie object with the entered details
         Movie newMovie = new Movie(username, movieName, movieDescription, movieCategory, base64Video);
@@ -116,25 +119,29 @@ public class EditMovie extends AppCompatActivity {
         Bitmap thumbnail = null;
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
 
-        try {
-            // Use itemView's context to set data source
-            retriever.setDataSource(this, videoUri);
-
-            // Get the thumbnail
-            thumbnail = retriever.getFrameAtTime();
-        } catch (Exception e) {
-            Log.e("AddMovie", "Failed to retrieve thumbnail for movie: " + movieName, e);
-        } finally {
+        if (videoUri != null) {
             try {
-                retriever.release();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                // Use itemView's context to set data source
+                retriever.setDataSource(this, videoUri);
+
+                // Get the thumbnail
+                thumbnail = retriever.getFrameAtTime();
+            } catch (Exception e) {
+                Log.e("AddMovie", "Failed to retrieve thumbnail for movie: " + movieName, e);
+            } finally {
+                try {
+                    retriever.release();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
+        }else {
+            thumbnail = base64ToBitmap(movie.GetImage());
         }
 
         newMovie.setMovieImage(bitmapToBase64(thumbnail));
 
-        Log.d("new movie", newMovie.getName());
+        Log.d("update movie", newMovie.getName());
 
         // Add the movie to MoviesManager
         MoviesManager.getInstance().UpdateMovie(movie, newMovie);
@@ -259,5 +266,10 @@ public class EditMovie extends AppCompatActivity {
                 videoViewUploadedMovie.start();
             }
         }
+    }
+
+    public static Bitmap base64ToBitmap(String base64Str) throws IllegalArgumentException {
+        byte[] decodedBytes = Base64.decode(base64Str, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
     }
 }
