@@ -1,16 +1,23 @@
 package com.example.footube;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import androidx.appcompat.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +42,8 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
     private RecyclerView recyclerView;
     private MovieAdapter adapter;
     private User user;
+    private ImageButton SearchButton;
+    private EditText SearchEditText;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
@@ -82,6 +91,29 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
             });
         }
 
+        SearchButton = findViewById(R.id.searchbutton);
+        SearchEditText = findViewById(R.id.searchedittext);
+
+        SearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Search1", "search");
+                Toast.makeText(MoviesList.this, "search: " + SearchEditText.getText().toString(), Toast.LENGTH_SHORT).show();
+                adapter.filter(SearchEditText.getText().toString());
+            }
+        });
+
+
+//        View otherLayout = LayoutInflater.from(this).inflate(R.layout.navigation_menu, null);
+//        TextView signout = otherLayout.findViewById(R.id.signout);
+//
+//        signout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
+
         FloatingActionButton btnAddMovie = findViewById(R.id.btnAddMovie);
         btnAddMovie.setOnClickListener(view -> {
             try {
@@ -122,8 +154,8 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         });
 
 //        SearchView searchView = findViewById(R.id.search_view);
-
-//        searchView.setQuery("", true);
+//
+////        searchView.setQuery("", true);
 //        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 //            @Override
 //            public boolean onQueryTextSubmit(String query) {
@@ -163,6 +195,7 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         super.onResume();
         // Update the RecyclerView with the latest movies
         adapter.notifyDataSetChanged();
+        adapter.filter("");
     }
 
     @Override
@@ -212,5 +245,25 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
         super.onPointerCaptureChanged(hasCapture);
+    }
+
+
+    //not work yet
+    @SuppressLint("ResourceType")
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.layout.navigation_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d("work", "work!!!");
+        int id = item.getItemId();
+        if (id == R.id.signout) {
+            Log.d("work", "work!!!");
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -31,7 +31,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     public MovieAdapter(List<Movie> movies, OnMovieClickListener listener) {
         this.movies = movies;
-//        this.filteredMovies = new ArrayList<>(movies);
+        this.filteredMovies = new ArrayList<>(movies);
         this.onMovieClickListener = listener;
     }
 
@@ -44,8 +44,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
-        Movie movie = movies.get(position);
-//        Movie movie = filteredMovies.get(position);
+//        Movie movie = movies.get(position);
+        Movie movie = filteredMovies.get(position);
         holder.titleTextView.setText(movie.getName());
         holder.descriptionTextView.setText(movie.getDescription());
         holder.genreTextView.setText(movie.getCategory());
@@ -97,11 +97,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public int getItemCount() {
-        return movies.size();
-//        return filteredMovies.size();
+//        return movies.size();
+        return filteredMovies.size();
     }
 
     public void filter(String query) {
+        if (filteredMovies == null) {
+            filteredMovies = new ArrayList<>(); // Initialize filteredMovies if null
+        }
         filteredMovies.clear();
         if (query.isEmpty()) {
             filteredMovies.addAll(movies);
