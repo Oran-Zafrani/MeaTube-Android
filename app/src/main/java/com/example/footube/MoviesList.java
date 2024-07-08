@@ -97,8 +97,8 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         SearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("Search1", "search");
-                Toast.makeText(MoviesList.this, "search: " + SearchEditText.getText().toString(), Toast.LENGTH_SHORT).show();
+//                Log.d("Search1", "search");
+//                Toast.makeText(MoviesList.this, "search: " + SearchEditText.getText().toString(), Toast.LENGTH_SHORT).show();
                 adapter.filter(SearchEditText.getText().toString());
             }
         });
