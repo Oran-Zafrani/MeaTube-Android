@@ -2,6 +2,7 @@ package com.example.footube;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -15,6 +16,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,13 +32,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 
 import java.io.File;
 
 public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovieClickListener {
     private static final int REQUEST_CODE_ADD_MOVIE = 1;
+    private static final String PREFS_NAME = "theme_prefs";
+    private static final String PREF_DARK_MODE = "dark_mode";
+
 
     private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
     private ImageButton sideMenuButton;
     private ImageButton signInButton;
     private ImageView userImage;
@@ -133,6 +142,7 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         });
 
         drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.navigation_view);
         sideMenuButton = findViewById(R.id.side_menu_button);
 
         // Set OnClickListener for side menu button
@@ -141,6 +151,25 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
             public void onClick(View v) {
                 // Open the drawer when button is clicked
                 drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+
+        Intent Signin = new Intent(this, SignIn.class);
+        // Set OnClickListener for the side menu
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                if (id == R.id.signout) {
+                    startActivity(Signin);
+                    finish();
+                    return true;
+                }
+                if (id == R.id.darkmode) {
+                    toggleTheme();
+                    return true;
+                }
+                return false;
             }
         });
 
@@ -209,6 +238,23 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
             // Update the RecyclerView with the latest movies
             adapter.notifyDataSetChanged();
         }
+    }
+
+    private void toggleTheme() {
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean isDarkMode = preferences.getBoolean(PREF_DARK_MODE, false);
+
+        // Toggle theme
+        if (isDarkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            preferences.edit().putBoolean(PREF_DARK_MODE, false).apply();
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            preferences.edit().putBoolean(PREF_DARK_MODE, true).apply();
+        }
+
+        // Recreate activity to apply the new theme
+        recreate();
     }
 
     public static Bitmap base64ToBitmap(String base64Str) throws IllegalArgumentException {

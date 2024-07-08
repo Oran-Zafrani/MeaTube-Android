@@ -40,4 +40,9 @@
         android:title="Sign Out"
         android:icon="@drawable/ic_sign_out"/>
 
+    <item
+        android:id="@+id/darkmode"
+        android:title="Dark Mode"
+        android:icon="@drawable/dark_mode_white"/>
+
 </menu>
