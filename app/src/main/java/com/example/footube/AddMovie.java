@@ -120,7 +120,7 @@ public class AddMovie extends AppCompatActivity {
         newMovie.setMovieImage(bitmapToBase64(thumbnail));
 
         // Add the movie to MoviesManager
-        MoviesManager.getInstance().addMovie(newMovie);
+        MoviesManager.getInstance(this).addMovie(newMovie);
         Toast.makeText(this, "Movie added successfully!", Toast.LENGTH_SHORT).show();
 
 //        Log.d("new movie",MoviesManager.getInstance().toString());

@@ -57,7 +57,7 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Create and set the adapter
-        adapter = new MovieAdapter(MoviesManager.getInstance().getMovies(),this);
+        adapter = new MovieAdapter(MoviesManager.getInstance(this).getMovies(),this);
         recyclerView.setAdapter(adapter);
 
         // Retrieve the User object from the Intent

@@ -77,7 +77,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         TViews = findViewById(R.id.views);
 
 
-        movies = MoviesManager.getInstance();
+        movies = MoviesManager.getInstance(this);
         position = getIntent().getIntExtra("movie_index", -1);
         Guest = getIntent().getIntExtra("Guest", -1);
         if (Guest == 0){

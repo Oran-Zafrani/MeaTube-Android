@@ -33,6 +33,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         this.movies = movies;
         this.filteredMovies = new ArrayList<>(movies);
         this.onMovieClickListener = listener;
+
     }
 
     @NonNull

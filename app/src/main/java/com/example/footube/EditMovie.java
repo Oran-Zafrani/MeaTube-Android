@@ -52,7 +52,7 @@ public class EditMovie extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_edit_movie);
-        movies = MoviesManager.getInstance();
+        movies = MoviesManager.getInstance(this);
         position = getIntent().getIntExtra("movie_index", -1);
         movie = movies.getMovie(position);
         user = (User) getIntent().getSerializableExtra("user");
@@ -144,7 +144,7 @@ public class EditMovie extends AppCompatActivity {
         Log.d("update movie", newMovie.getName());
 
         // Add the movie to MoviesManager
-        MoviesManager.getInstance().UpdateMovie(movie, newMovie);
+        MoviesManager.getInstance(this).UpdateMovie(movie, newMovie);
         Toast.makeText(this, "Movie update successfully!", Toast.LENGTH_SHORT).show();
 
 //        Log.d("new movie",MoviesManager.getInstance().toString());
