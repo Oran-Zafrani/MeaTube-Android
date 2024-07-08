@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -63,7 +64,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             // Get the thumbnail
             thumbnail = retriever.getFrameAtTime();
         } catch (Exception e) {
-            Log.e("MovieAdapter", "Failed to retrieve thumbnail for movie: " + movie.getName(), e);
+//            Log.e("MovieAdapter", "Failed to retrieve thumbnail for movie: " + movie.getName(), e);
+            Log.d("MovieAdapter", "Failed to retrieve thumbnail");
         } finally {
             try {
                 retriever.release();
