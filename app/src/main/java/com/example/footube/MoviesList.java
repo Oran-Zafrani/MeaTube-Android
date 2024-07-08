@@ -106,22 +106,11 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         SearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Log.d("Search1", "search");
-//                Toast.makeText(MoviesList.this, "search: " + SearchEditText.getText().toString(), Toast.LENGTH_SHORT).show();
                 adapter.filter(SearchEditText.getText().toString());
             }
         });
 
 
-//        View otherLayout = LayoutInflater.from(this).inflate(R.layout.navigation_menu, null);
-//        TextView signout = otherLayout.findViewById(R.id.signout);
-//
-//        signout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finish();
-//            }
-//        });
 
         FloatingActionButton btnAddMovie = findViewById(R.id.btnAddMovie);
         btnAddMovie.setOnClickListener(view -> {
@@ -188,22 +177,6 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
             }
         });
 
-//        SearchView searchView = findViewById(R.id.search_view);
-//
-////        searchView.setQuery("", true);
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                adapter.filter(query);
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                adapter.filter(newText);
-//                return false;
-//            }
-//        });
 
     }
 
@@ -220,11 +193,9 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
                 // Stop the refresh animation
                 swipeRefreshLayout.setRefreshing(false);
 
-//                adapter = new MovieAdapter(MoviesManager.getInstance().getMovies(),this);
-//                recyclerView.setAdapter(adapter);
 
-                // Update your data (e.g., notify your adapter of data changes)
-                // yourAdapter.notifyDataSetChanged();
+                // Update my data (e.g., notify your adapter of data changes)
+                // myAdapter.notifyDataSetChanged();
             }
         }, 2000); // Simulate a delay
     }
@@ -301,25 +272,5 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
         super.onPointerCaptureChanged(hasCapture);
-    }
-
-
-    //not work yet
-    @SuppressLint("ResourceType")
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.layout.navigation_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d("work", "work!!!");
-        int id = item.getItemId();
-        if (id == R.id.signout) {
-            Log.d("work", "work!!!");
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

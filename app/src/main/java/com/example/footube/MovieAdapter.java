@@ -64,7 +64,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             // Get the thumbnail
             thumbnail = retriever.getFrameAtTime();
         } catch (Exception e) {
-//            Log.e("MovieAdapter", "Failed to retrieve thumbnail for movie: " + movie.getName(), e);
             Log.d("MovieAdapter", "Failed to retrieve thumbnail");
         } finally {
             try {
@@ -100,7 +99,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public int getItemCount() {
-//        return movies.size();
         return filteredMovies.size();
     }
 

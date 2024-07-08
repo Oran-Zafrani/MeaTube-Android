@@ -147,7 +147,6 @@ public class EditMovie extends AppCompatActivity {
         MoviesManager.getInstance(this).UpdateMovie(movie, newMovie);
         Toast.makeText(this, "Movie update successfully!", Toast.LENGTH_SHORT).show();
 
-//        Log.d("new movie",MoviesManager.getInstance().toString());
 
         // Optionally, clear the input fields and reset the VideoView
         moviename.setText("");

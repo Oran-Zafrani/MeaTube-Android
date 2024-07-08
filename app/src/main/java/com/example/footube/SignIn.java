@@ -91,36 +91,6 @@ public class SignIn extends AppCompatActivity {
                 toggleTheme();
             }
         });
-
-        //see the password
-//        EditText passwordEditText = findViewById(R.id.tvPassword);
-//
-//        passwordEditText.setOnTouchListener(new View.OnTouchListener() {
-//            boolean isPasswordVisible = false;
-//
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                final int DRAWABLE_RIGHT = 2;
-////                if (event.getAction() == MotionEvent.ACTION_UP) {
-////                    if (event.getRawX() >= (passwordEditText.getRight() - passwordEditText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-////                        if (isPasswordVisible) {
-////                            passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-////                            passwordEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.eyeopen, 0);
-////                        } else {
-////                            passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-////                            passwordEditText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.eyeclose, 0);
-////                        }
-////                        isPasswordVisible = !isPasswordVisible;
-////                        // Move the cursor to the end of the text
-////                        passwordEditText.setSelection(passwordEditText.getText().length());
-////                        return true;
-////                    }
-////                }
-//                passwordEditText.setHint();
-//                return false;
-//            }
-//        });
-
     }
 
     private void toggleTheme() {
