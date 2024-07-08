@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SearchView;
 import android.widget.TextView;
@@ -321,5 +322,19 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent Signin = new Intent(this, SignIn.class);
+        // Show confirmation dialog
+        new AlertDialog.Builder(this)
+                .setMessage("Are you sure you want to sign out?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    startActivity(Signin);
+                    finish();
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 }
