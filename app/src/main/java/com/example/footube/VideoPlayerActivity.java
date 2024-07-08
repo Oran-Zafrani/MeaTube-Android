@@ -167,15 +167,6 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
             }
         });
 
-
-//        DeleteComment = findViewById(R.id.deleteCommentTextView);
-//        DeleteComment.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
-
         unlikeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -239,10 +230,6 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
             Uri uri = Uri.fromFile(tempFile);
             videoView.setVideoURI(uri);
 
-            // Create a MediaController and set it to the VideoView
-//            MediaController mediaController = new MediaController(this);
-//            mediaController.setAnchorView(videoView);
-//            videoView.setMediaController(mediaController);
 
             CustomMediaController customMediaController = new CustomMediaController(this);
             customMediaController.setVideoView(videoView);
@@ -277,9 +264,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
 
     @Override
     public void onDeleteComment(int position) {
-//        if (commentsAdapter.ge)
         Comment commentToDelete = commentList.get(position);
-//        movies.removeCommentFromMovie(movie.getName(), commentToDelete);
         commentList.remove(position);
         commentsAdapter.notifyItemRemoved(position);
     }
@@ -356,6 +341,4 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
             Toast.makeText(this, "View is null", Toast.LENGTH_SHORT).show();
         }
     }
-
-
 }

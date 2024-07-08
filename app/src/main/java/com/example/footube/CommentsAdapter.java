@@ -56,8 +56,6 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
                 holder.editCommentEditText.setVisibility(View.VISIBLE);
                 holder.editCommentEditText.setText(comment.getComment());
                 holder.editCommentButton.setVisibility(View.VISIBLE);
-//                holder.editmovie.setVisibility(View.GONE);
-                VideoPlayerActivity VideoPlayerActivity = new VideoPlayerActivity();
                 if (context instanceof VideoPlayerActivity) {
                     ((VideoPlayerActivity) context).hideineditcomment();
                 }

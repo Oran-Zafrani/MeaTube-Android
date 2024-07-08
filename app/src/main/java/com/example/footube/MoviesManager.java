@@ -131,28 +131,6 @@ public class MoviesManager {
         return stringBuilder.toString();
     }
 
-//    public String createthumbnail(){
-//        Bitmap thumbnail = null;
-//        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-//
-//        try {
-//            // Use itemView's context to set data source
-//            retriever.setDataSource(this, videoUri);
-//
-//            // Get the thumbnail
-//            thumbnail = retriever.getFrameAtTime();
-//        } catch (Exception e) {
-////            Log.e("AddMovie", "Failed to retrieve thumbnail for movie: " + movieName, e);
-//        } finally {
-//            try {
-//                retriever.release();
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//
-//        return bitmapToBase64(thumbnail);
-//    }
 
     public static String bitmapToBase64(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -160,18 +138,6 @@ public class MoviesManager {
         byte[] byteArray = byteArrayOutputStream.toByteArray();
         return android.util.Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
-
-//    public static String convertMp4ToBase64(String filePath) throws IOException {
-//        File file = new File(filePath);
-//        FileInputStream fileInputStream = new FileInputStream(file);
-//        byte[] bytes = new byte[(int) file.length()];
-//        fileInputStream.read(bytes);
-//        fileInputStream.close();
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            return Base64.getEncoder().encodeToString(bytes);
-//        }
-//        return filePath;
-//    }
 
 
     public List<Movie> getMovies() {
