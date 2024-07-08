@@ -154,6 +154,12 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
             }
         });
 
+        // Hide the "Sign Out" item if guest
+        if (user == null){
+            MenuItem signOutItem = navigationView.getMenu().findItem(R.id.signout);
+            signOutItem.setVisible(false);
+        }
+
         Intent Signin = new Intent(this, SignIn.class);
         // Set OnClickListener for the side menu
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
