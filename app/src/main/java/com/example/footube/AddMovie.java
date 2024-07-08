@@ -1,6 +1,7 @@
 package com.example.footube;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
@@ -11,6 +12,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.MediaController;
@@ -28,7 +30,6 @@ import java.io.InputStream;
 public class AddMovie extends AppCompatActivity {
 
     private static final int REQUEST_VIDEO_PICK = 1;
-
     private EditText editTextMovieName;
     private EditText editTextMovieDescription;
     private EditText editTextMovieCategory;
@@ -57,6 +58,7 @@ public class AddMovie extends AppCompatActivity {
         buttonUploadMovie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                closeKeyboard(v);
                 chooseVideoFromGallery();
             }
         });
@@ -118,7 +120,7 @@ public class AddMovie extends AppCompatActivity {
         newMovie.setMovieImage(bitmapToBase64(thumbnail));
 
         // Add the movie to MoviesManager
-        MoviesManager.getInstance().addMovie(newMovie);
+        MoviesManager.getInstance(this).addMovie(newMovie);
         Toast.makeText(this, "Movie added successfully!", Toast.LENGTH_SHORT).show();
 
 //        Log.d("new movie",MoviesManager.getInstance().toString());
@@ -138,6 +140,17 @@ public class AddMovie extends AppCompatActivity {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    }
+
+    public void closeKeyboard(View view) {
+        // Check if no view has focus
+        View currentView = this.getCurrentFocus();
+        if (currentView != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(currentView.getWindowToken(), 0);
+        } else {
+            Toast.makeText(this, "No view has focus", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public static String videoUriToBase64(ContentResolver contentResolver, Uri videoUri) {

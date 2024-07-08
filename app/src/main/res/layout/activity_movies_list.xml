@@ -40,7 +40,7 @@
                     android:scaleType="centerInside"
                     android:src="@drawable/menu"/>
 
-                <androidx.appcompat.widget.SearchView
+                <!--<androidx.appcompat.widget.SearchView
                     android:id="@+id/search_view"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -50,7 +50,32 @@
                     android:queryHint="Search movies..."
                     android:iconifiedByDefault="false"
                     app:searchIcon="@drawable/ic_search_black"
-                    style="@style/AppSearchViewStyle"/>
+                    style="@style/AppSearchViewStyle"/>-->
+
+                <EditText
+                    android:id="@+id/searchedittext"
+                    android:layout_width="100dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray"
+                    android:layout_height="wrap_content"
+                    android:hint="Search"
+                    android:padding="10dp"
+                    android:background="@android:drawable/edit_text"
+                    android:layout_marginBottom="8dp"
+                    android:scaleType="centerInside"
+                    android:layout_marginTop="8dp"
+                    android:inputType="text" />
+
+                <ImageButton
+                    android:id="@+id/searchbutton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_search_black"/>
 
                 <ImageButton
                     android:id="@+id/signin"

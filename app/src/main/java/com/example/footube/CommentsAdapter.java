@@ -1,5 +1,6 @@
 package com.example.footube;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
     private List<Comment> commentList;
     private OnDeleteCommentListener deleteCommentListener;
     private OnEditCommentListener editCommentListener;
+    private Context context;
+    private boolean iscreator;
 
     public interface OnDeleteCommentListener {
         void onDeleteComment(int position);
@@ -25,17 +28,19 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         void onEditComment(int position, String newComment);
     }
 
-    public CommentsAdapter(List<Comment> commentList, OnDeleteCommentListener deleteCommentListener, OnEditCommentListener editCommentListener) {
+    public CommentsAdapter(boolean iscreator, Context context, List<Comment> commentList, OnDeleteCommentListener deleteCommentListener, OnEditCommentListener editCommentListener) {
+        this.context = context;
         this.commentList = commentList;
         this.deleteCommentListener = deleteCommentListener;
         this.editCommentListener = editCommentListener;
+        this.iscreator = iscreator;
     }
 
     @Override
     public CommentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_comment, parent, false);
-        return new CommentViewHolder(view);
+        return new CommentViewHolder(view, iscreator);
     }
 
     @Override
@@ -51,6 +56,14 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
                 holder.editCommentEditText.setVisibility(View.VISIBLE);
                 holder.editCommentEditText.setText(comment.getComment());
                 holder.editCommentButton.setVisibility(View.VISIBLE);
+                if (context instanceof VideoPlayerActivity) {
+                    ((VideoPlayerActivity) context).hideineditcomment();
+                }
+
+                //not work yet
+                if (context instanceof VideoPlayerActivity) {
+                    ((VideoPlayerActivity) context).openKeyboard(v);
+                }
                 holder.editCommentEditText.requestFocus();
             }
         });
@@ -64,7 +77,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
                     holder.commentTextView.setText(newComment);
                     holder.commentTextView.setVisibility(View.VISIBLE);
                     holder.editCommentEditText.setVisibility(View.GONE);
-                    holder.editCommentButton.setVisibility(View.GONE);
+                    holder.editCommentButton.setVisibility(View.VISIBLE);
                 }
             }
             return true;
@@ -82,6 +95,10 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
                         holder.commentTextView.setVisibility(View.VISIBLE);
                         holder.editCommentEditText.setVisibility(View.GONE);
                         holder.editCommentButton.setVisibility(View.GONE);
+                        if (context instanceof VideoPlayerActivity) {
+                            ((VideoPlayerActivity) context).visibleineditcomment();
+                        }
+//                        holder.editmovie.setVisibility(View.GONE);
                     }
                 }else {
                     int position1 = holder.getAdapterPosition();
@@ -115,6 +132,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         return commentList.size();
     }
 
+
     class CommentViewHolder extends RecyclerView.ViewHolder {
         TextView usernameTextView;
         TextView commentTextView;
@@ -122,8 +140,9 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         Button editCommentButton;
         TextView editCommentTextView;
         TextView deleteCommentTextView;
+//        Button editmovie;
 
-        CommentViewHolder(View itemView) {
+        CommentViewHolder(View itemView, boolean iscreator) {
             super(itemView);
             usernameTextView = itemView.findViewById(R.id.usernameTextView);
             commentTextView = itemView.findViewById(R.id.commentTextView);
@@ -131,6 +150,11 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
             editCommentTextView = itemView.findViewById(R.id.editCommentTextView);
             deleteCommentTextView = itemView.findViewById(R.id.deleteCommentTextView);
             editCommentButton = itemView.findViewById(R.id.buttonEditComment);
+
+            if (!iscreator){
+                editCommentTextView.setVisibility(View.GONE);
+                deleteCommentTextView.setVisibility(View.GONE);
+            }
         }
     }
 }

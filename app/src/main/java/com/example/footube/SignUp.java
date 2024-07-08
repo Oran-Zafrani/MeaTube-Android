@@ -14,6 +14,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -23,12 +24,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.io.ByteArrayOutputStream;
+import java.util.regex.Pattern;
 
 public class SignUp extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_PICK = 2;
-
     private static final int CAMERA_REQUEST_CODE = 22;
     private Uri imageUri;
     private String imagePath;
@@ -60,16 +61,69 @@ public class SignUp extends AppCompatActivity {
                 EditText username = findViewById(R.id.etUsername);
                 EditText displayName = findViewById(R.id.etDisplayName);
                 EditText password = findViewById(R.id.etPassword);
+                EditText verifypassword = findViewById(R.id.etVerifyPassword);
 
                 String user = username.getText().toString();
                 String display = displayName.getText().toString();
                 String pass = password.getText().toString();
+                String pass2 = verifypassword.getText().toString();
                 String image = imageUri != null ? imageUri.toString() : "default_profile.jpg";
 
-                userManager.addUser(user, display, pass, imagePath);
-                startActivity(SignInIntent);
+                explaintouser(user,display,pass,image,pass2);
+
+                if (userconfirm(user,display,pass,image, pass2)){
+                    userManager.addUser(user, display, pass, imagePath);
+                    startActivity(SignInIntent);
+                }
             }
         });
+    }
+
+    private void explaintouser(String user,String diaplay, String pass, String image, String pass2){
+        TextView errorTextView = findViewById(R.id.errorTextView);
+        String error = "";
+        if (!allempty(user, diaplay,pass,image)){
+            error += "It is necessary to fill all the fields.\n";
+        }
+        if (!passlen(pass)){
+            error += "The password must contain at least 8 characters.\n";
+        }
+        if (!rightletters(pass)){
+            error += "Your password must contain at least one letter (a-z or A-Z).\n"
+                    + "Your password must contain at least one numeric digit (0-9).\n"
+            + " Your password must contain at least one special character among these: !@#$%^&*(),.?\":{}|<>.\n";
+        }
+        if (!samepass(pass,pass2)){
+            error += "Passwords are not the same.\n";
+        }
+        errorTextView.setText(error);
+        errorTextView.setVisibility(View.VISIBLE);
+    }
+
+    private boolean samepass (String pass1, String pass2){
+        return pass1.equals(pass2);
+    }
+
+    private boolean allempty(String user,String diaplay, String pass, String image){
+        return !user.isEmpty() && !diaplay.isEmpty() && !pass.isEmpty() && !image.isEmpty();
+    }
+
+    private boolean rightletters(String password) {
+        // Regular expression to check if the password contains both letters and special characters
+        String regex = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#\\$%^&*(),.?\":{}|<>]).{8,}$";
+        Pattern pattern = Pattern.compile(regex);
+
+        return pattern.matcher(password).matches();
+    }
+
+    private boolean passlen(String pass){
+        // Password must be at least 8 characters long
+        return pass.length() >= 8;
+    }
+
+    private boolean userconfirm(String user,String diaplay, String pass, String image, String pass2){
+        boolean notempty = allempty(user,diaplay,pass,image);
+        return !userManager.userExists(user) && notempty && passlen(pass) && rightletters(pass) && samepass(pass, pass2);
     }
 
     public void closeKeyboard(View view) {
@@ -82,6 +136,8 @@ public class SignUp extends AppCompatActivity {
             Toast.makeText(this, "No view has focus", Toast.LENGTH_SHORT).show();
         }
     }
+
+
 
     private void showPictureDialog() {
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);

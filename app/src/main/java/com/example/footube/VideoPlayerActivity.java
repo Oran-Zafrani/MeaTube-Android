@@ -1,15 +1,20 @@
 package com.example.footube;
 
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.annotation.Nullable;
@@ -22,6 +27,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class VideoPlayerActivity extends AppCompatActivity implements CommentsAdapter.OnDeleteCommentListener, CommentsAdapter.OnEditCommentListener {
@@ -36,6 +42,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
     private Button buttonAddComment;
     private ImageView likeButton;
     private ImageView unlikeButton;
+    private Button beditmovie;
     private TextView numberOfLikes;
     private CommentsAdapter commentsAdapter;
     private List<Comment> commentList;
@@ -44,6 +51,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
     private UserManager users;
     private int position;
     private int Views = 0;
+    private int Guest;
     private User user;
     private String userName;
     private boolean isLiked = false;
@@ -54,6 +62,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
 
+        //setting to xml
         videoView = findViewById(R.id.videoView);
         videoTitle = findViewById(R.id.video_title);
         videoCreator = findViewById(R.id.video_creator);
@@ -64,13 +73,28 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         likeButton = findViewById(R.id.likeButton);
         unlikeButton = findViewById(R.id.unlikeButton);
         numberOfLikes = findViewById(R.id.number_of_likes);
+        beditmovie = findViewById(R.id.editmovie);
         TViews = findViewById(R.id.views);
 
-        movies = MoviesManager.getInstance();
+
+        movies = MoviesManager.getInstance(this);
         position = getIntent().getIntExtra("movie_index", -1);
-        user = (User) getIntent().getSerializableExtra("username");
-        userName = user.getUsername();
-        user = UserManager.getInstance().getUser(userName);
+        Guest = getIntent().getIntExtra("Guest", -1);
+        if (Guest == 0){
+            user = (User) getIntent().getSerializableExtra("username");
+            userName = user.getUsername();
+            user = UserManager.getInstance().getUser(userName);
+        }else if (Guest == 1) {
+            user = new User("Guest","Guest", "", "");
+            userName = user.getUsername();
+
+            likeButton.setImageResource(R.drawable.ic_thumb_up_blue);
+            numberOfLikes.setTextColor(getResources().getColor(R.color.blue));
+            //disrepair the add comment
+            buttonAddComment.setVisibility(View.GONE);
+            editTextComment.setVisibility(View.GONE);
+            unlikeButton.setVisibility(View.GONE);
+        }
         movie = movies.getMovie(position);
         movie.AddView();
         TViews.setText(movie.getViews() + " Views");
@@ -92,6 +116,10 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         String relativeTime = getRelativeTime(uploadDate);
         uploadTimeTextView.setText(relativeTime);
 
+        if (!Objects.equals(userName, movie.getCreator())){
+            beditmovie.setVisibility(View.GONE);
+        }
+
         buttonAddComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,6 +128,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
                     Comment newComment = new Comment(userName, commentText);
                     movies.addCommentToMovie(movie.getName(), newComment);
                     commentsAdapter.notifyItemInserted(commentList.size() - 1);
+                    closeKeyboard(v);
                     editTextComment.setText("");
                 }
             }
@@ -108,71 +137,77 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isLiked) {
-                    isLiked = false;
-                    likeButton.setImageResource(R.drawable.ic_thumb_up);
-                    numberOfLikes.setTextColor(getResources().getColor(R.color.black));
-                    if(user.searchlike(movie)){
+                if (Guest != 1) {
+                    if (isLiked) {
+                        isLiked = false;
+                        likeButton.setImageResource(R.drawable.ic_thumb_up);
+                        numberOfLikes.setTextColor(getResources().getColor(R.color.black));
+                        if (user.searchlike(movie)) {
+                            user.RemoveLike(movie);
+                        }
                         user.RemoveLike(movie);
+                        movie.setLikes(movie.getLikes() - 1);
+                    } else {
+                        isLiked = true;
+                        likeButton.setImageResource(R.drawable.ic_thumb_up_blue);
+                        movie.setLikes(movie.getLikes() + 1);
+                        numberOfLikes.setTextColor(getResources().getColor(R.color.blue));
+                        if (user.searchunlike(movie)) {
+                            user.RemoveUnLike(movie);
+                        }
+                        user.AddLike(movie);
+                        if (isUnliked) {
+                            isUnliked = false;
+                            unlikeButton.setImageResource(R.drawable.ic_thumb_down);
+                            movie.setUnlikes(movie.getUnlikes() - 1);
+                        }
                     }
-                    user.RemoveLike(movie);
-                    movie.setLikes(movie.getLikes() - 1);
-                } else {
-                    isLiked = true;
-                    likeButton.setImageResource(R.drawable.ic_thumb_up_blue);
-                    movie.setLikes(movie.getLikes() + 1);
-                    numberOfLikes.setTextColor(getResources().getColor(R.color.blue));
-                    if(user.searchunlike(movie)){
-                        user.RemoveUnLike(movie);
-                    }
-                    user.AddLike(movie);
-                    if (isUnliked) {
-                        isUnliked = false;
-                        unlikeButton.setImageResource(R.drawable.ic_thumb_down);
-                        movie.setUnlikes(movie.getUnlikes() - 1);
-                    }
+                    numberOfLikes.setText(String.valueOf(movie.getLikes()));
                 }
-                numberOfLikes.setText(String.valueOf(movie.getLikes()));
             }
         });
-
-
-//        DeleteComment = findViewById(R.id.deleteCommentTextView);
-//        DeleteComment.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
 
         unlikeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isUnliked) {
-                    isUnliked = false;
-                    unlikeButton.setImageResource(R.drawable.ic_thumb_down);
-                    numberOfLikes.setTextColor(getResources().getColor(R.color.black));
-                    if(user.searchunlike(movie)){
+                if (Guest != 1) {
+                    if (isUnliked) {
+                        isUnliked = false;
+                        unlikeButton.setImageResource(R.drawable.ic_thumb_down);
+                        numberOfLikes.setTextColor(getResources().getColor(R.color.black));
+                        if (user.searchunlike(movie)) {
+                            user.RemoveUnLike(movie);
+                        }
                         user.RemoveUnLike(movie);
+                        movie.setUnlikes(movie.getUnlikes() - 1);
+                    } else {
+                        isUnliked = true;
+                        unlikeButton.setImageResource(R.drawable.ic_thumb_down_fill_red);
+                        numberOfLikes.setTextColor(getResources().getColor(R.color.black));
+                        movie.setUnlikes(movie.getUnlikes() + 1);
+                        if (user.searchlike(movie)) {
+                            user.RemoveLike(movie);
+                        }
+                        user.AddUnLike(movie);
+                        if (isLiked) {
+                            isLiked = false;
+                            likeButton.setImageResource(R.drawable.ic_thumb_up);
+                            movie.setLikes(movie.getLikes() - 1);
+                        }
                     }
-                    user.RemoveUnLike(movie);
-                    movie.setUnlikes(movie.getUnlikes() - 1);
-                } else {
-                    isUnliked = true;
-                    unlikeButton.setImageResource(R.drawable.ic_thumb_down_fill_red);
-                    numberOfLikes.setTextColor(getResources().getColor(R.color.black));
-                    movie.setUnlikes(movie.getUnlikes() + 1);
-                    if(user.searchlike(movie)){
-                        user.RemoveLike(movie);
-                    }
-                    user.AddUnLike(movie);
-                    if (isLiked) {
-                        isLiked = false;
-                        likeButton.setImageResource(R.drawable.ic_thumb_up);
-                        movie.setLikes(movie.getLikes() - 1);
-                    }
+                    numberOfLikes.setText(String.valueOf(movie.getLikes()));
                 }
-                numberOfLikes.setText(String.valueOf(movie.getLikes()));
+            }
+        });
+
+        beditmovie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent EditMovieInIntent = new Intent(VideoPlayerActivity.this, EditMovie.class);
+                EditMovieInIntent.putExtra("movie_index", position);
+                EditMovieInIntent.putExtra("user", user);
+                finish();
+                startActivity(EditMovieInIntent);
             }
         });
 
@@ -195,10 +230,11 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
             Uri uri = Uri.fromFile(tempFile);
             videoView.setVideoURI(uri);
 
-            // Create a MediaController and set it to the VideoView
-            MediaController mediaController = new MediaController(this);
-            mediaController.setAnchorView(videoView);
-            videoView.setMediaController(mediaController);
+
+            CustomMediaController customMediaController = new CustomMediaController(this);
+            customMediaController.setVideoView(videoView);
+            customMediaController.setAnchorView(findViewById(R.id.frame)); // Ensure the anchor view is set to the FrameLayout
+            videoView.setMediaController(customMediaController);
 
             videoView.start();
         }
@@ -206,7 +242,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
 
     private void setupCommentsRecyclerView() {
         commentList = movie.GetComments();
-        commentsAdapter = new CommentsAdapter(commentList, this, this);
+        boolean iscreator = Objects.equals(userName, movie.getCreator());
+        commentsAdapter = new CommentsAdapter(iscreator,this, commentList, this, this);
         commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         commentsRecyclerView.setAdapter(commentsAdapter);
     }
@@ -227,9 +264,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
 
     @Override
     public void onDeleteComment(int position) {
-//        if (commentsAdapter.ge)
         Comment commentToDelete = commentList.get(position);
-//        movies.removeCommentFromMovie(movie.getName(), commentToDelete);
         commentList.remove(position);
         commentsAdapter.notifyItemRemoved(position);
     }
@@ -238,6 +273,25 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
     public void onEditComment(int position, String newComment) {
         movie.GetComments().get(position).setComment(newComment);
         commentsAdapter.notifyItemChanged(position);
+    }
+    public void hideineditcomment(){
+        editTextComment = findViewById(R.id.editTextComment);
+        buttonAddComment = findViewById(R.id.buttonAddComment);
+        beditmovie = findViewById(R.id.editmovie);
+
+        beditmovie.setVisibility(View.GONE);
+        buttonAddComment.setVisibility(View.GONE);
+        editTextComment.setVisibility(View.GONE);
+    }
+
+    public void visibleineditcomment(){
+        editTextComment = findViewById(R.id.editTextComment);
+        buttonAddComment = findViewById(R.id.buttonAddComment);
+        beditmovie = findViewById(R.id.editmovie);
+
+        beditmovie.setVisibility(View.VISIBLE);
+        buttonAddComment.setVisibility(View.VISIBLE);
+        editTextComment.setVisibility(View.VISIBLE);
     }
 
     public static String getRelativeTime(Date uploadDate) {
@@ -264,6 +318,27 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         } else {
             long years = days / 365;
             return years == 1 ? "1 year ago" : years + " years ago";
+        }
+    }
+
+    public void closeKeyboard(View view) {
+        // Check if no view has focus
+        View currentView = this.getCurrentFocus();
+        if (currentView != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(currentView.getWindowToken(), 0);
+        } else {
+            Toast.makeText(this, "No view has focus", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void openKeyboard(View view) {
+        if (view != null) {
+            view.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+        } else {
+            Toast.makeText(this, "View is null", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -1,15 +1,27 @@
 package com.example.footube;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,13 +32,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 
 import java.io.File;
 
 public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovieClickListener {
     private static final int REQUEST_CODE_ADD_MOVIE = 1;
+    private static final String PREFS_NAME = "theme_prefs";
+    private static final String PREF_DARK_MODE = "dark_mode";
+
 
     private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
     private ImageButton sideMenuButton;
     private ImageButton signInButton;
     private ImageView userImage;
@@ -34,6 +51,8 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
     private RecyclerView recyclerView;
     private MovieAdapter adapter;
     private User user;
+    private ImageButton SearchButton;
+    private EditText SearchEditText;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
@@ -47,7 +66,7 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Create and set the adapter
-        adapter = new MovieAdapter(MoviesManager.getInstance().getMovies(),this);
+        adapter = new MovieAdapter(MoviesManager.getInstance(this).getMovies(),this);
         recyclerView.setAdapter(adapter);
 
         // Retrieve the User object from the Intent
@@ -81,6 +100,18 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
             });
         }
 
+        SearchButton = findViewById(R.id.searchbutton);
+        SearchEditText = findViewById(R.id.searchedittext);
+
+        SearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.filter(SearchEditText.getText().toString());
+            }
+        });
+
+
+
         FloatingActionButton btnAddMovie = findViewById(R.id.btnAddMovie);
         btnAddMovie.setOnClickListener(view -> {
             try {
@@ -100,6 +131,7 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         });
 
         drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.navigation_view);
         sideMenuButton = findViewById(R.id.side_menu_button);
 
         // Set OnClickListener for side menu button
@@ -108,6 +140,31 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
             public void onClick(View v) {
                 // Open the drawer when button is clicked
                 drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+
+        // Hide the "Sign Out" item if guest
+        if (user == null){
+            MenuItem signOutItem = navigationView.getMenu().findItem(R.id.signout);
+            signOutItem.setVisible(false);
+        }
+
+        Intent Signin = new Intent(this, SignIn.class);
+        // Set OnClickListener for the side menu
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                if (id == R.id.signout) {
+                    startActivity(Signin);
+                    finish();
+                    return true;
+                }
+                if (id == R.id.darkmode) {
+                    toggleTheme();
+                    return true;
+                }
+                return false;
             }
         });
 
@@ -120,6 +177,7 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
             }
         });
 
+
     }
 
     private void refreshData() {
@@ -128,14 +186,16 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                //cancel the filter (clean the search)
+                SearchEditText.setText("");
+                adapter.filter("");
+
                 // Stop the refresh animation
                 swipeRefreshLayout.setRefreshing(false);
 
-//                adapter = new MovieAdapter(MoviesManager.getInstance().getMovies(),this);
-//                recyclerView.setAdapter(adapter);
 
-                // Update your data (e.g., notify your adapter of data changes)
-                // yourAdapter.notifyDataSetChanged();
+                // Update my data (e.g., notify your adapter of data changes)
+                // myAdapter.notifyDataSetChanged();
             }
         }, 2000); // Simulate a delay
     }
@@ -145,6 +205,7 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         super.onResume();
         // Update the RecyclerView with the latest movies
         adapter.notifyDataSetChanged();
+        adapter.filter("");
     }
 
     @Override
@@ -154,6 +215,23 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
             // Update the RecyclerView with the latest movies
             adapter.notifyDataSetChanged();
         }
+    }
+
+    private void toggleTheme() {
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean isDarkMode = preferences.getBoolean(PREF_DARK_MODE, false);
+
+        // Toggle theme
+        if (isDarkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            preferences.edit().putBoolean(PREF_DARK_MODE, false).apply();
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            preferences.edit().putBoolean(PREF_DARK_MODE, true).apply();
+        }
+
+        // Recreate activity to apply the new theme
+        recreate();
     }
 
     public static Bitmap base64ToBitmap(String base64Str) throws IllegalArgumentException {
@@ -182,7 +260,12 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
     public void onMovieClick(int position) {
         Intent movieDetailIntent = new Intent(this, VideoPlayerActivity.class);
         movieDetailIntent.putExtra("movie_index", position);
-        movieDetailIntent.putExtra("username", user);
+        if(user != null){
+            movieDetailIntent.putExtra("username", user);
+            movieDetailIntent.putExtra("Guest", 0);
+        }else {
+            movieDetailIntent.putExtra("Guest", 1);
+        }
         startActivity(movieDetailIntent);
     }
 

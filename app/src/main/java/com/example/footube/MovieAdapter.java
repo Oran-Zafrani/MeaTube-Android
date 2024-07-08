@@ -11,16 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
     private static List<Movie> movies;
+    private List<Movie> filteredMovies;
     private OnMovieClickListener onMovieClickListener;
 
     public interface OnMovieClickListener {
@@ -29,7 +32,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     public MovieAdapter(List<Movie> movies, OnMovieClickListener listener) {
         this.movies = movies;
+        this.filteredMovies = new ArrayList<>(movies);
         this.onMovieClickListener = listener;
+
     }
 
     @NonNull
@@ -41,7 +46,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
-        Movie movie = movies.get(position);
+//        Movie movie = movies.get(position);
+        Movie movie = filteredMovies.get(position);
         holder.titleTextView.setText(movie.getName());
         holder.descriptionTextView.setText(movie.getDescription());
         holder.genreTextView.setText(movie.getCategory());
@@ -58,7 +64,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             // Get the thumbnail
             thumbnail = retriever.getFrameAtTime();
         } catch (Exception e) {
-            Log.e("MovieAdapter", "Failed to retrieve thumbnail for movie: " + movie.getName(), e);
+            Log.d("MovieAdapter", "Failed to retrieve thumbnail");
         } finally {
             try {
                 retriever.release();
@@ -93,7 +99,24 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public int getItemCount() {
-        return movies.size();
+        return filteredMovies.size();
+    }
+
+    public void filter(String query) {
+        if (filteredMovies == null) {
+            filteredMovies = new ArrayList<>(); // Initialize filteredMovies if null
+        }
+        filteredMovies.clear();
+        if (query.isEmpty()) {
+            filteredMovies.addAll(movies);
+        } else {
+            for (Movie movie : movies) {
+                if (movie.getName().toLowerCase().contains(query.toLowerCase())) {
+                    filteredMovies.add(movie);
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
     static class MovieViewHolder extends RecyclerView.ViewHolder {
