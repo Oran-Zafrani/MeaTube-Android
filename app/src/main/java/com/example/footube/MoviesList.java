@@ -178,6 +178,10 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                //cancel the filter (clean the search)
+                SearchEditText.setText("");
+                adapter.filter("");
+
                 // Stop the refresh animation
                 swipeRefreshLayout.setRefreshing(false);
 
