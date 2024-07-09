@@ -84,7 +84,7 @@
             android:id="@+id/Signinguest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sign In as a Guest"
+            android:text="Return to home page as guest"
             android:textColor="@android:color/holo_blue_light"
             android:clickable="true"
             android:textStyle="bold" />
