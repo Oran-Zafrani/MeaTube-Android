@@ -10,6 +10,9 @@ import android.os.Build;
 import android.util.Base64;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -17,6 +20,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -205,4 +209,28 @@ public class MoviesManager {
         sb.append("}");
         return sb.toString();
     }
+
+
+    // Load movies from JSON file
+    public void loadMoviesFromJSON(Context context) {
+        try {
+            InputStream is = context.getAssets().open("Feed.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+
+            String json = new String(buffer, "UTF-8");
+            Gson gson = new Gson();
+            Type movieListType = new TypeToken<List<User>>() {}.getType();
+            List<Movie> movies = gson.fromJson(json, movieListType);
+
+            for (Movie movie : movies) {
+                addMovie(movie);
+            }
+        } catch (IOException ex) {
+            Log.e("MoviesManager", "Error reading Feed.json", ex);
+        }
+    }
+
 }

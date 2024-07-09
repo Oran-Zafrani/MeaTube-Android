@@ -1,6 +1,18 @@
 package com.example.footube;
 
+import android.content.Context;
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -66,5 +78,27 @@ public class UserManager {
         return "UserManager{" +
                 "userMap=" + userMap +
                 '}';
+    }
+
+    // Load users from JSON file
+    public void loadUsersFromJSON(Context context) {
+        try {
+            InputStream is = context.getAssets().open("Users.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+
+            String json = new String(buffer, "UTF-8");
+            Gson gson = new Gson();
+            Type userListType = new TypeToken<List<User>>() {}.getType();
+            List<User> users = gson.fromJson(json, userListType);
+
+            for (User user : users) {
+                addUser(user);
+            }
+        } catch (IOException ex) {
+            Log.e("UserManager", "Error reading Users.json", ex);
+        }
     }
 }

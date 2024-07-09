@@ -36,6 +36,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.File;
+import java.io.InputStream;
 
 public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovieClickListener {
     private static final int REQUEST_CODE_ADD_MOVIE = 1;
@@ -78,6 +79,12 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         signInButton = findViewById(R.id.signin);
         userImage = findViewById(R.id.user_image);
         userName = findViewById(R.id.user_name);
+
+
+        // Load users from JSON
+        UserManager userManager = UserManager.getInstance();
+        userManager.loadUsersFromJSON(this);
+
 
         // Set visibility based on whether the user is present
         if (user != null) {

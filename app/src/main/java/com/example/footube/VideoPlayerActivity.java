@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,8 +20,10 @@ import android.widget.VideoView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -30,7 +33,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-public class VideoPlayerActivity extends AppCompatActivity implements CommentsAdapter.OnDeleteCommentListener, CommentsAdapter.OnEditCommentListener {
+public class VideoPlayerActivity extends AppCompatActivity implements CommentsAdapter.OnDeleteCommentListener, CommentsAdapter.OnEditCommentListener, MovieAdapter.OnMovieClickListener {
 
     private VideoView videoView;
     private TextView videoTitle;
@@ -53,7 +56,12 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
     private int Views = 0;
     private int Guest;
     private User user;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private RecyclerView recyclerView;
+    private MovieAdapter adapter;
     private String userName;
+    private TextView textNoComments;
+    private ConstraintLayout commentsLayout;
     private boolean isLiked = false;
     private boolean isUnliked = false;
 
@@ -75,6 +83,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         numberOfLikes = findViewById(R.id.number_of_likes);
         beditmovie = findViewById(R.id.editmovie);
         TViews = findViewById(R.id.views);
+        textNoComments = findViewById(R.id.NoComments);
+        commentsLayout = findViewById(R.id.commentsSection);
 
 
         movies = MoviesManager.getInstance(this);
@@ -131,6 +141,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
                     closeKeyboard(v);
                     editTextComment.setText("");
                 }
+
             }
         });
 
@@ -211,6 +222,56 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
             }
         });
 
+        //upload comments
+        UploadMovies();
+
+        //If no comments - to continue
+//        if (commentsAdapter.getItemCount() == 0){
+//            commentsLayout.setVisibility(View.GONE);
+//            textNoComments.setVisibility(View.VISIBLE);
+//        }else {
+//            commentsLayout.setVisibility(View.VISIBLE);
+//            textNoComments.setVisibility(View.GONE);
+//        }
+    }
+
+    private void UploadMovies(){
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+        // Initialize RecyclerView
+        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Create and set the adapter
+        adapter = new MovieAdapter(MoviesManager.getInstance(this).getMovies(),this);
+        recyclerView.setAdapter(adapter);
+
+        // Set up the refresh listener
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Perform the refresh operation
+                refreshData();
+            }
+        });
+    }
+
+    private void refreshData() {
+        // Simulate a refresh operation (e.g., fetch new data)
+        // After the operation is complete, call setRefreshing(false) to stop the animation
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //cancel the filter (clean the search)
+                adapter.filter("");
+
+                // Stop the refresh animation
+                swipeRefreshLayout.setRefreshing(false);
+
+
+                // Update my data (e.g., notify your adapter of data changes)
+                // myAdapter.notifyDataSetChanged();
+            }
+        }, 2000); // Simulate a delay
     }
 
     private void setupVideoPlayer(String base64Video) {
@@ -229,7 +290,6 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         if (tempFile != null) {
             Uri uri = Uri.fromFile(tempFile);
             videoView.setVideoURI(uri);
-
 
             CustomMediaController customMediaController = new CustomMediaController(this);
             customMediaController.setVideoView(videoView);
@@ -340,5 +400,18 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         } else {
             Toast.makeText(this, "View is null", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onMovieClick(int position) {
+        Intent movieDetailIntent = new Intent(this, VideoPlayerActivity.class);
+        movieDetailIntent.putExtra("movie_index", position);
+        if(user != null){
+            movieDetailIntent.putExtra("username", user);
+            movieDetailIntent.putExtra("Guest", 0);
+        }else {
+            movieDetailIntent.putExtra("Guest", 1);
+        }
+        startActivity(movieDetailIntent);
     }
 }

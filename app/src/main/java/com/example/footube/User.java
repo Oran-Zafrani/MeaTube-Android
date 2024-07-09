@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.Objects;
 
 public class User implements Serializable {
+    private int id;
     private String username;
     private String displayName;
     private String password;
     private String image;
+    private int subscribers;
     private List<Movie> likes;
     private List<Movie> unlikes;
 
@@ -24,6 +26,14 @@ public class User implements Serializable {
 
     public String getUsername() {
         return username;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public boolean searchlike(Movie m){
