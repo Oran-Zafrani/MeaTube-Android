@@ -137,7 +137,7 @@
             android:layout_width="22dp"
             android:layout_height="22dp"
             android:layout_marginEnd="3dp"
-            android:src="@drawable/ic_share" <!-- Replace with your share icon -->
+            android:src="@drawable/ic_share"
         android:scaleType="fitCenter" />
 
         <!-- Number of likes -->

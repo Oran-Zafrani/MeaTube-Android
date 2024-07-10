@@ -42,6 +42,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
     private Button buttonAddComment;
     private ImageView likeButton;
     private ImageView unlikeButton;
+    private ImageView shareButton;
     private Button beditmovie;
     private TextView numberOfLikes;
     private CommentsAdapter commentsAdapter;
@@ -72,6 +73,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         buttonAddComment = findViewById(R.id.buttonAddComment);
         likeButton = findViewById(R.id.likeButton);
         unlikeButton = findViewById(R.id.unlikeButton);
+        shareButton = findViewById(R.id.shareButton);
         numberOfLikes = findViewById(R.id.number_of_likes);
         beditmovie = findViewById(R.id.editmovie);
         TViews = findViewById(R.id.views);
@@ -90,10 +92,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
 
             likeButton.setImageResource(R.drawable.ic_thumb_up_blue);
             numberOfLikes.setTextColor(getResources().getColor(R.color.blue));
-            //disrepair the add comment
-            buttonAddComment.setVisibility(View.GONE);
-            editTextComment.setVisibility(View.GONE);
-            unlikeButton.setVisibility(View.GONE);
+
         }
         movie = movies.getMovie(position);
         movie.AddView();
@@ -123,13 +122,16 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         buttonAddComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String commentText = editTextComment.getText().toString().trim();
-                if (!commentText.isEmpty()) {
-                    Comment newComment = new Comment(userName, commentText);
-                    movies.addCommentToMovie(movie.getName(), newComment);
-                    commentsAdapter.notifyItemInserted(commentList.size() - 1);
-                    closeKeyboard(v);
-                    editTextComment.setText("");
+                if (Guest != 1) {
+                    Toast.makeText(VideoPlayerActivity.this, "You need to sign in to comment", Toast.LENGTH_SHORT).show();
+                    String commentText = editTextComment.getText().toString().trim();
+                    if (!commentText.isEmpty()) {
+                        Comment newComment = new Comment(userName, commentText);
+                        movies.addCommentToMovie(movie.getName(), newComment);
+                        commentsAdapter.notifyItemInserted(commentList.size() - 1);
+                        closeKeyboard(v);
+                        editTextComment.setText("");
+                    }
                 }
             }
         });
@@ -206,6 +208,17 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
                     }
                     numberOfLikes.setText(String.valueOf(movie.getLikes()));
                 }
+            }
+        });
+
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Share the video should implement in the future link to the video
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "Check out this awesome video!");
+                startActivity(Intent.createChooser(shareIntent, "Share video"));
             }
         });
 
