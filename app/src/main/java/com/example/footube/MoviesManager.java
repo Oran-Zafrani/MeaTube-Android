@@ -8,6 +8,7 @@ public class MoviesManager {
     private static MoviesManager instance;
     private List<Movie> movies;
 
+    // Singleton pattern to ensure only one instance of MoviesManager is created
     private MoviesManager() {
         movies = new ArrayList<>();
     }
