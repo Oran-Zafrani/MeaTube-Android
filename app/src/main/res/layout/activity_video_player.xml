@@ -131,6 +131,15 @@
             android:src="@drawable/ic_thumb_up"
             android:scaleType="fitCenter" />
 
+        <!-- Share button -->
+        <ImageView
+            android:id="@+id/shareButton"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="3dp"
+            android:src="@drawable/ic_share" <!-- Replace with your share icon -->
+        android:scaleType="fitCenter" />
+
         <!-- Number of likes -->
         <TextView
             android:id="@+id/number_of_likes"
