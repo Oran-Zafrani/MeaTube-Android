@@ -94,7 +94,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         TViews = findViewById(R.id.views);
         textNoComments = findViewById(R.id.NoComments);
         commentsLayout = findViewById(R.id.commentsSection);
-        //uploadUserImage = findViewById(R.id.uploader_image);
+        uploadUserImage = findViewById(R.id.uploader_image);
 
         // Get the logged user data
         isGuest = getIntent().getIntExtra("Guest", -1);
@@ -125,7 +125,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
             videoDescription.setText(movie.getDescription());
             setupCommentsRecyclerView();
             numberOfLikes.setText(String.valueOf(movie.getLikes()));
-            //Uri imageUri = Uri.fromFile(new File(UserManager.getInstance().getUser(movie.getCreator()).getImage()));
+            Uri imageUri = Uri.fromFile(new File(UserManager.getInstance().getUser(movie.getCreator()).getImage()));
             //uploadUserImage.setImageURI(imageUri);
             numberOfLikes.setTextColor(getResources().getColor(R.color.black));
             PrivateLikesLogic();
