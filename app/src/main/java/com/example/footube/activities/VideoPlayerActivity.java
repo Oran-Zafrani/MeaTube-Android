@@ -129,7 +129,10 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         }
 
         numberOfLikes.setTextColor(getResources().getColor(R.color.black));
-        PrivateLikesLogic();
+
+        if (user != null){
+            PrivateLikesLogic();
+        }
 
         TextView uploadTimeTextView = findViewById(R.id.upload_time);
 
@@ -398,5 +401,6 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
             movieDetailIntent.putExtra("Guest", 1);
         }
         startActivity(movieDetailIntent);
+        finish();
     }
 }

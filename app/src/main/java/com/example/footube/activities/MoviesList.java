@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -268,9 +269,11 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         Intent movieDetailIntent = new Intent(this, VideoPlayerActivity.class);
         movieDetailIntent.putExtra("movie_index", position);
         if(user != null){
+            Log.d("movie123",user.getDisplayName());
             movieDetailIntent.putExtra("username", user);
             movieDetailIntent.putExtra("Guest", 0);
         }else {
+            Log.d("movie111","user.getDisplayName()");
             movieDetailIntent.putExtra("Guest", 1);
         }
         startActivity(movieDetailIntent);
