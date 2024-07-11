@@ -49,7 +49,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 //        Movie movie = movies.get(position);
         Movie movie = filteredMovies.get(position);
         holder.titleTextView.setText(movie.getName());
-        holder.descriptionTextView.setText(movie.getDescription());
+//        holder.uploadtime.setText(movie.GetUploadTime().toString()); //fix
+        holder.uploadtime.setText(movie.getRelativeTime());
+        holder.views.setText(String.valueOf(movie.getViews()) + " Views");
+        holder.likes.setText(String.valueOf(movie.getLikes()) + " Likes");
         holder.genreTextView.setText(movie.getCategory());
         holder.creatorTextView.setText(movie.getChannel());
 
@@ -121,7 +124,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     static class MovieViewHolder extends RecyclerView.ViewHolder {
         TextView titleTextView;
-        TextView descriptionTextView;
+        TextView uploadtime;
+        TextView likes;
+        TextView views;
         TextView genreTextView;
         TextView creatorTextView;  // Add a TextView for the creator
         ImageView movieImageView;
@@ -129,7 +134,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         MovieViewHolder(View itemView, final OnMovieClickListener listener) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.movie_title);
-            descriptionTextView = itemView.findViewById(R.id.movie_description);
+            uploadtime = itemView.findViewById(R.id.movie_upload_time);
+            likes = itemView.findViewById(R.id.movie_likes);
+            views = itemView.findViewById(R.id.movie_views);
             genreTextView = itemView.findViewById(R.id.movie_category);
             creatorTextView = itemView.findViewById(R.id.movie_creator);  // Initialize the creator TextView
             movieImageView = itemView.findViewById(R.id.movie_image);

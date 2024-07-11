@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 public class Movie implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -181,6 +182,33 @@ public class Movie implements Serializable {
         } catch (ParseException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public String getRelativeTime() {
+        long uploadTime = this.uploadTime.getTime();
+        long currentTime = System.currentTimeMillis();
+        long duration = currentTime - uploadTime;
+
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(duration);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(duration);
+        long hours = TimeUnit.MILLISECONDS.toHours(duration);
+        long days = TimeUnit.MILLISECONDS.toDays(duration);
+
+        if (seconds < 60) {
+            return seconds == 1 ? "1 second ago" : seconds + " seconds ago";
+        } else if (minutes < 60) {
+            return minutes == 1 ? "1 minute ago" : minutes + " minutes ago";
+        } else if (hours < 24) {
+            return hours == 1 ? "1 hour ago" : hours + " hours ago";
+        } else if (days < 30) {
+            return days == 1 ? "1 day ago" : days + " days ago";
+        } else if (days < 365) {
+            long months = days / 30;
+            return months == 1 ? "1 month ago" : months + " months ago";
+        } else {
+            long years = days / 365;
+            return years == 1 ? "1 year ago" : years + " years ago";
         }
     }
 }

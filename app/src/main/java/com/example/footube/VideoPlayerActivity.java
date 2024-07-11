@@ -122,8 +122,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         PrivateLikesLogic();
 
         TextView uploadTimeTextView = findViewById(R.id.upload_time);
-        Date uploadDate = movie.GetUploadTime();
-        String relativeTime = getRelativeTime(uploadDate);
+
+        String relativeTime = movie.getRelativeTime();
         uploadTimeTextView.setText(relativeTime);
 
         if (!Objects.equals(userName, movie.getCreator())){
@@ -354,32 +354,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         editTextComment.setVisibility(View.VISIBLE);
     }
 
-    public static String getRelativeTime(Date uploadDate) {
-        long uploadTime = uploadDate.getTime();
-        long currentTime = System.currentTimeMillis();
-        long duration = currentTime - uploadTime;
 
-        long seconds = TimeUnit.MILLISECONDS.toSeconds(duration);
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(duration);
-        long hours = TimeUnit.MILLISECONDS.toHours(duration);
-        long days = TimeUnit.MILLISECONDS.toDays(duration);
-
-        if (seconds < 60) {
-            return seconds == 1 ? "1 second ago" : seconds + " seconds ago";
-        } else if (minutes < 60) {
-            return minutes == 1 ? "1 minute ago" : minutes + " minutes ago";
-        } else if (hours < 24) {
-            return hours == 1 ? "1 hour ago" : hours + " hours ago";
-        } else if (days < 30) {
-            return days == 1 ? "1 day ago" : days + " days ago";
-        } else if (days < 365) {
-            long months = days / 30;
-            return months == 1 ? "1 month ago" : months + " months ago";
-        } else {
-            long years = days / 365;
-            return years == 1 ? "1 year ago" : years + " years ago";
-        }
-    }
 
     public void closeKeyboard(View view) {
         // Check if no view has focus
