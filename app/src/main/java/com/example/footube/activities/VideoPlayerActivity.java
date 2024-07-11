@@ -142,7 +142,6 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
             @Override
             public void onClick(View v) {
                 if (isGuest != 1) {
-                    Toast.makeText(VideoPlayerActivity.this, "You need to sign in to comment", Toast.LENGTH_SHORT).show();
                     String commentText = editTextComment.getText().toString().trim();
                     if (!commentText.isEmpty()) {
                         Comment newComment = new Comment(loggedInUserName, commentText,0,0);
@@ -151,6 +150,9 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
                         closeKeyboard(v);
                         editTextComment.setText("");
                     }
+                }
+                else {
+                    Toast.makeText(VideoPlayerActivity.this, "You need to sign in to comment", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -164,6 +166,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
                         isLiked = false;
                         likeButton.setImageResource(R.drawable.ic_thumb_up);
                         numberOfLikes.setTextColor(getResources().getColor(R.color.black));
+                        numberOfUnlikes.setTextColor(getResources().getColor(R.color.black));
                         if (loggedInUser.searchlike(movie)) {
                             loggedInUser.RemoveLike(movie);
                         }
@@ -174,6 +177,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
                         likeButton.setImageResource(R.drawable.ic_thumb_up_blue);
                         movie.setLikes(movie.getLikes() + 1);
                         numberOfLikes.setTextColor(getResources().getColor(R.color.blue));
+                        numberOfUnlikes.setTextColor(getResources().getColor(R.color.black));
                         if (loggedInUser.searchunlike(movie)) {
                             loggedInUser.RemoveUnLike(movie);
                         }
