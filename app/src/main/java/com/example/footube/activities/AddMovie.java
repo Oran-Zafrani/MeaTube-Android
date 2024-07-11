@@ -1,18 +1,18 @@
-package com.example.footube;
-
-import static com.example.footube.AddMovie.bitmapToBase64;
+package com.example.footube.activities;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.MediaController;
@@ -20,61 +20,50 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.example.footube.BasicClasses.Movie;
+import com.example.footube.managers.MoviesManager;
+import com.example.footube.R;
+import com.example.footube.BasicClasses.User;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class EditMovie extends AppCompatActivity {
+public class AddMovie extends AppCompatActivity {
 
     private static final int REQUEST_VIDEO_PICK = 1;
-    private Movie movie;
-    private MoviesManager movies;
-    private User user;
-    private String userName;
-    private int position;
-    private Uri videoUri;
-    private EditText moviename;
-    private EditText moviedecription;
-    private EditText moviecategory;
-    private TextView editor;
+    private EditText editTextMovieName;
+    private EditText editTextMovieDescription;
+    private EditText editTextMovieCategory;
     private VideoView videoViewUploadedMovie;
+    private Uri videoUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_edit_movie);
-        movies = MoviesManager.getInstance(this);
-        position = getIntent().getIntExtra("movie_index", -1);
-        movie = movies.getMovie(position);
-        user = (User) getIntent().getSerializableExtra("user");
-        userName = user.getUsername();
-        user = UserManager.getInstance().getUser(userName);
+        setContentView(R.layout.activity_add_movie);
 
-        moviename = findViewById(R.id.editTextMovieName);
-        moviedecription = findViewById(R.id.editTextMovieDescription);
-        moviecategory = findViewById(R.id.editTextMovieCategory);
-        editor = findViewById(R.id.editor);
+        Intent intent = getIntent();
+        User user = (User) intent.getSerializableExtra("user");
+
+        TextView creator = findViewById(R.id.creator);
+        creator.setText("Movie Creator: " + user.getUsername());
+        creator.setGravity(Gravity.CENTER);
+
+
+        editTextMovieName = findViewById(R.id.editTextMovieName);
+        editTextMovieDescription = findViewById(R.id.editTextMovieDescription);
+        editTextMovieCategory = findViewById(R.id.editTextMovieCategory);
         videoViewUploadedMovie = findViewById(R.id.videoViewUploadedMovie);
-//
-        moviename.setText(movie.getName());
-        moviedecription.setText(movie.getDescription());
-        moviecategory.setText(movie.getCategory());
-        editor.setText("Editor: " + userName);
-        setupVideoPlayer(movie.getMovieUri());
 
         Button buttonUploadMovie = findViewById(R.id.buttonUploadMovie);
         buttonUploadMovie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                closeKeyboard(v);
                 chooseVideoFromGallery();
             }
         });
@@ -84,42 +73,35 @@ public class EditMovie extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addMovieToManager();
-                finish();
             }
         });
+    }
 
+    private void chooseVideoFromGallery() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent, REQUEST_VIDEO_PICK);
     }
 
     private void addMovieToManager() {
         Intent intent = getIntent();
         User user = (User) intent.getSerializableExtra("user");
         String username = user.getUsername();
-        String movieName = moviename.getText().toString();
-        String movieDescription = moviedecription.getText().toString();
-        String movieCategory = moviecategory.getText().toString();
+        String movieName = editTextMovieName.getText().toString();
+        String movieDescription = editTextMovieDescription.getText().toString();
+        String movieCategory = editTextMovieCategory.getText().toString();
 
-        if (movieName.isEmpty() || movieDescription.isEmpty() || movieCategory.isEmpty()) {
+        if (movieName.isEmpty() || movieDescription.isEmpty() || movieCategory.isEmpty() || videoUri == null) {
             // Handle case where any field is empty or videoUri is null
             // Typically show a Toast or error message
             Toast.makeText(this, "Please fill all fields and upload a video.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String base64Video;
-        if (videoUri != null){
-            base64Video = videoUriToBase64(getContentResolver(), videoUri);
-            Log.d("editmovie111", base64Video);
         }else {
-            base64Video = movie.getMovieUri();
-            Log.d("editmovie222", base64Video);
-        }
-        // Create a Movie object with the entered details
-        Movie newMovie = new Movie(username, movieName, movieDescription, movieCategory, base64Video);
+            String base64Video = videoUriToBase64(getContentResolver(), videoUri);
+            // Create a Movie object with the entered details
+            Movie newMovie = new Movie(user.getDisplayName(),username, movieName, movieDescription, movieCategory, base64Video, "");
 
-        Bitmap thumbnail = null;
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            Bitmap thumbnail = null;
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
 
-        if (videoUri != null) {
             try {
                 // Use itemView's context to set data source
                 retriever.setDataSource(this, videoUri);
@@ -135,63 +117,26 @@ public class EditMovie extends AppCompatActivity {
                     throw new RuntimeException(e);
                 }
             }
-        }else {
-            thumbnail = base64ToBitmap(movie.GetImage());
+
+            newMovie.setMovieImage(bitmapToBase64(thumbnail));
+
+            // Add the movie to MoviesManager
+            MoviesManager.getInstance(this).addMovie(newMovie);
+            Toast.makeText(this, "Movie added successfully!", Toast.LENGTH_SHORT).show();
+
+
+            //clear the input fields and reset the VideoView
+            editTextMovieName.setText("");
+            editTextMovieDescription.setText("");
+            editTextMovieCategory.setText("");
+            videoViewUploadedMovie.setVideoURI(null); // Clear the video
+
+
+            //close the activity
+            finish();
         }
 
-        newMovie.setMovieImage(bitmapToBase64(thumbnail));
 
-        Log.d("update movie", newMovie.getName());
-
-        // Add the movie to MoviesManager
-        MoviesManager.getInstance(this).UpdateMovie(movie, newMovie);
-        Toast.makeText(this, "Movie update successfully!", Toast.LENGTH_SHORT).show();
-
-
-        // Optionally, clear the input fields and reset the VideoView
-        moviename.setText("");
-        moviedecription.setText("");
-        moviecategory.setText("");
-        videoViewUploadedMovie.setVideoURI(null); // Clear the video
-
-        // Provide feedback to the user (e.g., Toast message) that the movie was added successfully
-        // Optionally navigate to another activity or perform additional actions
-    }
-
-    private void chooseVideoFromGallery() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(galleryIntent, REQUEST_VIDEO_PICK);
-    }
-
-    private void setupVideoPlayer(String base64Video) {
-        byte[] videoBytes = Base64.decode(base64Video, Base64.DEFAULT);
-        File tempFile = null;
-        try {
-            tempFile = File.createTempFile("tempVideo", ".mp4", getCacheDir());
-            FileOutputStream fos = new FileOutputStream(tempFile);
-            fos.write(videoBytes);
-            fos.close();
-        } catch (IOException e) {
-            Log.e("VideoPlayerActivity", "Error writing video to temp file", e);
-            return;
-        }
-
-        if (tempFile != null) {
-            Uri uri = Uri.fromFile(tempFile);
-            videoViewUploadedMovie.setVideoURI(uri);
-
-            // Create a MediaController and set it to the VideoView
-//            MediaController mediaController = new MediaController(this);
-//            mediaController.setAnchorView(videoView);
-//            videoView.setMediaController(mediaController);
-
-            CustomMediaController customMediaController = new CustomMediaController(this);
-            customMediaController.setVideoView(videoViewUploadedMovie);
-            customMediaController.setAnchorView(findViewById(R.id.frame)); // Ensure the anchor view is set to the FrameLayout
-            videoViewUploadedMovie.setMediaController(customMediaController);
-
-            videoViewUploadedMovie.start();
-        }
     }
 
     public static String bitmapToBase64(Bitmap bitmap) {
@@ -199,6 +144,17 @@ public class EditMovie extends AppCompatActivity {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    }
+
+    public void closeKeyboard(View view) {
+        // Check if no view has focus
+        View currentView = this.getCurrentFocus();
+        if (currentView != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(currentView.getWindowToken(), 0);
+        } else {
+            Toast.makeText(this, "No view has focus", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public static String videoUriToBase64(ContentResolver contentResolver, Uri videoUri) {
@@ -249,6 +205,8 @@ public class EditMovie extends AppCompatActivity {
         }
     }
 
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -265,10 +223,5 @@ public class EditMovie extends AppCompatActivity {
                 videoViewUploadedMovie.start();
             }
         }
-    }
-
-    public static Bitmap base64ToBitmap(String base64Str) throws IllegalArgumentException {
-        byte[] decodedBytes = Base64.decode(base64Str, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
     }
 }

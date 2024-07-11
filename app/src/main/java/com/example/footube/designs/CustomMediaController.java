@@ -1,4 +1,4 @@
-package com.example.footube;
+package com.example.footube.designs;
 
 import android.content.Context;
 import android.util.AttributeSet;

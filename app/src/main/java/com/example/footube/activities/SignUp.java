@@ -1,4 +1,4 @@
-package com.example.footube;
+package com.example.footube.activities;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,6 +22,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.example.footube.R;
+import com.example.footube.managers.UserManager;
 
 import java.io.ByteArrayOutputStream;
 import java.util.regex.Pattern;

@@ -1,4 +1,4 @@
-package com.example.footube;
+package com.example.footube.listeners;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,10 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.footube.BasicClasses.Movie;
+import com.example.footube.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -49,9 +51,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 //        Movie movie = movies.get(position);
         Movie movie = filteredMovies.get(position);
         holder.titleTextView.setText(movie.getName());
-        holder.descriptionTextView.setText(movie.getDescription());
+//        holder.uploadtime.setText(movie.GetUploadTime().toString()); //fix
+        holder.uploadtime.setText(movie.getRelativeTime());
+        holder.views.setText(String.valueOf(movie.getViews()) + " Views");
+        holder.likes.setText(String.valueOf(movie.getLikes()) + " Likes");
         holder.genreTextView.setText(movie.getCategory());
-        holder.creatorTextView.setText(movie.getCreator());  // Set the creator text
+        holder.creatorTextView.setText(movie.getChannel());
 
         // Generate a thumbnail from the video URI
         Bitmap thumbnail = null;
@@ -121,7 +126,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     static class MovieViewHolder extends RecyclerView.ViewHolder {
         TextView titleTextView;
-        TextView descriptionTextView;
+        TextView uploadtime;
+        TextView likes;
+        TextView views;
         TextView genreTextView;
         TextView creatorTextView;  // Add a TextView for the creator
         ImageView movieImageView;
@@ -129,7 +136,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         MovieViewHolder(View itemView, final OnMovieClickListener listener) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.movie_title);
-            descriptionTextView = itemView.findViewById(R.id.movie_description);
+            uploadtime = itemView.findViewById(R.id.movie_upload_time);
+            likes = itemView.findViewById(R.id.movie_likes);
+            views = itemView.findViewById(R.id.movie_views);
             genreTextView = itemView.findViewById(R.id.movie_category);
             creatorTextView = itemView.findViewById(R.id.movie_creator);  // Initialize the creator TextView
             movieImageView = itemView.findViewById(R.id.movie_image);
