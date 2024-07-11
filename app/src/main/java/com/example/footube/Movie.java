@@ -1,46 +1,66 @@
 package com.example.footube;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+import java.util.TimeZone;
 
 public class Movie implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String creator;
-    private String name;
+    private int id;
+    private String username;
+    private String title;
     private String description;
     private String category;
-    private String movie;
-    private Date uploadtime;
+    private String videoFile;
     private int likes;
-    private int unlikes;
+    private int dislikes;
     private int views;
-    private String image;
-    private List<Comment> comments;
+    private String previewImage;
+    private List<Comment> commentsLink;
+    private String channel;
+    private int comments;
+    private Date uploadTime;
 
-    public Movie(String creator, String name, String description, String category, String movie) {
-        this.creator = creator;
-        this.name = name;
+    public Movie(String channel,String creator, String name, String description, String category, String movie, String uploadtime) {
+        this.channel = channel;
+        this.username = creator;
+        this.title = name;
         this.description = description;
         this.category = category;
-        this.movie = movie;
+        this.videoFile = movie;
         this.likes = 0;
-        this.unlikes = 0;
+        this.dislikes = 0;
         this.views = 0;
-        this.uploadtime = Calendar.getInstance().getTime();
-        this.comments = new ArrayList<Comment>();
+        if (Objects.equals(uploadtime, "")){
+            this.uploadTime = Calendar.getInstance().getTime();
+        }else {
+            this.uploadTime = convertStringToDate(uploadtime);
+        }
+        this.commentsLink = new ArrayList<Comment>();
     }
 
 
     public void SetMovie(Movie m){
-        this.name = m.getName();
+        this.title = m.getName();
         this.description = m.getDescription();
         this.category = m.getCategory();
-        this.image = m.image;
-        this.movie = m.getMovieUri();
+        this.previewImage = m.getPreviewImage();
+        this.videoFile = m.getMovieUri();
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public String getPreviewImage() {
+        return previewImage;
     }
 
     public int getViews() {
@@ -52,27 +72,23 @@ public class Movie implements Serializable {
     }
 
     public void AddComment(Comment comment){
-        this.comments.add(comment);
+        this.commentsLink.add(comment);
     }
 
     public List<Comment> GetComments(){
-        return this.comments;
+        return this.commentsLink;
     }
 
     public String getCreator() {
-        return creator;
+        return username;
     }
 
     public Date GetUploadTime() {
-        return this.uploadtime;
+        return this.uploadTime;
     }
 
     public String GetImage() {
-        return this.image;
-    }
-
-    public void SetImage(String image){
-        this.image = image;
+        return this.previewImage;
     }
 
     public int getLikes(){
@@ -84,23 +100,23 @@ public class Movie implements Serializable {
     }
 
     public int getUnlikes() {
-        return unlikes;
+        return dislikes;
     }
 
     public void setUnlikes(int unlikes) {
-        this.unlikes = unlikes;
+        this.dislikes = unlikes;
     }
 
     public void setCreator(String creator) {
-        this.creator = creator;
+        this.username = creator;
     }
 
     public String getName() {
-        return name;
+        return title;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.title = name;
     }
 
     public String getDescription() {
@@ -120,21 +136,21 @@ public class Movie implements Serializable {
     }
 
     public String getMovieUri() {
-        return movie;
+        return videoFile;
     }
 
     public void setMovieUri(String movie) {
-        this.movie = movie;
+        this.videoFile = movie;
     }
 
     public void setMovieImage(String image) {
-        this.image = image;
+        this.previewImage = image;
     }
 
     public String commentsstring(){
         String s="{";
-        for (int i = 0; i < this.comments.size(); i++) {
-            s+="{"+this.comments.get(i).getUsername() + "," + this.comments.get(i).getComment() + "}";
+        for (int i = 0; i < this.commentsLink.size(); i++) {
+            s+="{"+this.commentsLink.get(i).getUsername() + "," + this.commentsLink.get(i).getComment() + "}";
         }
         s+="}";
         return s;
@@ -143,14 +159,28 @@ public class Movie implements Serializable {
     @Override
     public String toString() {
         return "Movie{" +
-                "creator='" + creator + '\'' +
-                "name='" + name + '\'' +
+                "creator='" + username + '\'' +
+                "name='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", category='" + category + '\'' +
-                ", movieUri='" + movie + '\'' +
-                ", uploadtime='" + this.uploadtime + '\'' +
+                ", movieUri='" + videoFile + '\'' +
+                ", uploadtime='" + this.uploadTime + '\'' +
                 ", likes='" + this.likes + '\'' +
                 ", comments='" + commentsstring() + '\'' +
                 '}';
+    }
+
+    public static Date convertStringToDate(String dateString) {
+        // Define the date format
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        try {
+            // Parse the date string to a Date object
+            return dateFormat.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,6 +96,12 @@ public class UserManager {
             List<User> users = gson.fromJson(json, userListType);
 
             for (User user : users) {
+                if (user.getLikes() == null) {
+                    user.setLikes(new ArrayList<>());
+                }
+                if (user.getUnlikes() == null) {
+                    user.setUnlikes(new ArrayList<>());
+                }
                 addUser(user);
             }
         } catch (IOException ex) {

@@ -21,8 +21,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public class MoviesManager {
 
@@ -33,7 +37,7 @@ public class MoviesManager {
     private MoviesManager(Context context) {
         this.context = context;
         movies = new ArrayList<>();
-        AddDefaultMovies();
+        loadMoviesFromJSON(context);
     }
 
     public static synchronized MoviesManager getInstance(Context context) {
@@ -44,74 +48,74 @@ public class MoviesManager {
     }
 
     private void AddDefaultMovies (){
-        String movie1 = readTextFileFromRaw(R.raw.movie1);
-        String movie1p = readTextFileFromRaw(R.raw.movie1p);
-        Movie m1 = new Movie("ba", "meat1", "interesting", "beef", movie1);
-        m1.setMovieImage(movie1p);
-        this.movies.add(m1);
-
-
-        String movie2 = readTextFileFromRaw(R.raw.movie2);
-        String movie2p = readTextFileFromRaw(R.raw.movie2p);
-        Movie m2 = new Movie("ba", "meat2", "interesting", "beef", movie2);
-        m2.setMovieImage(movie2p);
-        this.movies.add(m2);
-
-
-        String movie3 = readTextFileFromRaw(R.raw.movie3);
-        String movie3p = readTextFileFromRaw(R.raw.movie3p);
-        Movie m3 = new Movie("ba", "meat3", "interesting", "beef", movie3);
-        m3.setMovieImage(movie3p);
-        this.movies.add(m3);
-
-
-        String movie4= readTextFileFromRaw(R.raw.movie4);
-        String movie4p = readTextFileFromRaw(R.raw.movie4p);
-        Movie m4 = new Movie("ba", "meat4", "interesting", "beef", movie4);
-        m4.setMovieImage(movie4p);
-        this.movies.add(m4);
-
-
-        String movie5= readTextFileFromRaw(R.raw.movie5);
-        String movie5p = readTextFileFromRaw(R.raw.movie5p);
-        Movie m5 = new Movie("ba", "meat5", "interesting", "beef", movie5);
-        m5.setMovieImage(movie5p);
-        this.movies.add(m5);
-
-
-        String movie6= readTextFileFromRaw(R.raw.movie6);
-        String movie6p = readTextFileFromRaw(R.raw.movie6p);
-        Movie m6 = new Movie("ba", "meat6", "interesting", "beef", movie6);
-        m6.setMovieImage(movie6p);
-        this.movies.add(m6);
-
-
-        String movie7= readTextFileFromRaw(R.raw.movie7);
-        String movie7p = readTextFileFromRaw(R.raw.movie7p);
-        Movie m7 = new Movie("ba", "meat7", "interesting", "beef", movie7);
-        m7.setMovieImage(movie7p);
-        this.movies.add(m7);
-
-
-        String movie8= readTextFileFromRaw(R.raw.movie8);
-        String movie8p = readTextFileFromRaw(R.raw.movie8p);
-        Movie m8 = new Movie("ba", "meat8", "interesting", "beef", movie8);
-        m8.setMovieImage(movie8p);
-        this.movies.add(m8);
-
-
-        String movie9= readTextFileFromRaw(R.raw.movie9);
-        String movie9p = readTextFileFromRaw(R.raw.movie9p);
-        Movie m9 = new Movie("ba", "meat9", "interesting", "beef", movie9);
-        m9.setMovieImage(movie9p);
-        this.movies.add(m9);
-
-
-        String movie10= readTextFileFromRaw(R.raw.movie10);
-        String movie10p = readTextFileFromRaw(R.raw.movie10p);
-        Movie m10 = new Movie("ba", "meat10", "interesting", "beef", movie10);
-        m10.setMovieImage(movie10p);
-        this.movies.add(m10);
+//        String movie1 = readTextFileFromRaw(R.raw.movie1);
+//        String movie1p = readTextFileFromRaw(R.raw.movie1p);
+//        Movie m1 = new Movie("ba", "meat1", "interesting", "beef", movie1);
+//        m1.setMovieImage(movie1p);
+//        this.movies.add(m1);
+//
+//
+//        String movie2 = readTextFileFromRaw(R.raw.movie2);
+//        String movie2p = readTextFileFromRaw(R.raw.movie2p);
+//        Movie m2 = new Movie("ba", "meat2", "interesting", "beef", movie2);
+//        m2.setMovieImage(movie2p);
+//        this.movies.add(m2);
+//
+//
+//        String movie3 = readTextFileFromRaw(R.raw.movie3);
+//        String movie3p = readTextFileFromRaw(R.raw.movie3p);
+//        Movie m3 = new Movie("ba", "meat3", "interesting", "beef", movie3);
+//        m3.setMovieImage(movie3p);
+//        this.movies.add(m3);
+//
+//
+//        String movie4= readTextFileFromRaw(R.raw.movie4);
+//        String movie4p = readTextFileFromRaw(R.raw.movie4p);
+//        Movie m4 = new Movie("ba", "meat4", "interesting", "beef", movie4);
+//        m4.setMovieImage(movie4p);
+//        this.movies.add(m4);
+//
+//
+//        String movie5= readTextFileFromRaw(R.raw.movie5);
+//        String movie5p = readTextFileFromRaw(R.raw.movie5p);
+//        Movie m5 = new Movie("ba", "meat5", "interesting", "beef", movie5);
+//        m5.setMovieImage(movie5p);
+//        this.movies.add(m5);
+//
+//
+//        String movie6= readTextFileFromRaw(R.raw.movie6);
+//        String movie6p = readTextFileFromRaw(R.raw.movie6p);
+//        Movie m6 = new Movie("ba", "meat6", "interesting", "beef", movie6);
+//        m6.setMovieImage(movie6p);
+//        this.movies.add(m6);
+//
+//
+//        String movie7= readTextFileFromRaw(R.raw.movie7);
+//        String movie7p = readTextFileFromRaw(R.raw.movie7p);
+//        Movie m7 = new Movie("ba", "meat7", "interesting", "beef", movie7);
+//        m7.setMovieImage(movie7p);
+//        this.movies.add(m7);
+//
+//
+//        String movie8= readTextFileFromRaw(R.raw.movie8);
+//        String movie8p = readTextFileFromRaw(R.raw.movie8p);
+//        Movie m8 = new Movie("ba", "meat8", "interesting", "beef", movie8);
+//        m8.setMovieImage(movie8p);
+//        this.movies.add(m8);
+//
+//
+//        String movie9= readTextFileFromRaw(R.raw.movie9);
+//        String movie9p = readTextFileFromRaw(R.raw.movie9p);
+//        Movie m9 = new Movie("ba", "meat9", "interesting", "beef", movie9);
+//        m9.setMovieImage(movie9p);
+//        this.movies.add(m9);
+//
+//
+//        String movie10= readTextFileFromRaw(R.raw.movie10);
+//        String movie10p = readTextFileFromRaw(R.raw.movie10p);
+//        Movie m10 = new Movie("ba", "meat10", "interesting", "beef", movie10);
+//        m10.setMovieImage(movie10p);
+//        this.movies.add(m10);
     }
 
 
@@ -222,15 +226,46 @@ public class MoviesManager {
 
             String json = new String(buffer, "UTF-8");
             Gson gson = new Gson();
-            Type movieListType = new TypeToken<List<User>>() {}.getType();
+            Type movieListType = new TypeToken<List<Movie>>() {}.getType();
             List<Movie> movies = gson.fromJson(json, movieListType);
 
-            for (Movie movie : movies) {
+            String moviephoto;
+            String Video;
+            for (int i = 0; i < movies.size(); i++) {
+                Movie movie = movies.get(i);
+                // Dynamically read the raw resource file based on the movie position
+                int resourceId = context.getResources().getIdentifier("movie" + (i + 1) + "p", "raw", context.getPackageName());
+                if (resourceId != 0) {
+                    moviephoto = readTextFileFromRaw(context, resourceId);
+                    movie.setMovieImage(moviephoto);
+                }
+
+                resourceId = context.getResources().getIdentifier("movie" + (i + 1), "raw", context.getPackageName());
+                if (resourceId != 0) {
+                    Video = readTextFileFromRaw(context, resourceId);
+                    movie.setMovieUri(Video);
+                }
                 addMovie(movie);
             }
         } catch (IOException ex) {
             Log.e("MoviesManager", "Error reading Feed.json", ex);
         }
+    }
+
+    private String readTextFileFromRaw(Context context, int resourceId) {
+        InputStream inputStream = context.getResources().openRawResource(resourceId);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        try {
+            int i = inputStream.read();
+            while (i != -1) {
+                byteArrayOutputStream.write(i);
+                i = inputStream.read();
+            }
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return byteArrayOutputStream.toString();
     }
 
 }

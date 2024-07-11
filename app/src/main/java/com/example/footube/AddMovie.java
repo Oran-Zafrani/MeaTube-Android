@@ -96,7 +96,7 @@ public class AddMovie extends AppCompatActivity {
 
         String base64Video = videoUriToBase64(getContentResolver(), videoUri);
         // Create a Movie object with the entered details
-        Movie newMovie = new Movie(username, movieName, movieDescription, movieCategory, base64Video);
+        Movie newMovie = new Movie(user.getDisplayName(),username, movieName, movieDescription, movieCategory, base64Video, "");
 
         Bitmap thumbnail = null;
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();

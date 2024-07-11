@@ -114,7 +114,7 @@ public class EditMovie extends AppCompatActivity {
             Log.d("editmovie222", base64Video);
         }
         // Create a Movie object with the entered details
-        Movie newMovie = new Movie(username, movieName, movieDescription, movieCategory, base64Video);
+        Movie newMovie = new Movie(user.getDisplayName(),username, movieName, movieDescription, movieCategory, base64Video, "");
 
         Bitmap thumbnail = null;
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
