@@ -125,8 +125,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
             videoDescription.setText(movie.getDescription());
             setupCommentsRecyclerView();
             numberOfLikes.setText(String.valueOf(movie.getLikes()));
-            Uri imageUri = Uri.fromFile(new File(UserManager.getInstance().getUser(movie.getCreator()).getImage()));
-            //uploadUserImage.setImageURI(imageUri);
+            uploadUserImage.setImageBitmap(MoviesList.base64ToBitmap(UserManager.getInstance().getUser(movie.getCreator()).getImage()));
             numberOfLikes.setTextColor(getResources().getColor(R.color.black));
             PrivateLikesLogic();
             TextView uploadTimeTextView = findViewById(R.id.upload_time);
