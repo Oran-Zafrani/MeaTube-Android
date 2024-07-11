@@ -45,6 +45,7 @@ public class Movie implements Serializable {
             this.uploadTime = convertStringToDate(uploadtime);
         }
         this.commentsLink = new ArrayList<Comment>();
+        this.id = (int) (System.currentTimeMillis() / 1000L);
     }
 
 
@@ -138,6 +139,14 @@ public class Movie implements Serializable {
 
     public String getMovieUri() {
         return videoFile;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setMovieUri(String movie) {
