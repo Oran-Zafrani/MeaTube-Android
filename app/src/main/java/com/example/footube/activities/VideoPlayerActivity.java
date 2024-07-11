@@ -315,8 +315,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
 
     private void setupCommentsRecyclerView() {
         commentList = movie.GetComments();
-        boolean iscreator = Objects.equals(userName, movie.getCreator());
-        commentsAdapter = new CommentsAdapter(iscreator,this, commentList, this, this);
+//        boolean[] iscreator = movie.getiscreator(userName);
+        commentsAdapter = new CommentsAdapter(userName,this, commentList, this, this);
         commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         commentsRecyclerView.setAdapter(commentsAdapter);
     }
