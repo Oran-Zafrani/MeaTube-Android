@@ -68,7 +68,6 @@ public class AddMovie extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addMovieToManager();
-                finish();
             }
         });
     }
@@ -90,49 +89,49 @@ public class AddMovie extends AppCompatActivity {
             // Handle case where any field is empty or videoUri is null
             // Typically show a Toast or error message
             Toast.makeText(this, "Please fill all fields and upload a video.", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        }else {
+            String base64Video = videoUriToBase64(getContentResolver(), videoUri);
+            // Create a Movie object with the entered details
+            Movie newMovie = new Movie(user.getDisplayName(),username, movieName, movieDescription, movieCategory, base64Video, "");
 
+            Bitmap thumbnail = null;
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
 
-        String base64Video = videoUriToBase64(getContentResolver(), videoUri);
-        // Create a Movie object with the entered details
-        Movie newMovie = new Movie(user.getDisplayName(),username, movieName, movieDescription, movieCategory, base64Video, "");
-
-        Bitmap thumbnail = null;
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-
-        try {
-            // Use itemView's context to set data source
-            retriever.setDataSource(this, videoUri);
-
-            // Get the thumbnail
-            thumbnail = retriever.getFrameAtTime();
-        } catch (Exception e) {
-            Log.e("AddMovie", "Failed to retrieve thumbnail for movie: " + movieName, e);
-        } finally {
             try {
-                retriever.release();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                // Use itemView's context to set data source
+                retriever.setDataSource(this, videoUri);
+
+                // Get the thumbnail
+                thumbnail = retriever.getFrameAtTime();
+            } catch (Exception e) {
+                Log.e("AddMovie", "Failed to retrieve thumbnail for movie: " + movieName, e);
+            } finally {
+                try {
+                    retriever.release();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
+
+            newMovie.setMovieImage(bitmapToBase64(thumbnail));
+
+            // Add the movie to MoviesManager
+            MoviesManager.getInstance(this).addMovie(newMovie);
+            Toast.makeText(this, "Movie added successfully!", Toast.LENGTH_SHORT).show();
+
+
+            //clear the input fields and reset the VideoView
+            editTextMovieName.setText("");
+            editTextMovieDescription.setText("");
+            editTextMovieCategory.setText("");
+            videoViewUploadedMovie.setVideoURI(null); // Clear the video
+
+
+            //close the activity
+            finish();
         }
 
-        newMovie.setMovieImage(bitmapToBase64(thumbnail));
 
-        // Add the movie to MoviesManager
-        MoviesManager.getInstance(this).addMovie(newMovie);
-        Toast.makeText(this, "Movie added successfully!", Toast.LENGTH_SHORT).show();
-
-//        Log.d("new movie",MoviesManager.getInstance().toString());
-
-        // Optionally, clear the input fields and reset the VideoView
-        editTextMovieName.setText("");
-        editTextMovieDescription.setText("");
-        editTextMovieCategory.setText("");
-        videoViewUploadedMovie.setVideoURI(null); // Clear the video
-
-        // Provide feedback to the user (e.g., Toast message) that the movie was added successfully
-        // Optionally navigate to another activity or perform additional actions
     }
 
     public static String bitmapToBase64(Bitmap bitmap) {
