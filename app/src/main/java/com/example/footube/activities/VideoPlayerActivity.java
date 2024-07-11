@@ -55,6 +55,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
     private ImageView uploadUserImage;
     private Button beditmovie;
     private TextView numberOfLikes;
+    private TextView numberOfUnlikes;
     private CommentsAdapter commentsAdapter;
     private List<Comment> commentList;
     private Movie movie;
@@ -90,6 +91,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         unlikeButton = findViewById(R.id.unlikeButton);
         shareButton = findViewById(R.id.shareButton);
         numberOfLikes = findViewById(R.id.number_of_likes);
+        numberOfUnlikes = findViewById(R.id.number_of_unlikes);
         beditmovie = findViewById(R.id.editmovie);
         TViews = findViewById(R.id.views);
         textNoComments = findViewById(R.id.NoComments);
@@ -106,9 +108,6 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         }else if (isGuest == 1) { // If the user is a guest
             loggedInUser = new User("Guest","Guest", "", "");
             loggedInUserName = loggedInUser.getUsername();
-
-            likeButton.setImageResource(R.drawable.ic_thumb_up_blue);
-            numberOfLikes.setTextColor(getResources().getColor(R.color.blue));
         }
 
         // Get the movie data
@@ -125,8 +124,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
             videoDescription.setText(movie.getDescription());
             setupCommentsRecyclerView();
             numberOfLikes.setText(String.valueOf(movie.getLikes()));
+            numberOfUnlikes.setText(String.valueOf(movie.getUnlikes()));
             uploadUserImage.setImageBitmap(MoviesList.base64ToBitmap(UserManager.getInstance().getUser(movie.getCreator()).getImage()));
-            numberOfLikes.setTextColor(getResources().getColor(R.color.black));
             PrivateLikesLogic();
             TextView uploadTimeTextView = findViewById(R.id.upload_time);
             String relativeTime = movie.getRelativeTime();
@@ -187,6 +186,9 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
                     }
                     numberOfLikes.setText(String.valueOf(movie.getLikes()));
                 }
+                else {
+                    Toast.makeText(VideoPlayerActivity.this, "You need to sign in to like", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -198,16 +200,20 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
                         isUnliked = false;
                         unlikeButton.setImageResource(R.drawable.ic_thumb_down);
                         numberOfLikes.setTextColor(getResources().getColor(R.color.black));
+                        numberOfUnlikes.setTextColor(getResources().getColor(R.color.black));
                         if (loggedInUser.searchunlike(movie)) {
                             loggedInUser.RemoveUnLike(movie);
                         }
                         loggedInUser.RemoveUnLike(movie);
                         movie.setUnlikes(movie.getUnlikes() - 1);
+                        numberOfUnlikes.setText(String.valueOf(movie.getUnlikes()));
                     } else {
                         isUnliked = true;
                         unlikeButton.setImageResource(R.drawable.ic_thumb_down_fill_red);
                         numberOfLikes.setTextColor(getResources().getColor(R.color.black));
+                        numberOfUnlikes.setTextColor(getResources().getColor(R.color.red));
                         movie.setUnlikes(movie.getUnlikes() + 1);
+                        numberOfUnlikes.setText(String.valueOf(movie.getUnlikes()));
                         if (loggedInUser.searchlike(movie)) {
                             loggedInUser.RemoveLike(movie);
                         }
@@ -219,6 +225,9 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
                         }
                     }
                     numberOfLikes.setText(String.valueOf(movie.getLikes()));
+                }
+                else {
+                    Toast.makeText(VideoPlayerActivity.this, "You need to sign in to unlike", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -351,6 +360,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
             isUnliked = true;
             Log.d("videoplayeractivity", "work2!");
             unlikeButton.setImageResource(R.drawable.ic_thumb_down_fill_red);
+            numberOfUnlikes.setTextColor(getResources().getColor(R.color.red));
         }
     }
 
