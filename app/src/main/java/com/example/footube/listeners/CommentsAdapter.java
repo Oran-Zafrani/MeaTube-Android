@@ -1,4 +1,4 @@
-package com.example.footube;
+package com.example.footube.listeners;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.footube.BasicClasses.Comment;
+import com.example.footube.R;
+import com.example.footube.activities.VideoPlayerActivity;
 
 import java.util.List;
 

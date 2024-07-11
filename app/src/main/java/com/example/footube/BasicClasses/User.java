@@ -1,4 +1,6 @@
-package com.example.footube;
+package com.example.footube.BasicClasses;
+
+import com.example.footube.BasicClasses.Movie;
 
 import java.io.Serializable;
 import java.util.ArrayList;

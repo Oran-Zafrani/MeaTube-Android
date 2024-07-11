@@ -1,4 +1,4 @@
-package com.example.footube;
+package com.example.footube.activities;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -22,6 +22,11 @@ import android.widget.VideoView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.footube.BasicClasses.Movie;
+import com.example.footube.managers.MoviesManager;
+import com.example.footube.R;
+import com.example.footube.BasicClasses.User;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

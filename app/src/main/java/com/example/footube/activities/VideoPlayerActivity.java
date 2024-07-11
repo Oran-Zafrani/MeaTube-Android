@@ -1,4 +1,4 @@
-package com.example.footube;
+package com.example.footube.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,13 +7,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -25,13 +23,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.footube.BasicClasses.Comment;
+import com.example.footube.listeners.CommentsAdapter;
+import com.example.footube.designs.CustomMediaController;
+import com.example.footube.BasicClasses.Movie;
+import com.example.footube.listeners.MovieAdapter;
+import com.example.footube.managers.MoviesManager;
+import com.example.footube.R;
+import com.example.footube.BasicClasses.User;
+import com.example.footube.managers.UserManager;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 public class VideoPlayerActivity extends AppCompatActivity implements CommentsAdapter.OnDeleteCommentListener, CommentsAdapter.OnEditCommentListener, MovieAdapter.OnMovieClickListener {
 

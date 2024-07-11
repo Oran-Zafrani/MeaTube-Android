@@ -1,11 +1,9 @@
-package com.example.footube;
+package com.example.footube.activities;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.InputType;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -16,6 +14,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+
+import com.example.footube.R;
+import com.example.footube.BasicClasses.User;
+import com.example.footube.managers.UserManager;
 
 public class SignIn extends AppCompatActivity {
     private static final String PREFS_NAME = "theme_prefs";

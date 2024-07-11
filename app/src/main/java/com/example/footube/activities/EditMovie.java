@@ -1,6 +1,4 @@
-package com.example.footube;
-
-import static com.example.footube.AddMovie.bitmapToBase64;
+package com.example.footube.activities;
 
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -23,9 +21,13 @@ import android.widget.VideoView;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.example.footube.designs.CustomMediaController;
+import com.example.footube.BasicClasses.Movie;
+import com.example.footube.managers.MoviesManager;
+import com.example.footube.R;
+import com.example.footube.BasicClasses.User;
+import com.example.footube.managers.UserManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

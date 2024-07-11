@@ -1,4 +1,4 @@
-package com.example.footube;
+package com.example.footube.BasicClasses;
 
 import java.io.Serializable;
 import java.text.ParseException;
