@@ -112,7 +112,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         if (movie != null) {
             setupVideoPlayer(movie.getMovieUri());
             videoTitle.setText(movie.getName());
-            videoCreator.setText(movie.getCreator());
+            videoCreator.setText(movie.getChannel());
             videoDescription.setText(movie.getDescription());
             setupCommentsRecyclerView();
             numberOfLikes.setText(String.valueOf(movie.getLikes()));

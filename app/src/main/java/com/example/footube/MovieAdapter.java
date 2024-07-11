@@ -51,7 +51,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         holder.titleTextView.setText(movie.getName());
         holder.descriptionTextView.setText(movie.getDescription());
         holder.genreTextView.setText(movie.getCategory());
-        holder.creatorTextView.setText(movie.getCreator());  // Set the creator text
+        holder.creatorTextView.setText(movie.getChannel());
 
         // Generate a thumbnail from the video URI
         Bitmap thumbnail = null;
