@@ -2,6 +2,7 @@ package com.example.footube.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -40,7 +41,7 @@ import java.io.File;
 
 public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovieClickListener {
     private static final int REQUEST_CODE_ADD_MOVIE = 1;
-    private static final String PREFS_NAME = "theme_prefs";
+    private static final String PREFS_NAME = "prefs";
     private static final String PREF_DARK_MODE = "dark_mode";
 
 
@@ -227,7 +228,12 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
 
     private void toggleTheme() {
         SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        boolean isDarkMode = preferences.getBoolean(PREF_DARK_MODE, false);
+
+        // Check if system's default is dark mode
+        boolean isSystemDarkMode = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+
+        // Retrieve current theme preference or use system default if not set
+        boolean isDarkMode = preferences.getBoolean(PREF_DARK_MODE, isSystemDarkMode);
 
         // Toggle theme
         if (isDarkMode) {
