@@ -99,6 +99,9 @@ public class SignUp extends AppCompatActivity {
         if (!samepass(pass,pass2)){
             error += "Passwords are not the same.\n";
         }
+        if (userManager.userExists(user)){
+            error += "This user is already exist.\n";
+        }
         errorTextView.setText(error);
         errorTextView.setVisibility(View.VISIBLE);
     }
