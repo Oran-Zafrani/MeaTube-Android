@@ -146,7 +146,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
                     Toast.makeText(VideoPlayerActivity.this, "You need to sign in to comment", Toast.LENGTH_SHORT).show();
                     String commentText = editTextComment.getText().toString().trim();
                     if (!commentText.isEmpty()) {
-                        Comment newComment = new Comment(userName, commentText);
+                        Comment newComment = new Comment(userName, commentText,0,0);
                         movies.addCommentToMovie(movie.getName(), newComment);
                         commentsAdapter.notifyItemInserted(commentList.size() - 1);
                         closeKeyboard(v);
