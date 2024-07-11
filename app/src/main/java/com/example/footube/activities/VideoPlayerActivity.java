@@ -52,6 +52,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
     private ImageView likeButton;
     private ImageView unlikeButton;
     private ImageView shareButton;
+    private ImageView uploadUserImage;
     private Button beditmovie;
     private TextView numberOfLikes;
     private CommentsAdapter commentsAdapter;
@@ -61,12 +62,12 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
     private UserManager users;
     private int position;
     private int Views = 0;
-    private int Guest;
-    private User user;
+    private int isGuest;
+    private User loggedInUser;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
     private MovieAdapter adapter;
-    private String userName;
+    private String loggedInUserName;
     private TextView textNoComments;
     private ConstraintLayout commentsLayout;
     private boolean isLiked = false;
@@ -77,7 +78,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_player);
 
-        //setting to xml
+        // Initialize the views
         videoView = findViewById(R.id.videoView);
         videoTitle = findViewById(R.id.video_title);
         videoCreator = findViewById(R.id.video_creator);
@@ -93,27 +94,26 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         TViews = findViewById(R.id.views);
         textNoComments = findViewById(R.id.NoComments);
         commentsLayout = findViewById(R.id.commentsSection);
+        //uploadUserImage = findViewById(R.id.uploader_image);
 
-
-
-
-
-
-        movies = MoviesManager.getInstance(this);
-        position = getIntent().getIntExtra("movie_index", -1);
-        Guest = getIntent().getIntExtra("Guest", -1);
-        if (Guest == 0){
-            user = (User) getIntent().getSerializableExtra("username");
-            userName = user.getUsername();
-            user = UserManager.getInstance().getUser(userName);
-        }else if (Guest == 1) {
-            user = new User("Guest","Guest", "", "");
-            userName = user.getUsername();
+        // Get the logged user data
+        isGuest = getIntent().getIntExtra("Guest", -1);
+        // Check if the user is a guest
+        if (isGuest == 0){  // If the user is not a guest
+            loggedInUser = (User) getIntent().getSerializableExtra("username");
+            loggedInUserName = loggedInUser.getUsername();
+            loggedInUser = UserManager.getInstance().getUser(loggedInUserName);
+        }else if (isGuest == 1) { // If the user is a guest
+            loggedInUser = new User("Guest","Guest", "", "");
+            loggedInUserName = loggedInUser.getUsername();
 
             likeButton.setImageResource(R.drawable.ic_thumb_up_blue);
             numberOfLikes.setTextColor(getResources().getColor(R.color.blue));
-
         }
+
+        // Get the movie data
+        movies = MoviesManager.getInstance(this);
+        position = getIntent().getIntExtra("movie_index", -1);
         movie = movies.getMovie(position);
         movie.AddView();
         TViews.setText(movie.getViews() + " Views");
@@ -125,28 +125,29 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
             videoDescription.setText(movie.getDescription());
             setupCommentsRecyclerView();
             numberOfLikes.setText(String.valueOf(movie.getLikes()));
+            //Uri imageUri = Uri.fromFile(new File(UserManager.getInstance().getUser(movie.getCreator()).getImage()));
+            //uploadUserImage.setImageURI(imageUri);
+            numberOfLikes.setTextColor(getResources().getColor(R.color.black));
+            PrivateLikesLogic();
+            TextView uploadTimeTextView = findViewById(R.id.upload_time);
+            String relativeTime = movie.getRelativeTime();
+            uploadTimeTextView.setText(relativeTime);
+            if (!Objects.equals(loggedInUserName, movie.getCreator())){
+                beditmovie.setVisibility(View.GONE);
+            }
         }
 
-        numberOfLikes.setTextColor(getResources().getColor(R.color.black));
-        PrivateLikesLogic();
 
-        TextView uploadTimeTextView = findViewById(R.id.upload_time);
 
-        String relativeTime = movie.getRelativeTime();
-        uploadTimeTextView.setText(relativeTime);
-
-        if (!Objects.equals(userName, movie.getCreator())){
-            beditmovie.setVisibility(View.GONE);
-        }
 
         buttonAddComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Guest != 1) {
+                if (isGuest != 1) {
                     Toast.makeText(VideoPlayerActivity.this, "You need to sign in to comment", Toast.LENGTH_SHORT).show();
                     String commentText = editTextComment.getText().toString().trim();
                     if (!commentText.isEmpty()) {
-                        Comment newComment = new Comment(userName, commentText,0,0);
+                        Comment newComment = new Comment(loggedInUserName, commentText,0,0);
                         movies.addCommentToMovie(movie.getName(), newComment);
                         commentsAdapter.notifyItemInserted(commentList.size() - 1);
                         closeKeyboard(v);
@@ -160,25 +161,25 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Guest != 1) {
+                if (isGuest != 1) {
                     if (isLiked) {
                         isLiked = false;
                         likeButton.setImageResource(R.drawable.ic_thumb_up);
                         numberOfLikes.setTextColor(getResources().getColor(R.color.black));
-                        if (user.searchlike(movie)) {
-                            user.RemoveLike(movie);
+                        if (loggedInUser.searchlike(movie)) {
+                            loggedInUser.RemoveLike(movie);
                         }
-                        user.RemoveLike(movie);
+                        loggedInUser.RemoveLike(movie);
                         movie.setLikes(movie.getLikes() - 1);
                     } else {
                         isLiked = true;
                         likeButton.setImageResource(R.drawable.ic_thumb_up_blue);
                         movie.setLikes(movie.getLikes() + 1);
                         numberOfLikes.setTextColor(getResources().getColor(R.color.blue));
-                        if (user.searchunlike(movie)) {
-                            user.RemoveUnLike(movie);
+                        if (loggedInUser.searchunlike(movie)) {
+                            loggedInUser.RemoveUnLike(movie);
                         }
-                        user.AddLike(movie);
+                        loggedInUser.AddLike(movie);
                         if (isUnliked) {
                             isUnliked = false;
                             unlikeButton.setImageResource(R.drawable.ic_thumb_down);
@@ -193,25 +194,25 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         unlikeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Guest != 1) {
+                if (isGuest != 1) {
                     if (isUnliked) {
                         isUnliked = false;
                         unlikeButton.setImageResource(R.drawable.ic_thumb_down);
                         numberOfLikes.setTextColor(getResources().getColor(R.color.black));
-                        if (user.searchunlike(movie)) {
-                            user.RemoveUnLike(movie);
+                        if (loggedInUser.searchunlike(movie)) {
+                            loggedInUser.RemoveUnLike(movie);
                         }
-                        user.RemoveUnLike(movie);
+                        loggedInUser.RemoveUnLike(movie);
                         movie.setUnlikes(movie.getUnlikes() - 1);
                     } else {
                         isUnliked = true;
                         unlikeButton.setImageResource(R.drawable.ic_thumb_down_fill_red);
                         numberOfLikes.setTextColor(getResources().getColor(R.color.black));
                         movie.setUnlikes(movie.getUnlikes() + 1);
-                        if (user.searchlike(movie)) {
-                            user.RemoveLike(movie);
+                        if (loggedInUser.searchlike(movie)) {
+                            loggedInUser.RemoveLike(movie);
                         }
-                        user.AddUnLike(movie);
+                        loggedInUser.AddUnLike(movie);
                         if (isLiked) {
                             isLiked = false;
                             likeButton.setImageResource(R.drawable.ic_thumb_up);
@@ -248,7 +249,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
             public void onClick(View v) {
                 Intent EditMovieInIntent = new Intent(VideoPlayerActivity.this, EditMovie.class);
                 EditMovieInIntent.putExtra("movie_index", position);
-                EditMovieInIntent.putExtra("user", user);
+                EditMovieInIntent.putExtra("user", loggedInUser);
                 finish();
                 startActivity(EditMovieInIntent);
             }
@@ -334,20 +335,20 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
 
     private void setupCommentsRecyclerView() {
         commentList = movie.GetComments();
-        boolean iscreator = Objects.equals(userName, movie.getCreator());
+        boolean iscreator = Objects.equals(loggedInUserName, movie.getCreator());
         commentsAdapter = new CommentsAdapter(iscreator,this, commentList, this, this);
         commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         commentsRecyclerView.setAdapter(commentsAdapter);
     }
 
     private void PrivateLikesLogic(){
-        if (user.searchlike(movie)){
+        if (loggedInUser.searchlike(movie)){
             Log.d("videoplayeractivity", "work!");
             isLiked = true;
             likeButton.setImageResource(R.drawable.ic_thumb_up_blue);
             numberOfLikes.setTextColor(getResources().getColor(R.color.blue));
         }
-        if (user.searchunlike(movie)){
+        if (loggedInUser.searchunlike(movie)){
             isUnliked = true;
             Log.d("videoplayeractivity", "work2!");
             unlikeButton.setImageResource(R.drawable.ic_thumb_down_fill_red);
@@ -413,8 +414,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
     public void onMovieClick(int position) {
         Intent movieDetailIntent = new Intent(this, VideoPlayerActivity.class);
         movieDetailIntent.putExtra("movie_index", position);
-        if(user != null){
-            movieDetailIntent.putExtra("username", user);
+        if(loggedInUser != null){
+            movieDetailIntent.putExtra("username", loggedInUser);
             movieDetailIntent.putExtra("Guest", 0);
         }else {
             movieDetailIntent.putExtra("Guest", 1);
