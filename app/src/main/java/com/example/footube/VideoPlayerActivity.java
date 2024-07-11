@@ -214,10 +214,19 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Share the video should implement in the future link to the video
+                // Base URL
+                String baseUrl = "http://localhost:3000/watch/";
+
+                // ID of the video
+                int videoId = movie.getId(); // replace this with the method to get the video ID
+
+                // Full URL
+                String videoUrl = baseUrl + videoId;
+
+                // Share the video
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_TEXT, "Check out this awesome video!");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "Check out this awesome video: " + videoUrl);
                 startActivity(Intent.createChooser(shareIntent, "Share video"));
             }
         });
