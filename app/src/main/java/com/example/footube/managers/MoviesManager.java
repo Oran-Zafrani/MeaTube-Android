@@ -224,20 +224,34 @@ public class MoviesManager {
 
             String moviephoto;
             String Video;
+            String commenterimage;
             for (int i = 0; i < movies.size(); i++) {
                 Movie movie = movies.get(i);
                 // Dynamically read the raw resource file based on the movie position
-                int resourceId = context.getResources().getIdentifier("movie" + (i + 1) + "p", "raw", context.getPackageName());
+
+
+                int resourceId = context.getResources().getIdentifier(movie.getPreviewImage(), "raw", context.getPackageName());
                 if (resourceId != 0) {
                     moviephoto = readTextFileFromRaw(context, resourceId);
                     movie.setMovieImage(moviephoto);
                 }
 
-                resourceId = context.getResources().getIdentifier("movie" + (i + 1), "raw", context.getPackageName());
+                resourceId = context.getResources().getIdentifier(movie.getMovieUri(), "raw", context.getPackageName());
                 if (resourceId != 0) {
                     Video = readTextFileFromRaw(context, resourceId);
                     movie.setMovieUri(Video);
                 }
+
+                if (movie.GetComments() != null){
+                    for (int j = 0; j < movie.GetComments().size(); j++) {
+                        resourceId = context.getResources().getIdentifier(movie.GetComments().get(j).getUserImage(), "raw", context.getPackageName());
+                        if (resourceId != 0) {
+                            commenterimage = readTextFileFromRaw(context, resourceId);
+                            movie.GetComments().get(j).setUserImage(commenterimage);
+                        }
+                    }
+                }
+
                 addMovie(movie);
             }
         } catch (IOException ex) {
@@ -245,7 +259,7 @@ public class MoviesManager {
         }
     }
 
-    private String readTextFileFromRaw(Context context, int resourceId) {
+    public static String readTextFileFromRaw(Context context, int resourceId) {
         InputStream inputStream = context.getResources().openRawResource(resourceId);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         try {

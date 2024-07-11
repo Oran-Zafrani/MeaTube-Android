@@ -7,13 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.footube.BasicClasses.Comment;
 import com.example.footube.R;
+import com.example.footube.activities.MoviesList;
 import com.example.footube.activities.VideoPlayerActivity;
+import com.example.footube.managers.UserManager;
 
 import java.util.List;
 import java.util.Objects;
@@ -54,7 +57,17 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         Comment comment = commentList.get(position);
         holder.usernameTextView.setText(comment.getDisplayName());
         holder.commentTextView.setText(comment.getComment());
-        Log.d("LoggedInUser12", this.LoggedInUser + "," + comment.getUsername()+ ","+Objects.equals(comment.getUsername(), this.LoggedInUser));
+
+        String image;
+//        if (UserManager.getInstance().getUser(comment.getUsername()).getImage() == null || Objects.equals(UserManager.getInstance().getUser(comment.getUsername()).getImage(), "")){
+//            holder.CommentUser.setImageResource(R.drawable.signin_man);
+//        }else {
+        image = comment.getUserImage();
+        holder.CommentUser.setImageBitmap(MoviesList.base64ToBitmap(image));
+//        }
+
+        //display and gone the edit and delete button
+//        Log.d("LoggedInUser12", this.LoggedInUser + "," + comment.getUsername()+ ","+Objects.equals(comment.getUsername(), this.LoggedInUser));
         if (!Objects.equals(comment.getUsername(), this.LoggedInUser)){
             holder.editCommentTextView.setVisibility(View.GONE);
             holder.deleteCommentTextView.setVisibility(View.GONE);
@@ -155,6 +168,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         Button editCommentButton;
         TextView editCommentTextView;
         TextView deleteCommentTextView;
+        ImageButton CommentUser;
 //        Button editmovie;
 
         CommentViewHolder(View itemView) {
@@ -165,6 +179,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
             editCommentTextView = itemView.findViewById(R.id.editCommentTextView);
             deleteCommentTextView = itemView.findViewById(R.id.deleteCommentTextView);
             editCommentButton = itemView.findViewById(R.id.buttonEditComment);
+            CommentUser = itemView.findViewById(R.id.CommentUser);
 
 //            if (!iscreator){
 //                editCommentTextView.setVisibility(View.GONE);

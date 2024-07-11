@@ -101,6 +101,11 @@ public class UserManager {
                 if (user.getUnlikes() == null) {
                     user.setUnlikes(new ArrayList<>());
                 }
+                int resourceId = context.getResources().getIdentifier(user.getImage(), "raw", context.getPackageName());
+                if (resourceId != 0) {
+                    String readuser = MoviesManager.readTextFileFromRaw(context, resourceId);
+                    user.setImage(readuser);
+                }
                 addUser(user);
             }
         } catch (IOException ex) {

@@ -21,6 +21,14 @@ public class Comment {
         this.displayName = displayName;
     }
 
+    public String getUserImage() {
+        return userImage;
+    }
+
+    public void setUserImage(String userImage) {
+        this.userImage = userImage;
+    }
+
     public String getDisplayName() {
         return displayName;
     }
