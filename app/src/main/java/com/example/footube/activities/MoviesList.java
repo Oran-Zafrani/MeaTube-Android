@@ -249,8 +249,11 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
     }
 
     public static Bitmap base64ToBitmap(String base64Str) throws IllegalArgumentException {
-        byte[] decodedBytes = Base64.decode(base64Str, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+        if (base64Str != null){
+            byte[] decodedBytes = Base64.decode(base64Str, Base64.DEFAULT);
+            return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+        }
+        return null;
     }
 
     private void setImage(String imagePath) {

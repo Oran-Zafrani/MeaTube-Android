@@ -55,7 +55,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
     @Override
     public void onBindViewHolder(CommentViewHolder holder, int position) {
         Comment comment = commentList.get(position);
-        holder.usernameTextView.setText(comment.getDisplayName());
+        holder.usernameTextView.setText(comment.getUsername());
         holder.commentTextView.setText(comment.getComment());
 
         String image;

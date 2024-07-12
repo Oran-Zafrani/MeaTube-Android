@@ -13,12 +13,13 @@ public class Comment {
     private int dislikesNum;
 
     // Constructor
-    public Comment(String displayName,String username, String comment, int likesNum, int dislikesNum) {
+    public Comment(String displayName,String username, String comment, int likesNum, int dislikesNum, String userImage) {
         this.userName = username;
         this.commentText = comment;
         this.dislikesNum = dislikesNum;
         this.likesNum = likesNum;
         this.displayName = displayName;
+        this.userImage = userImage;
     }
 
     public String getUserImage() {

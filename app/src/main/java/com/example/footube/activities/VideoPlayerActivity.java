@@ -148,7 +148,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
             public void onClick(View v) {
                 String commentText = editTextComment.getText().toString().trim();
                 if (!commentText.isEmpty()) {
-                    Comment newComment = new Comment(user.getDisplayName(),userName, commentText,0,0);
+                    Comment newComment = new Comment(user.getDisplayName(),userName, commentText,0,0, user.getImage());
                     movies.addCommentToMovie(movie.getName(), newComment);
                     commentsAdapter.notifyItemInserted(commentList.size() - 1);
                     closeKeyboard(v);
