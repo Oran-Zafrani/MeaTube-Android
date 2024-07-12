@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -50,6 +51,7 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
     private ImageButton sideMenuButton;
     private ImageButton signInButton;
     private ImageView userImage;
+    private CardView userImageCard;
     private TextView userName;
     private RecyclerView recyclerView;
     private MovieAdapter adapter;
@@ -79,6 +81,7 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         // Initialize the views
         signInButton = findViewById(R.id.signin);
         userImage = findViewById(R.id.user_image);
+        userImageCard = findViewById(R.id.user_image_card);
         userName = findViewById(R.id.user_name);
 
 
@@ -91,6 +94,7 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         if (user != null) {
             signInButton.setVisibility(View.GONE);
             userImage.setVisibility(View.VISIBLE);
+            userImageCard.setVisibility(View.VISIBLE);
             userName.setVisibility(View.VISIBLE);
 
             userName.setText(user.getDisplayName());
@@ -98,6 +102,7 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         } else {
             signInButton.setVisibility(View.VISIBLE);
             userImage.setVisibility(View.GONE);
+            userImageCard.setVisibility(View.GONE);
             userName.setVisibility(View.GONE);
 
             signInButton.setOnClickListener(new View.OnClickListener() {
