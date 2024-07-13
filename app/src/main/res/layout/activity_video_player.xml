@@ -40,7 +40,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginEnd="16dp"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -54,6 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginStart="20dp"
             app:layout_constraintTop_toBottomOf="@id/video_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -64,7 +65,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="205dp"
-                android:text="Uploaded 1 day ago"
                 android:textSize="14sp" />
 
             <TextView
@@ -72,24 +72,98 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="1dp"
-                android:text="1 Views"
                 android:textSize="14sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/additionalDetails"
+            app:layout_constraintStart_toStartOf="parent">
 
+            <!-- upload image -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp">
+
+                <ImageView
+                    android:id="@+id/uploader_image"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/signin_man"
+                    android:scaleType="centerCrop" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/video_creator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_gravity="center_vertical" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_vertical|end">
+
+
+                <ImageView
+                    android:id="@+id/unlikeButton"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginEnd="3dp"
+                    android:src="@drawable/ic_thumb_down"
+                    android:scaleType="fitCenter" />
+
+                <!-- Number of unlikes -->
+                <TextView
+                    android:id="@+id/number_of_unlikes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="0"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:gravity="center" />
+
+                <ImageView
+                    android:id="@+id/likeButton"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginEnd="3dp"
+                    android:src="@drawable/ic_thumb_up"
+                    android:scaleType="fitCenter" />
+
+                <!-- Number of likes -->
+                <TextView
+                    android:id="@+id/number_of_likes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="0"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:gravity="center" />
+
+                <!-- Share button -->
+                <ImageView
+                    android:id="@+id/shareButton"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginEnd="3dp"
+                    android:src="@drawable/ic_share"
+                    android:scaleType="fitCenter" />
+            </LinearLayout>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/video_creator"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:textSize="16sp"
-        android:textColor="@android:color/darker_gray"
-        app:layout_constraintTop_toBottomOf="@id/detailsContainer"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/video_description"
@@ -99,7 +173,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@id/video_creator"
+        app:layout_constraintTop_toBottomOf="@id/detailsContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -114,34 +188,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="8dp"
         android:gravity="center">
-
-        <ImageView
-            android:id="@+id/unlikeButton"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_marginEnd="3dp"
-            android:src="@drawable/ic_thumb_down"
-            android:scaleType="fitCenter" />
-
-        <ImageView
-            android:id="@+id/likeButton"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_marginEnd="3dp"
-            android:src="@drawable/ic_thumb_up"
-            android:scaleType="fitCenter" />
-
-        <!-- Number of likes -->
-        <TextView
-            android:id="@+id/number_of_likes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="0"
-            android:textSize="16sp"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:gravity="center" />
     </LinearLayout>
 
     <Button
