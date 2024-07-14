@@ -26,7 +26,9 @@ public class UserManager {
         userMap = new HashMap<>();
         // Adding a sample user for demonstration
         User sampleUser = new User("ba", "Bar User", "123", "default_profile.jpg");
+        User sampleUser1 = new User("Guest", "Guest", "123", "default_profile.jpg"); //for no option to create Guest username
         addUser(sampleUser);
+        addUser(sampleUser1);
     }
 
     // Method to get the single instance of UserManager

@@ -39,6 +39,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.File;
+import java.util.Objects;
 
 public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovieClickListener {
     private static final int REQUEST_CODE_ADD_MOVIE = 1;
@@ -282,7 +283,7 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
     public void onMovieClick(int position) {
         Intent movieDetailIntent = new Intent(this, VideoPlayerActivity.class);
         movieDetailIntent.putExtra("movie_index", position);
-        if(user != null){
+        if(user != null && !Objects.equals(user.getUsername(), "Guest")){
             Log.d("movie123",user.getDisplayName());
             movieDetailIntent.putExtra("username", user);
             movieDetailIntent.putExtra("Guest", 0);

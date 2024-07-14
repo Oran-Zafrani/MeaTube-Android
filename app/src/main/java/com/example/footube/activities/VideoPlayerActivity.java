@@ -433,7 +433,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
     public void onMovieClick(int position) {
         Intent movieDetailIntent = new Intent(this, VideoPlayerActivity.class);
         movieDetailIntent.putExtra("movie_index", position);
-        if(loggedInUser != null){
+        if(loggedInUser != null && !Objects.equals(loggedInUser.getUsername(), "Guest")){
             movieDetailIntent.putExtra("username", loggedInUser);
             movieDetailIntent.putExtra("Guest", 0);
         }else {
