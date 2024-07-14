@@ -1,11 +1,10 @@
-
 [
     {
     "id": 1,
     "username": "admin",
     "password": "admin123",
     "displayName": "MeatLover123",
-    "image": "",
+    "image": "admin_user_picture",
     "subscribers": 55467825,
     "likedVideos": [],
     "dislikedVideos": []

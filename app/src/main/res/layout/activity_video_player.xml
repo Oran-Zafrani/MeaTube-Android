@@ -190,6 +190,7 @@
         android:gravity="center">
     </LinearLayout>
 
+
     <Button
         android:id="@+id/editmovie"
         android:layout_width="73dp"
@@ -202,6 +203,23 @@
         android:textSize="14sp"
         app:layout_constraintTop_toBottomOf="@id/likeUnlikeContainer"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/commentCountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 comments"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:textSize="14sp"
+        android:textColor="@android:color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/video_description"
+        app:layout_constraintBottom_toTopOf="@id/commentsSection" />
+
+
+
+    <!--app:layout_constraintEnd_toEndOf="parent" />-->
 
 
     <!-- Comments Section -->

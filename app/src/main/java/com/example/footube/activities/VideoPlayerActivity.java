@@ -67,6 +67,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
     private User loggedInUser;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
+    private TextView NumberOfComments;
     private MovieAdapter adapter;
     private String loggedInUserName;
     private TextView textNoComments;
@@ -97,6 +98,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         textNoComments = findViewById(R.id.NoComments);
         commentsLayout = findViewById(R.id.commentsSection);
         uploadUserImage = findViewById(R.id.uploader_image);
+        NumberOfComments = findViewById(R.id.commentCountTextView);
+
 
         // Get the logged user data
         isGuest = getIntent().getIntExtra("Guest", -1);
@@ -126,7 +129,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
             numberOfLikes.setText(String.valueOf(movie.getLikes()));
             numberOfUnlikes.setText(String.valueOf(movie.getUnlikes()));
             uploadUserImage.setImageBitmap(MoviesList.base64ToBitmap(UserManager.getInstance().getUser(movie.getCreator()).getImage()));
-            if (user != null){
+            if (loggedInUser != null){
                 PrivateLikesLogic();
             }
             TextView uploadTimeTextView = findViewById(R.id.upload_time);
@@ -143,15 +146,18 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         buttonAddComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (isGuest != 0){
+                    Toast.makeText(VideoPlayerActivity.this, "You need to log in first before you comment.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String commentText = editTextComment.getText().toString().trim();
                 if (!commentText.isEmpty()) {
-                    Comment newComment = new Comment(user.getDisplayName(),userName, commentText,0,0, user.getImage());
+                    Comment newComment = new Comment(loggedInUser.getDisplayName(),loggedInUserName, commentText,0,0, loggedInUser.getImage());
                     movies.addCommentToMovie(movie.getName(), newComment);
                     commentsAdapter.notifyItemInserted(commentList.size() - 1);
                     closeKeyboard(v);
                     editTextComment.setText("");
                 }
-
             }
         });
 
@@ -344,10 +350,12 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
 
     private void setupCommentsRecyclerView() {
         commentList = movie.GetComments();
-//        boolean[] iscreator = movie.getiscreator(userName);
-        commentsAdapter = new CommentsAdapter(userName,this, commentList, this, this);
+        commentsAdapter = new CommentsAdapter(loggedInUserName,this, commentList, this, this);
         commentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         commentsRecyclerView.setAdapter(commentsAdapter);
+
+        //set number of comments
+        NumberOfComments.setText(commentList.size()+ " Comments");
     }
 
     private void PrivateLikesLogic(){
