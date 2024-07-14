@@ -7,6 +7,7 @@ import com.example.footube.BasicClasses.User;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
@@ -111,5 +112,20 @@ public class UserManager {
         } catch (IOException ex) {
             Log.e("UserManager", "Error reading Users.json", ex);
         }
+    }
+    private String readTextFileFromRaw(Context context, int resourceId) {
+        InputStream inputStream = context.getResources().openRawResource(resourceId);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        try {
+            int i = inputStream.read();
+            while (i != -1) {
+                byteArrayOutputStream.write(i);
+                i = inputStream.read();
+            }
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return byteArrayOutputStream.toString();
     }
 }
