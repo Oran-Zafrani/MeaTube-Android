@@ -118,7 +118,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         position = getIntent().getIntExtra("movie_index", -1);
         movie = movies.getMovie(position);
         movie.AddView();
-        TViews.setText(movie.getViews() + " Views");
+        TViews.setText(MovieAdapter.formatViews(movie.getViews()) + " Views");
 
         if (movie != null) {
             setupVideoPlayer(movie.getMovieUri());
@@ -126,8 +126,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
             videoCreator.setText(movie.getChannel());
             videoDescription.setText(movie.getDescription());
             setupCommentsRecyclerView();
-            numberOfLikes.setText(String.valueOf(movie.getLikes()));
-            numberOfUnlikes.setText(String.valueOf(movie.getUnlikes()));
+            numberOfLikes.setText(MovieAdapter.formatViews(movie.getLikes()));
+            numberOfUnlikes.setText(MovieAdapter.formatViews(movie.getUnlikes()));
             uploadUserImage.setImageBitmap(MoviesList.base64ToBitmap(UserManager.getInstance().getUser(movie.getCreator()).getImage()));
             if (loggedInUser != null){
                 PrivateLikesLogic();
@@ -191,7 +191,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
                             movie.setUnlikes(movie.getUnlikes() - 1);
                         }
                     }
-                    numberOfLikes.setText(String.valueOf(movie.getLikes()));
+                    numberOfLikes.setText(MovieAdapter.formatViews(movie.getLikes()));
+                    numberOfUnlikes.setText(MovieAdapter.formatViews(movie.getUnlikes()));
                 }
                 else {
                     Toast.makeText(VideoPlayerActivity.this, "You need to sign in to like", Toast.LENGTH_SHORT).show();
@@ -213,14 +214,13 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
                         }
                         loggedInUser.RemoveUnLike(movie);
                         movie.setUnlikes(movie.getUnlikes() - 1);
-                        numberOfUnlikes.setText(String.valueOf(movie.getUnlikes()));
+                        numberOfUnlikes.setText(MovieAdapter.formatViews(movie.getUnlikes()));
                     } else {
                         isUnliked = true;
                         unlikeButton.setImageResource(R.drawable.ic_thumb_down_fill_red);
                         numberOfLikes.setTextColor(getResources().getColor(R.color.black));
                         numberOfUnlikes.setTextColor(getResources().getColor(R.color.red));
                         movie.setUnlikes(movie.getUnlikes() + 1);
-                        numberOfUnlikes.setText(String.valueOf(movie.getUnlikes()));
                         if (loggedInUser.searchlike(movie)) {
                             loggedInUser.RemoveLike(movie);
                         }
@@ -231,7 +231,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
                             movie.setLikes(movie.getLikes() - 1);
                         }
                     }
-                    numberOfLikes.setText(String.valueOf(movie.getLikes()));
+                    numberOfLikes.setText(MovieAdapter.formatViews(movie.getLikes()));
+                    numberOfUnlikes.setText(MovieAdapter.formatViews(movie.getUnlikes()));
                 }
                 else {
                     Toast.makeText(VideoPlayerActivity.this, "You need to sign in to unlike", Toast.LENGTH_SHORT).show();
