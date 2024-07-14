@@ -233,26 +233,32 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
     }
 
     private void toggleTheme() {
+        // Access the SharedPreferences file
         SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        // Check if system's default is dark mode
+        // Check if the system's default is dark mode
         boolean isSystemDarkMode = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
 
-        // Retrieve current theme preference or use system default if not set
+        // Retrieve the current theme preference or use the system default if not set
         boolean isDarkMode = preferences.getBoolean(PREF_DARK_MODE, isSystemDarkMode);
 
-        // Toggle theme
+        // Toggle the theme
         if (isDarkMode) {
+            // Set the theme to light mode
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            // Save the new preference
             preferences.edit().putBoolean(PREF_DARK_MODE, false).apply();
         } else {
+            // Set the theme to dark mode
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            // Save the new preference
             preferences.edit().putBoolean(PREF_DARK_MODE, true).apply();
         }
 
-        // Recreate activity to apply the new theme
+        // Recreate the activity to apply the new theme
         recreate();
     }
+
 
     public static Bitmap base64ToBitmap(String base64Str) throws IllegalArgumentException {
         if (base64Str != null){

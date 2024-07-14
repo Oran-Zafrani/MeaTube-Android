@@ -5,14 +5,20 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.FooTube" parent="Base.Theme.FooTube" />
+    <style name="Theme.FooTube" parent="Base.Theme.FooTube">
+        <item name="meatube_with_text_logo">@drawable/meatube_logo_with_text_removebg_preview</item>
+        <item name="share">@drawable/ic_share</item>
+        <item name="Unlike">@drawable/ic_thumb_down</item>
+        <item name="Like">@drawable/ic_thumb_up</item>
+        <item name="Unlike_Like_Color_Text">@color/black</item>
+    </style>
 
     <style name="AppSearchViewStyle" parent="Widget.AppCompat.SearchView">
         <!-- Customize other attributes of SearchView -->
         <item name="android:searchIcon">@drawable/ic_search_black</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textColorHint">@color/black</item>
-    </style>
 
+    </style>
 
 </resources>

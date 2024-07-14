@@ -118,7 +118,7 @@
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:layout_marginEnd="3dp"
-                    android:src="@drawable/ic_thumb_down"
+                    android:src="?attr/Unlike"
                     android:scaleType="fitCenter" />
 
                 <!-- Number of unlikes -->
@@ -129,7 +129,7 @@
                     android:layout_marginEnd="8dp"
                     android:text="0"
                     android:textSize="16sp"
-                    android:textColor="@android:color/black"
+                    android:textColor="?attr/Unlike_Like_Color_Text"
                     android:textStyle="bold"
                     android:gravity="center" />
 
@@ -138,7 +138,7 @@
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:layout_marginEnd="3dp"
-                    android:src="@drawable/ic_thumb_up"
+                    android:src="?attr/Like"
                     android:scaleType="fitCenter" />
 
                 <!-- Number of likes -->
@@ -149,7 +149,7 @@
                     android:layout_marginEnd="8dp"
                     android:text="0"
                     android:textSize="16sp"
-                    android:textColor="@android:color/black"
+                    android:textColor="?attr/Unlike_Like_Color_Text"
                     android:textStyle="bold"
                     android:gravity="center" />
 
@@ -159,7 +159,7 @@
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:layout_marginEnd="3dp"
-                    android:src="@drawable/ic_share"
+                    android:src="?attr/share"
                     android:scaleType="fitCenter" />
             </LinearLayout>
         </LinearLayout>
