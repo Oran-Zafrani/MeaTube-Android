@@ -43,7 +43,7 @@ import java.util.Objects;
 
 public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovieClickListener {
     private static final int REQUEST_CODE_ADD_MOVIE = 1;
-    private static final String PREFS_NAME = "prefs";
+    private static final String PREFS_NAME = "AppPrefs";
     private static final String PREF_DARK_MODE = "dark_mode";
 
 

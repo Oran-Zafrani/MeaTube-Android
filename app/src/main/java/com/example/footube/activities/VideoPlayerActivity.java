@@ -2,11 +2,13 @@ package com.example.footube.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -161,15 +163,23 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
             }
         });
 
+        //Define the attrs
+        TypedValue typedValue_Unlike = new TypedValue();
+        TypedValue typedValue_Like = new TypedValue();
+        TypedValue typedValue_Unlike_Like_Color_Text = new TypedValue();
+        getTheme().resolveAttribute(R.attr.Unlike, typedValue_Unlike, true);
+        getTheme().resolveAttribute(R.attr.Like, typedValue_Like, true);
+        getTheme().resolveAttribute(R.attr.Unlike_Like_Color_Text, typedValue_Unlike_Like_Color_Text, true);
+
         likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isGuest != 1) {
                     if (isLiked) {
                         isLiked = false;
-                        likeButton.setImageResource(R.drawable.ic_thumb_up);
-                        numberOfLikes.setTextColor(getResources().getColor(R.color.black));
-                        numberOfUnlikes.setTextColor(getResources().getColor(R.color.black));
+                        likeButton.setImageResource(typedValue_Like.resourceId);
+                        numberOfLikes.setTextColor(typedValue_Unlike_Like_Color_Text.data);
+                        numberOfUnlikes.setTextColor(typedValue_Unlike_Like_Color_Text.data);
                         if (loggedInUser.searchlike(movie)) {
                             loggedInUser.RemoveLike(movie);
                         }
@@ -180,14 +190,14 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
                         likeButton.setImageResource(R.drawable.ic_thumb_up_blue);
                         movie.setLikes(movie.getLikes() + 1);
                         numberOfLikes.setTextColor(getResources().getColor(R.color.blue));
-                        numberOfUnlikes.setTextColor(getResources().getColor(R.color.black));
+                        numberOfUnlikes.setTextColor(typedValue_Unlike_Like_Color_Text.data);
                         if (loggedInUser.searchunlike(movie)) {
                             loggedInUser.RemoveUnLike(movie);
                         }
                         loggedInUser.AddLike(movie);
                         if (isUnliked) {
                             isUnliked = false;
-                            unlikeButton.setImageResource(R.drawable.ic_thumb_down);
+                            unlikeButton.setImageResource(typedValue_Unlike.resourceId);
                             movie.setUnlikes(movie.getUnlikes() - 1);
                         }
                     }
@@ -206,9 +216,9 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
                 if (isGuest != 1) {
                     if (isUnliked) {
                         isUnliked = false;
-                        unlikeButton.setImageResource(R.drawable.ic_thumb_down);
-                        numberOfLikes.setTextColor(getResources().getColor(R.color.black));
-                        numberOfUnlikes.setTextColor(getResources().getColor(R.color.black));
+                        unlikeButton.setImageResource(typedValue_Unlike.resourceId);
+                        numberOfLikes.setTextColor(typedValue_Unlike_Like_Color_Text.data);
+                        numberOfUnlikes.setTextColor(typedValue_Unlike_Like_Color_Text.data);
                         if (loggedInUser.searchunlike(movie)) {
                             loggedInUser.RemoveUnLike(movie);
                         }
@@ -218,7 +228,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
                     } else {
                         isUnliked = true;
                         unlikeButton.setImageResource(R.drawable.ic_thumb_down_fill_red);
-                        numberOfLikes.setTextColor(getResources().getColor(R.color.black));
+                        numberOfLikes.setTextColor(typedValue_Unlike_Like_Color_Text.data);
                         numberOfUnlikes.setTextColor(getResources().getColor(R.color.red));
                         movie.setUnlikes(movie.getUnlikes() + 1);
                         if (loggedInUser.searchlike(movie)) {
@@ -227,7 +237,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
                         loggedInUser.AddUnLike(movie);
                         if (isLiked) {
                             isLiked = false;
-                            likeButton.setImageResource(R.drawable.ic_thumb_up);
+                            likeButton.setImageResource(typedValue_Like.resourceId);
                             movie.setLikes(movie.getLikes() - 1);
                         }
                     }
