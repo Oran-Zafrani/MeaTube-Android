@@ -66,6 +66,9 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movies_list);
 
+        //set dark mode if relevant
+        applyThemeBasedOnPreference();
+
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         // Initialize RecyclerView
         recyclerView = findViewById(R.id.recycler_view);
@@ -259,6 +262,23 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         recreate();
     }
 
+    private void applyThemeBasedOnPreference() {
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+
+        // Check if the system's default is dark mode
+        boolean isSystemDarkMode = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+
+        // Retrieve the current theme preference or use the system default if not set
+        boolean isDarkMode = preferences.getBoolean(PREF_DARK_MODE, isSystemDarkMode);
+
+        // Apply theme based on preference
+        if (isDarkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
+
 
     public static Bitmap base64ToBitmap(String base64Str) throws IllegalArgumentException {
         if (base64Str != null){
@@ -317,5 +337,14 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
                 })
                 .setNegativeButton("No", null)
                 .show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Clear theme preference
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        preferences.edit().remove(PREF_DARK_MODE).apply();
     }
 }
