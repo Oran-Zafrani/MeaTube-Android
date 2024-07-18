@@ -1,8 +1,9 @@
 package com.example.footube.BasicClasses;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Comment {
+public class Comment implements Serializable {
     private int commentId;
     private String userName;
     private String displayName;

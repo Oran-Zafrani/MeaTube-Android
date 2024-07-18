@@ -107,8 +107,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         isGuest = getIntent().getIntExtra("Guest", -1);
         // Check if the user is a guest
         if (isGuest == 0){  // If the user is not a guest
-            loggedInUser = (User) getIntent().getSerializableExtra("username");
-            loggedInUserName = loggedInUser.getUsername();
+            loggedInUserName = getIntent().getStringExtra("username");
             loggedInUser = UserManager.getInstance().getUser(loggedInUserName);
         }else if (isGuest == 1) { // If the user is a guest
             loggedInUser = new User("Guest","Guest", "", "");
@@ -444,7 +443,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         Intent movieDetailIntent = new Intent(this, VideoPlayerActivity.class);
         movieDetailIntent.putExtra("movie_index", position);
         if(loggedInUser != null && !Objects.equals(loggedInUser.getUsername(), "Guest")){
-            movieDetailIntent.putExtra("username", loggedInUser);
+            movieDetailIntent.putExtra("username", loggedInUser.getUsername());
             movieDetailIntent.putExtra("Guest", 0);
         }else {
             movieDetailIntent.putExtra("Guest", 1);

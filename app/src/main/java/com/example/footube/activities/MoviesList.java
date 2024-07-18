@@ -311,7 +311,7 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         movieDetailIntent.putExtra("movie_index", position);
         if(user != null && !Objects.equals(user.getUsername(), "Guest")){
             Log.d("movie123",user.getDisplayName());
-            movieDetailIntent.putExtra("username", user);
+            movieDetailIntent.putExtra("username", user.getUsername());
             movieDetailIntent.putExtra("Guest", 0);
         }else {
             Log.d("movie111","user.getDisplayName()");
@@ -327,16 +327,20 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
 
     @Override
     public void onBackPressed() {
-        Intent Signin = new Intent(this, SignIn.class);
-        // Show confirmation dialog
-        new AlertDialog.Builder(this)
-                .setMessage("Are you sure you want to sign out?")
-                .setPositiveButton("Yes", (dialog, which) -> {
-                    startActivity(Signin);
-                    finish();
-                })
-                .setNegativeButton("No", null)
-                .show();
+        if (user != null) {
+            Intent Signin = new Intent(this, SignIn.class);
+            // Show confirmation dialog
+            new AlertDialog.Builder(this)
+                    .setMessage("Are you sure you want to sign out?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        startActivity(Signin);
+                        finish();
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+        }else {
+            super.onBackPressed();
+        }
     }
 
     @Override
