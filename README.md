@@ -33,7 +33,7 @@ This will build the app and install it on the selected emulator or device.
 
 ## Work Process
 
-1. Planning: We started by planning the project, defining requirements, and creating a basic interface design.
+1. Planning: We started by planning the project, defining requirements and needs, creating a scrum project in the Jira platform, adding issues to each developer, and creating a basic interface design.
 
 2. Project Setup: We created the Android project using Android Studio and set up the necessary configurations.
 
