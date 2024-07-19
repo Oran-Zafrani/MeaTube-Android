@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:textSize="16sp"
-                android:textColor="@color/black"
+                android:textColor="?attr/Unlike_Like_Color_Text"
                 android:layout_gravity="center_vertical" />
 
             <LinearLayout
@@ -118,7 +118,7 @@
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:layout_marginEnd="3dp"
-                    android:src="@drawable/ic_thumb_down"
+                    android:src="?attr/Unlike"
                     android:scaleType="fitCenter" />
 
                 <!-- Number of unlikes -->
@@ -129,7 +129,7 @@
                     android:layout_marginEnd="8dp"
                     android:text="0"
                     android:textSize="16sp"
-                    android:textColor="@android:color/black"
+                    android:textColor="?attr/Unlike_Like_Color_Text"
                     android:textStyle="bold"
                     android:gravity="center" />
 
@@ -138,7 +138,7 @@
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:layout_marginEnd="3dp"
-                    android:src="@drawable/ic_thumb_up"
+                    android:src="?attr/Like"
                     android:scaleType="fitCenter" />
 
                 <!-- Number of likes -->
@@ -149,7 +149,7 @@
                     android:layout_marginEnd="8dp"
                     android:text="0"
                     android:textSize="16sp"
-                    android:textColor="@android:color/black"
+                    android:textColor="?attr/Unlike_Like_Color_Text"
                     android:textStyle="bold"
                     android:gravity="center" />
 
@@ -159,7 +159,7 @@
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:layout_marginEnd="3dp"
-                    android:src="@drawable/ic_share"
+                    android:src="?attr/share"
                     android:scaleType="fitCenter" />
             </LinearLayout>
         </LinearLayout>
@@ -190,6 +190,7 @@
         android:gravity="center">
     </LinearLayout>
 
+
     <Button
         android:id="@+id/editmovie"
         android:layout_width="73dp"
@@ -202,6 +203,23 @@
         android:textSize="14sp"
         app:layout_constraintTop_toBottomOf="@id/likeUnlikeContainer"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/commentCountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 comments"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:textSize="14sp"
+        android:textColor="@android:color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/video_description"
+        app:layout_constraintBottom_toTopOf="@id/commentsSection" />
+
+
+
+    <!--app:layout_constraintEnd_toEndOf="parent" />-->
 
 
     <!-- Comments Section -->

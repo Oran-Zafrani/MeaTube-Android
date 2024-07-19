@@ -20,8 +20,11 @@ import com.example.footube.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
     private static List<Movie> movies;
@@ -53,8 +56,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         holder.titleTextView.setText(movie.getName());
 //        holder.uploadtime.setText(movie.GetUploadTime().toString()); //fix
         holder.uploadtime.setText(movie.getRelativeTime());
-        holder.views.setText(String.valueOf(movie.getViews()) + " Views");
-        holder.likes.setText(String.valueOf(movie.getLikes()) + " Likes");
+        holder.views.setText(formatViews(movie.getViews()) + " Views");
+        holder.likes.setText(formatViews(movie.getLikes()) + " Likes");
         holder.genreTextView.setText(movie.getCategory());
         holder.creatorTextView.setText(movie.getChannel());
 
@@ -87,6 +90,26 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             holder.movieImageView.setImageBitmap(base64ToBitmap(movie.GetImage()));  // Placeholder image
 //            Log.d("wtf", Uri.parse(movie.getMovieUri()).toString());
         }
+    }
+
+    public static String formatViews(int views) {
+        if (views < 1000) {
+            return String.valueOf(views);
+        }
+
+        String[] suffix = new String[]{"", "K", "M", "B", "T"};
+        int index = 0;
+        double num = views;
+
+        while (num >= 1000 && index < suffix.length - 1) {
+            num /= 1000;
+            index++;
+        }
+
+        // Format number to 1 decimal place if more than 10
+        DecimalFormat df = new DecimalFormat("#.#");
+        String formatted = df.format(num) + suffix[index];
+        return formatted;
     }
 
     public static String bitmapToBase64(Bitmap bitmap) {

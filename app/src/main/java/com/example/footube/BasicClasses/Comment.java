@@ -1,10 +1,12 @@
 package com.example.footube.BasicClasses;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Comment {
+public class Comment implements Serializable {
     private int commentId;
     private String userName;
+    private String displayName;
     private String commentText;
     private String userImage;
     private Date timestamp;
@@ -12,11 +14,25 @@ public class Comment {
     private int dislikesNum;
 
     // Constructor
-    public Comment(String username, String comment, int likesNum, int dislikesNum) {
+    public Comment(String displayName,String username, String comment, int likesNum, int dislikesNum, String userImage) {
         this.userName = username;
         this.commentText = comment;
         this.dislikesNum = dislikesNum;
         this.likesNum = likesNum;
+        this.displayName = displayName;
+        this.userImage = userImage;
+    }
+
+    public String getUserImage() {
+        return userImage;
+    }
+
+    public void setUserImage(String userImage) {
+        this.userImage = userImage;
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 
     // Getter for username

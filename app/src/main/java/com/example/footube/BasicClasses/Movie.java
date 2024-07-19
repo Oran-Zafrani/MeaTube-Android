@@ -194,6 +194,14 @@ public class Movie implements Serializable {
         }
     }
 
+    public boolean[] getiscreator(String username){
+        boolean[] iscreator = new boolean[commentsLink.size()+1];
+        for (int i = 0; i < commentsLink.size(); i++) {
+            iscreator[i] = Objects.equals(commentsLink.get(i).getUsername(), username);
+        }
+        return iscreator;
+    }
+
     public String getRelativeTime() {
         long uploadTime = this.uploadTime.getTime();
         long currentTime = System.currentTimeMillis();

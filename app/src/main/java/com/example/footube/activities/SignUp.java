@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -70,11 +71,11 @@ public class SignUp extends AppCompatActivity {
                 String display = displayName.getText().toString();
                 String pass = password.getText().toString();
                 String pass2 = verifypassword.getText().toString();
-                String image = imageUri != null ? imageUri.toString() : "default_profile.jpg";
+                String image = imagePath != null ? imagePath : "default_profile.jpg";
 
-                explaintouser(user,display,pass,image,pass2);
+                explaintouser(user,display,pass,imagePath,pass2);
 
-                if (userconfirm(user,display,pass,image, pass2)){
+                if (userconfirm(user,display,pass,imagePath, pass2)){
                     userManager.addUser(user, display, pass, imagePath);
                     startActivity(SignInIntent);
                 }
@@ -99,6 +100,9 @@ public class SignUp extends AppCompatActivity {
         if (!samepass(pass,pass2)){
             error += "Passwords are not the same.\n";
         }
+        if (userManager.userExists(user)){
+            error += "This user is already exist.\n";
+        }
         errorTextView.setText(error);
         errorTextView.setVisibility(View.VISIBLE);
     }
@@ -108,7 +112,7 @@ public class SignUp extends AppCompatActivity {
     }
 
     private boolean allempty(String user,String diaplay, String pass, String image){
-        return !user.isEmpty() && !diaplay.isEmpty() && !pass.isEmpty() && !image.isEmpty();
+        return !user.isEmpty() && !diaplay.isEmpty() && !pass.isEmpty() && (image != null);
     }
 
     private boolean rightletters(String password) {

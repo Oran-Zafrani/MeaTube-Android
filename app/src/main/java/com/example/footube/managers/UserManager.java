@@ -26,7 +26,9 @@ public class UserManager {
         userMap = new HashMap<>();
         // Adding a sample user for demonstration
         User sampleUser = new User("ba", "Bar User", "123", "default_profile.jpg");
+        User sampleUser1 = new User("Guest", "Guest", "123", "default_profile.jpg"); //for no option to create Guest username
         addUser(sampleUser);
+        addUser(sampleUser1);
     }
 
     // Method to get the single instance of UserManager
@@ -102,10 +104,10 @@ public class UserManager {
                 if (user.getUnlikes() == null) {
                     user.setUnlikes(new ArrayList<>());
                 }
-                int resourceId = context.getResources().getIdentifier("admin_user_picture", "raw", context.getPackageName());
+                int resourceId = context.getResources().getIdentifier(user.getImage(), "raw", context.getPackageName());
                 if (resourceId != 0) {
-                    String adminUserPicture = readTextFileFromRaw(context, resourceId);
-                    user.setImage(adminUserPicture);
+                    String readuser = MoviesManager.readTextFileFromRaw(context, resourceId);
+                    user.setImage(readuser);
                 }
                 addUser(user);
             }

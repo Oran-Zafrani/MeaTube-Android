@@ -88,18 +88,28 @@
                     android:scaleType="centerInside"
                     android:src="@drawable/signin_man"/>
 
-                <ImageView
-                    android:id="@+id/user_image"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/user_image_card"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:background="@android:color/transparent"
-                    android:scaleType="centerInside"
-                    android:visibility="gone"/>
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="0dp"
+                    android:visibility="gone">
 
-                <TextView
+                <ImageView
+                    android:id="@+id/user_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone" />
+            </androidx.cardview.widget.CardView>
+
+
+            <TextView
                     android:id="@+id/user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

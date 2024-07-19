@@ -20,7 +20,7 @@ import com.example.footube.BasicClasses.User;
 import com.example.footube.managers.UserManager;
 
 public class SignIn extends AppCompatActivity {
-    private static final String PREFS_NAME = "theme_prefs";
+    private static final String PREFS_NAME = "AppPrefs";
     private static final String PREF_DARK_MODE = "dark_mode";
     UserManager userManager = UserManager.getInstance(); // Get the singleton instance
     TextView linkToSignUp;
@@ -121,5 +121,14 @@ public class SignIn extends AppCompatActivity {
         } else {
             Toast.makeText(this, "No view has focus", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Clear theme preference
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        preferences.edit().remove(PREF_DARK_MODE).apply();
     }
 }
