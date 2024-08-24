@@ -26,6 +26,9 @@
         android:theme="@style/Theme.FooTube"
         tools:targetApi="31">
         <activity
+            android:name=".activities.userVideoList"
+            android:exported="false" />
+        <activity
             android:name=".activities.EditMovie"
             android:exported="false" />
         <activity

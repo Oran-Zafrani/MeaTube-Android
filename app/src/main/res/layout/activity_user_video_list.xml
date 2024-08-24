@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.MoviesList">
+
+    <!-- LinearLayout to hold the circular image and username -->
+    <LinearLayout
+        android:id="@+id/user_info_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="16dp"
+        android:gravity="center_vertical">
+
+        <!-- Circular Image (User Avatar) -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            android:layout_gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/uploader_image"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/signin_man"
+                android:clickable="true"
+                android:scaleType="centerCrop" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Username TextView -->
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginStart="10dp"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+
+    <!-- LinearLayout for Edit and Delete buttons -->
+    <LinearLayout
+        android:id="@+id/user_buttons_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="@id/user_info_layout"
+        app:layout_constraintBottom_toBottomOf="@id/user_info_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="4dp"
+        android:gravity="center_vertical">
+
+        <!-- Edit User Button -->
+        <Button
+            android:id="@+id/btn_edit_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit User"
+            android:layout_marginEnd="4dp"/>
+
+        <!-- Delete User Button -->
+        <Button
+            android:id="@+id/btn_delete_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete User"/>
+    </LinearLayout>
+
+    <!-- SwipeRefreshLayout and RecyclerView -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/user_info_layout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            tools:listitem="@layout/item_movie"/>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
