@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.footube.BasicClasses.User;
+import com.example.footube.ViewModel.UserViewModel;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -20,10 +21,12 @@ import java.util.Objects;
 public class UserManager {
     private static UserManager instance;
     private Map<String, User> userMap;
+    private UserViewModel viewModel;
 
     // Private constructor to prevent instantiation
     private UserManager() {
         userMap = new HashMap<>();
+        viewModel = new UserViewModel();
         // Adding a sample user for demonstration
         User sampleUser = new User("ba", "Bar User", "123", "default_profile.jpg");
         User sampleUser1 = new User("Guest", "Guest", "123", "default_profile.jpg"); //for no option to create Guest username
@@ -42,7 +45,8 @@ public class UserManager {
     // Add a user to the map
     public void addUser(String username, String displayName, String password, String image) {
         User newUser = new User(username, displayName, password, image);
-        userMap.put(username, newUser);
+        //userMap.put(username, newUser);
+        viewModel.addUser(newUser);
     }
 
     // Add a user to the map
@@ -101,8 +105,8 @@ public class UserManager {
                 if (user.getLikes() == null) {
                     user.setLikes(new ArrayList<>());
                 }
-                if (user.getUnlikes() == null) {
-                    user.setUnlikes(new ArrayList<>());
+                if (user.getDislike() == null) {
+                    user.setDislike(new ArrayList<>());
                 }
                 int resourceId = context.getResources().getIdentifier(user.getImage(), "raw", context.getPackageName());
                 if (resourceId != 0) {

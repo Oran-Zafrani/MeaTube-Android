@@ -1,21 +1,31 @@
 package com.example.footube.BasicClasses;
 
-import com.example.footube.BasicClasses.Movie;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+@Entity
 public class User implements Serializable {
+    @PrimaryKey(autoGenerate = true)
     private int id;
     private String username;
     private String displayName;
     private String password;
     private String image;
+
+    public int getSubscribers() {
+        return subscribers;
+    }
+
+    public void setSubscribers(int subscribers) {
+        this.subscribers = subscribers;
+    }
+
     private int subscribers;
     private List<Movie> likes;
-    private List<Movie> unlikes;
+    private List<Movie> dislike;
 
     public User(String username, String displayName, String password, String image) {
         this.username = username;
@@ -23,8 +33,9 @@ public class User implements Serializable {
         this.password = password;
         this.image = image;
         this.likes = new ArrayList<>();
-        this.unlikes = new ArrayList<>();
+        this.dislike = new ArrayList<>();
     }
+
 
     public String getUsername() {
         return username;
@@ -48,7 +59,7 @@ public class User implements Serializable {
     }
 
     public boolean searchunlike(Movie m){
-        for (Movie temp : this.unlikes){
+        for (Movie temp : this.dislike){
             if(Objects.equals(temp.getName(), m.getName()) && temp.GetUploadTime() == m.GetUploadTime()){
                 return true;
             }
@@ -64,16 +75,16 @@ public class User implements Serializable {
         return likes;
     }
 
-    public List<Movie> getUnlikes() {
-        return unlikes;
+    public List<Movie> getDislike() {
+        return dislike;
     }
 
     public void setLikes(List<Movie> likes) {
         this.likes = likes;
     }
 
-    public void setUnlikes(List<Movie> unlikes) {
-        this.unlikes = unlikes;
+    public void setDislike(List<Movie> dislike) {
+        this.dislike = dislike;
     }
 
     public void AddLike(Movie movie){
@@ -81,11 +92,11 @@ public class User implements Serializable {
     }
 
     public void AddUnLike(Movie movie){
-        this.unlikes.add(movie);
+        this.dislike.add(movie);
     }
 
     public void RemoveUnLike(Movie movie){
-        this.unlikes.remove(movie);
+        this.dislike.remove(movie);
     }
 
     public void RemoveLike(Movie movie){

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,6 +74,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
     private String loggedInUserName;
     private TextView textNoComments;
     private ConstraintLayout commentsLayout;
+    private ImageButton userImage;
     private boolean isLiked = false;
     private boolean isUnliked = false;
 
@@ -168,6 +170,18 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         getTheme().resolveAttribute(R.attr.Unlike, typedValue_Unlike, true);
         getTheme().resolveAttribute(R.attr.Like, typedValue_Like, true);
         getTheme().resolveAttribute(R.attr.Unlike_Like_Color_Text, typedValue_Unlike_Like_Color_Text, true);
+
+
+        //go to video of the user
+        userImage = findViewById(R.id.uploader_image);
+        Intent UserMoviesListIntent = new Intent(this, userVideoList.class);
+        userImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(UserMoviesListIntent);
+            }
+        });
+
 
         likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
