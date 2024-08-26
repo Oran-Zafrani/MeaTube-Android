@@ -26,6 +26,7 @@ public class UserAPI {
     Retrofit retrofit;
     private UserDao dao;
     WebServiceAPI webServiceAPI;
+    private final TokenRepository tokenRepository = new TokenRepository();
     public UserAPI(MutableLiveData<Boolean> signUpResult, MutableLiveData<Boolean> authenticateResult, MutableLiveData<User> userData, UserDao dao) {
         this.signUpResult = signUpResult;
         this.authenticateResult = authenticateResult;
@@ -134,6 +135,29 @@ public class UserAPI {
                 Toast.makeText(MyApplication.context, "Unable to connect to the server."
                         , Toast.LENGTH_SHORT).show();
 
+            }
+        });
+    }
+
+    public void updateUser(User updatedUser) {
+        Call<User> call = webServiceAPI.updateUser(updatedUser.getUsername(),tokenRepository.get(),updatedUser);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(MyApplication.context, "Unable to update user try later"
+                            , Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(MyApplication.context, "updated your info"
+                            , Toast.LENGTH_SHORT).show();
+                    new Thread(() -> dao.update(response.body())).start();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(MyApplication.context, "Unable to connect to the server."
+                        , Toast.LENGTH_SHORT).show();
             }
         });
     }

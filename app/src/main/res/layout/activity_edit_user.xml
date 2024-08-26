@@ -23,6 +23,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:adjustViewBounds="true"
+                android:layout_marginTop="20dp"
                 android:scaleType="centerInside"/>
 
             <TextView
@@ -90,11 +91,11 @@
                 android:scaleType="centerCrop" />
 
             <Button
-                android:id="@+id/btnSignUp"
+                android:id="@+id/btnUpdate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/red"
-                android:text="Sign Up" />
+                android:text="Update Details" />
 
             <TextView
                 android:id="@+id/errorTextView"

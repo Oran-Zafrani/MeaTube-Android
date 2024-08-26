@@ -113,6 +113,17 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
             userName.setVisibility(View.VISIBLE);
             userName.setText(user.getDisplayName());
             setImage(user.getImage());
+
+            //clickable to user image
+            Intent UserMoviesListIntent = new Intent(this, UserProfile.class);
+            UserMoviesListIntent.putExtra("movie_creator",LoggedInUser.getInstance().getUser().getUsername());
+
+            userImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(UserMoviesListIntent);
+                }
+            });
         });
 
 

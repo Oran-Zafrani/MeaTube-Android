@@ -50,6 +50,10 @@ public class UserViewModel extends ViewModel {
         return userLiveData;
     }
 
+    public void updateUser(User updatedUser) {
+        repository.updateUser(updatedUser);
+    }
+
 //    public LiveData<User> getUser(String username) {
 //        userLiveData = repository.getUser(username);
 //        return userLiveData;

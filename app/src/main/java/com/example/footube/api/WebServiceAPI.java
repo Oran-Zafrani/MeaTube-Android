@@ -11,6 +11,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 public interface WebServiceAPI {
     @POST("users")
@@ -24,4 +25,7 @@ public interface WebServiceAPI {
 
     @POST("login")
     Call<Token> authenticateUser(@Body LoginRequest loginRequest);
+
+    @PUT("users/{username}")
+    Call<User> updateUser(@Path("username") String username, @Header("Authorization") String token, @Body User updatedUser);
 }

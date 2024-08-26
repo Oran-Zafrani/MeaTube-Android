@@ -54,4 +54,8 @@ public class UserRepository extends Application {
     public void authenticate(String username, String password) {
         api.authenticate(username, password);
     }
+
+    public void updateUser(User updatedUser) {
+        api.updateUser(updatedUser);
+    }
 }

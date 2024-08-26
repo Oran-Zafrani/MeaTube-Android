@@ -10,7 +10,7 @@ import com.example.footube.convertors.MovieListConverter;
 import com.example.footube.dao.TokenDao;
 import com.example.footube.dao.UserDao;
 
-@Database(entities = {User.class, Token.class}, version = 6)
+@Database(entities = {User.class, Token.class}, version = 7)
 @TypeConverters({MovieListConverter.class})
 public abstract class AppDB extends RoomDatabase {
     public abstract UserDao userDao();
