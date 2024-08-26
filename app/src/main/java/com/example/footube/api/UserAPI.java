@@ -42,6 +42,7 @@ public class UserAPI {
                 if (!response.isSuccessful()) {
                     Toast.makeText(MyApplication.context, "Unable to sign you up, try later :)"
                             , Toast.LENGTH_SHORT).show();
+                    Log.d("response1:", response.toString());
                 } else {
                     new Thread(() -> dao.insert(newuser)).start();
                     signUpResult.setValue(true);
@@ -57,4 +58,54 @@ public class UserAPI {
 
         });
     }
+
+
+    public void deleteUser(String username) {
+        Call<Void> call = webServiceAPI.deleteUser(username);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(MyApplication.context, "Unable to delete your user, try later :)"
+                            , Toast.LENGTH_SHORT).show();
+                } else {
+                    //new Thread(() -> dao.delete(username)).start();
+                    signUpResult.setValue(true);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(MyApplication.context, "Unable to connect to the server.", Toast.LENGTH_SHORT).show();
+                Log.e("UserAPI", "Failed to connect to the server: ", t);
+            }
+
+        });
+    }
+
+
+    public void getUser(String username) {
+
+        Call<User> call = webServiceAPI.getUser(username);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(MyApplication.context, "Unable to get your User information"
+                            , Toast.LENGTH_SHORT).show();
+                } else {
+                    new Thread(() -> dao.insert(response.body())).start();
+                    userData.postValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Toast.makeText(MyApplication.context, "Unable to connect to the server."
+                        , Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }

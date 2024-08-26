@@ -13,6 +13,16 @@ public class User implements Serializable {
     private String username;
     private String displayName;
     private String password;
+
+    public String getPasswordConfirmation() {
+        return passwordConfirmation;
+    }
+
+    public void setPasswordConfirmation(String passwordConfirmation) {
+        this.passwordConfirmation = passwordConfirmation;
+    }
+
+    private String passwordConfirmation;
     private String image;
 
     public int getSubscribers() {
@@ -27,10 +37,11 @@ public class User implements Serializable {
     private List<Movie> likes;
     private List<Movie> dislike;
 
-    public User(String username, String displayName, String password, String image) {
+    public User(String username, String displayName, String password, String image, String passwordConfirmation) {
         this.username = username;
         this.displayName = displayName;
         this.password = password;
+        this.passwordConfirmation = passwordConfirmation;
         this.image = image;
         this.likes = new ArrayList<>();
         this.dislike = new ArrayList<>();

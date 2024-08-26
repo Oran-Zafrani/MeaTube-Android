@@ -12,4 +12,11 @@ import retrofit2.http.Path;
 public interface WebServiceAPI {
     @POST("users")
     Call<Void> createUser(@Body User user);
+
+    @DELETE("users/{username}")
+    Call<Void> deleteUser(@Path("username") String username);
+
+    @GET("users/username/{username}")
+    Call<User> getUser(@Path("username") String username);
+
 }

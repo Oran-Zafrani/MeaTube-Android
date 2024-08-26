@@ -23,8 +23,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.footube.BasicClasses.User;
 import com.example.footube.R;
+import com.example.footube.Repository.UserRepository;
+import com.example.footube.ViewModel.UserViewModel;
 import com.example.footube.managers.UserManager;
 
 import java.io.ByteArrayOutputStream;
@@ -40,11 +44,15 @@ public class SignUp extends AppCompatActivity {
     private ImageView ivSelectedImage;
 
     UserManager userManager = UserManager.getInstance(); // Get the singleton instance
+    private UserViewModel userviewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        userviewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        //userviewModel = new UserViewModel();
 
         Button btnUploadPicture = findViewById(R.id.btnUploadPicture);
         Button btnSignUp = findViewById(R.id.btnSignUp);
@@ -76,7 +84,9 @@ public class SignUp extends AppCompatActivity {
                 explaintouser(user,display,pass,imagePath,pass2);
 
                 if (userconfirm(user,display,pass,imagePath, pass2)){
-                    userManager.addUser(user, display, pass, imagePath);
+                    //userManager.addUser(user, display, pass, imagePath);
+                    User newUser = new User(user, display, pass, imagePath, pass2);
+                    userviewModel.addUser(newUser);
                     startActivity(SignInIntent);
                 }
             }

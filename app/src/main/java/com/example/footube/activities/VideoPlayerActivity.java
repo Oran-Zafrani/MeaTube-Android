@@ -111,7 +111,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
             loggedInUserName = getIntent().getStringExtra("username");
             loggedInUser = UserManager.getInstance().getUser(loggedInUserName);
         }else if (isGuest == 1) { // If the user is a guest
-            loggedInUser = new User("Guest","Guest", "", "");
+            loggedInUser = new User("Guest","Guest", "", "", "");
             loggedInUserName = loggedInUser.getUsername();
         }
 
@@ -122,7 +122,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         movie.AddView();
         TViews.setText(MovieAdapter.formatViews(movie.getViews()) + " Views");
 
-        if (movie != null) {
+        if (movie != null && UserManager.getInstance().getUser(movie.getCreator())!= null) {
             setupVideoPlayer(movie.getMovieUri());
             videoTitle.setText(movie.getName());
             videoCreator.setText(movie.getChannel());
@@ -174,7 +174,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
 
         //go to video of the user
         userImage = findViewById(R.id.uploader_image);
-        Intent UserMoviesListIntent = new Intent(this, userVideoList.class);
+        Intent UserMoviesListIntent = new Intent(this, UserProfile.class);
+        UserMoviesListIntent.putExtra("username", loggedInUserName);
         userImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

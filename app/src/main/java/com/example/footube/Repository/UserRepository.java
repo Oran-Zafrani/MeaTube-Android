@@ -2,6 +2,7 @@ package com.example.footube.Repository;
 
 import android.app.Application;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
@@ -31,5 +32,17 @@ public class UserRepository extends Application {
 
     public void addUser(User newuser) {
         api.addUser(newuser);
+    }
+
+    public void deleteUser(String username) {
+        api.deleteUser(username);
+    }
+
+    public void getUser(String username) {
+        api.getUser(username);
+    }
+
+    public LiveData<User> getUserData() {
+        return this.userData;
     }
 }

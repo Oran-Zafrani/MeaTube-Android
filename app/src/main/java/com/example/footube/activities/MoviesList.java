@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import androidx.lifecycle.ViewModelProvider;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -30,6 +31,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.footube.ViewModel.UserViewModel;
 import com.example.footube.listeners.MovieAdapter;
 import com.example.footube.managers.MoviesManager;
 import com.example.footube.R;
@@ -59,6 +61,7 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
     private User user;
     private ImageButton SearchButton;
     private EditText SearchEditText;
+    private UserViewModel userViewModel;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
@@ -68,6 +71,10 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
 
         //set dark mode if relevant
         applyThemeBasedOnPreference();
+
+        //create view models
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+
 
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         // Initialize RecyclerView
@@ -81,6 +88,21 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         // Retrieve the User object from the Intent
         Intent intent = getIntent();
         user = (User) intent.getSerializableExtra("user");
+
+        //get user from the server
+        userViewModel.getUser("admin");
+        userViewModel.getUserLiveData().observe(this, userdata -> {
+            Log.d("passwordOfTheUser", userdata.getDisplayName().toString());
+//            if (isSuccess) {
+//                // Navigate to the next activity
+//                Intent intent = new Intent(this, SignIn.class);
+//                startActivity(intent);
+//            } else {
+//                // Show error message
+//                Toast.makeText(this, "Sign up failed. Try again later.",
+//                        Toast.LENGTH_SHORT).show();
+//            }
+        });
 
         // Initialize the views
         signInButton = findViewById(R.id.signin);

@@ -26,10 +26,10 @@ public class UserManager {
     // Private constructor to prevent instantiation
     private UserManager() {
         userMap = new HashMap<>();
-        viewModel = new UserViewModel();
+        //viewModel = new UserViewModel();
         // Adding a sample user for demonstration
-        User sampleUser = new User("ba", "Bar User", "123", "default_profile.jpg");
-        User sampleUser1 = new User("Guest", "Guest", "123", "default_profile.jpg"); //for no option to create Guest username
+        User sampleUser = new User("bar12", "Bar User", "123", "default_profile.jpg", "123");
+        User sampleUser1 = new User("Guest", "Guest", "123", "default_profile.jpg", "123"); //for no option to create Guest username
         addUser(sampleUser);
         addUser(sampleUser1);
     }
@@ -44,7 +44,7 @@ public class UserManager {
 
     // Add a user to the map
     public void addUser(String username, String displayName, String password, String image) {
-        User newUser = new User(username, displayName, password, image);
+        User newUser = new User(username, displayName, password, image, password);
         //userMap.put(username, newUser);
         viewModel.addUser(newUser);
     }
