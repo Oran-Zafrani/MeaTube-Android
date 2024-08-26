@@ -283,7 +283,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
                 String baseUrl = "http://localhost:3000/watch/";
 
                 // ID of the video
-                int videoId = movie.getId();
+                String videoId = movie.getId();
 
                 // Full URL
                 String videoUrl = baseUrl + videoId;

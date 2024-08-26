@@ -98,7 +98,6 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         //user = (User) intent.getSerializableExtra("user");
 
         //get user from the server
-//        userViewModel.getUser("admin");
         if (LoggedInUser.getInstance().getUser() != null)
             userViewModel.getUser(LoggedInUser.getInstance().getUser().getUsername());
         userViewModel.getUserLiveData().observe(this, userdata -> {
@@ -196,7 +195,7 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         });
 
         // Hide the "Sign Out" item if guest
-        if (user == null){
+        if (LoggedInUser.thereIsUser()){
             MenuItem signOutItem = navigationView.getMenu().findItem(R.id.signout);
             signOutItem.setVisible(false);
         }
@@ -208,6 +207,7 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 if (id == R.id.signout) {
+                    LoggedInUser.getInstance().deleteLoggedInUser();
                     startActivity(Signin);
                     finish();
                     return true;
@@ -227,6 +227,13 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
                 // Perform the refresh operation
                 refreshData();
             }
+        });
+
+        if (LoggedInUser.getInstance().getUser() != null)
+            userViewModel.getUser(LoggedInUser.getInstance().getUser().getUsername());
+        userViewModel.getUserLiveData().observe(this, userdata -> {
+            MenuItem signOutItem = navigationView.getMenu().findItem(R.id.signout);
+            signOutItem.setVisible(true);
         });
 
 
@@ -367,6 +374,7 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
             new AlertDialog.Builder(this)
                     .setMessage("Are you sure you want to sign out?")
                     .setPositiveButton("Yes", (dialog, which) -> {
+                        LoggedInUser.getInstance().deleteLoggedInUser();
                         startActivity(Signin);
                         finish();
                     })

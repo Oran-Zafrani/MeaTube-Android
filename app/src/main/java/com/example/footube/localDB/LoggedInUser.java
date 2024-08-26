@@ -29,5 +29,9 @@ public class LoggedInUser {
     public User getUser() {
         return user;
     }
-}
 
+    public void deleteLoggedInUser() {
+        user = null;        // Clear the reference to the logged-in user
+        instance = null;    // Reset the singleton instance
+    }
+}

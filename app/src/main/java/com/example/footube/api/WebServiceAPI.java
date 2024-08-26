@@ -1,5 +1,6 @@
 package com.example.footube.api;
 
+import com.example.footube.BasicClasses.Movie;
 import com.example.footube.BasicClasses.Token;
 import com.example.footube.BasicClasses.User;
 import com.example.footube.requests.LoginRequest;
@@ -14,6 +15,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 public interface WebServiceAPI {
+    //users
     @POST("users")
     Call<Void> createUser(@Body User user);
 
@@ -28,4 +30,8 @@ public interface WebServiceAPI {
 
     @PUT("users/{username}")
     Call<User> updateUser(@Path("username") String username, @Header("Authorization") String token, @Body User updatedUser);
+
+    //Movies
+    @POST("videos")
+    Call<Void> createMovie(@Body Movie movie, String token);
 }

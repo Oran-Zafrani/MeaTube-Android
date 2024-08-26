@@ -1,5 +1,9 @@
 package com.example.footube.BasicClasses;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,23 +15,26 @@ import java.util.Objects;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+@Entity
 public class Movie implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private int id;
-    private String username;
+    @PrimaryKey
+    @NonNull
+    private String id;
     private String title;
     private String description;
     private String category;
     private String videoFile;
+    private String previewImage;
+    private String username;
+    private Date uploadTime;
+    private int views;
     private int likes;
     private int dislikes;
-    private int views;
-    private String previewImage;
+    private int comments;
     private List<Comment> commentsLink;
     private String channel;
-    private int comments;
-    private Date uploadTime;
 
     public Movie(String channel,String creator, String name, String description, String category, String movie, String uploadtime) {
         this.channel = channel;
@@ -45,9 +52,83 @@ public class Movie implements Serializable {
             this.uploadTime = convertStringToDate(uploadtime);
         }
         this.commentsLink = new ArrayList<Comment>();
-        this.id = (int) (System.currentTimeMillis() / 1000L);
+        this.id = String.valueOf((int) (System.currentTimeMillis() / 1000L));
     }
 
+    // Empty constructor required by Room
+    public Movie() {
+        this.id = String.valueOf((int) (System.currentTimeMillis() / 1000L));
+        this.uploadTime = Calendar.getInstance().getTime();
+        this.commentsLink = new ArrayList<>();
+    }
+
+    public String getVideoFile() {
+        return videoFile;
+    }
+
+    public void setVideoFile(String videoFile) {
+        this.videoFile = videoFile;
+    }
+
+    public void setPreviewImage(String previewImage) {
+        this.previewImage = previewImage;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Date getUploadTime() {
+        return uploadTime;
+    }
+
+    public void setUploadTime(Date uploadTime) {
+        this.uploadTime = uploadTime;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
+    }
+
+    public int getDislikes() {
+        return dislikes;
+    }
+
+    public void setDislikes(int dislikes) {
+        this.dislikes = dislikes;
+    }
+
+    public int getComments() {
+        return comments;
+    }
+
+    public void setComments(int comments) {
+        this.comments = comments;
+    }
+
+    public List<Comment> getCommentsLink() {
+        return commentsLink;
+    }
+
+    public void setCommentsLink(List<Comment> commentsLink) {
+        this.commentsLink = commentsLink;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public void SetMovie(Movie m){
         this.title = m.getName();
@@ -141,11 +222,11 @@ public class Movie implements Serializable {
         return videoFile;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
