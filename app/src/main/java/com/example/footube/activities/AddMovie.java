@@ -22,8 +22,12 @@ import android.widget.VideoView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.footube.BasicClasses.Movie;
+import com.example.footube.ViewModel.MovieViewModel;
+import com.example.footube.ViewModel.UserViewModel;
+import com.example.footube.localDB.LoggedInUser;
 import com.example.footube.managers.MoviesManager;
 import com.example.footube.R;
 import com.example.footube.BasicClasses.User;
@@ -40,6 +44,8 @@ public class AddMovie extends AppCompatActivity {
     private EditText editTextMovieCategory;
     private VideoView videoViewUploadedMovie;
     private Uri videoUri;
+    private MovieViewModel movieViewModel;
+    private UserViewModel userViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +53,16 @@ public class AddMovie extends AppCompatActivity {
         setContentView(R.layout.activity_add_movie);
 
         Intent intent = getIntent();
-        User user = (User) intent.getSerializableExtra("user");
+//        User user = (User) intent.getSerializableExtra("user");
+        User user = LoggedInUser.getInstance().getUser();
 
         TextView creator = findViewById(R.id.creator);
         creator.setText("Movie Creator: " + user.getUsername());
         creator.setGravity(Gravity.CENTER);
 
+        //define view models
+        movieViewModel = new ViewModelProvider(this).get(MovieViewModel.class);
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         editTextMovieName = findViewById(R.id.editTextMovieName);
         editTextMovieDescription = findViewById(R.id.editTextMovieDescription);
@@ -84,7 +94,8 @@ public class AddMovie extends AppCompatActivity {
 
     private void addMovieToManager() {
         Intent intent = getIntent();
-        User user = (User) intent.getSerializableExtra("user");
+//        User user = (User) intent.getSerializableExtra("user");
+        User user = LoggedInUser.getInstance().getUser();
         String username = user.getUsername();
         String movieName = editTextMovieName.getText().toString();
         String movieDescription = editTextMovieDescription.getText().toString();
@@ -121,7 +132,8 @@ public class AddMovie extends AppCompatActivity {
             newMovie.setMovieImage(bitmapToBase64(thumbnail));
 
             // Add the movie to MoviesManager
-            MoviesManager.getInstance(this).addMovie(newMovie);
+            //MoviesManager.getInstance(this).addMovie(newMovie);
+            movieViewModel.addMovie(newMovie);
             Toast.makeText(this, "Movie added successfully!", Toast.LENGTH_SHORT).show();
 
 

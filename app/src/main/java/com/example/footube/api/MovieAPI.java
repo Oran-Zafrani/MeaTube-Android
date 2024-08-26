@@ -1,4 +1,4 @@
-package com.example.footube.Repository;
+package com.example.footube.api;
 
 import android.widget.Toast;
 
@@ -8,6 +8,8 @@ import com.example.footube.BasicClasses.Movie;
 import com.example.footube.BasicClasses.User;
 import com.example.footube.MyApplication;
 import com.example.footube.R;
+import com.example.footube.Repository.TokenRepository;
+import com.example.footube.Repository.UserRepository;
 import com.example.footube.api.WebServiceAPI;
 import com.example.footube.dao.MovieDao;
 import com.example.footube.localDB.LoggedInUser;
@@ -30,9 +32,13 @@ public class MovieAPI {
     private TokenRepository tokenRepository;
     private UserRepository usersRepository;
 
-    public MovieAPI(MutableLiveData<List<Movie>> postListData, MovieDao dao, MutableLiveData<List<Movie>> wallPostData) {
+    public MovieAPI(MutableLiveData<List<Movie>> movieListData, MovieDao dao) {
         this.movieListData = movieListData;
         this.dao = dao;
+
+        // Initialize repositories
+        this.tokenRepository = new TokenRepository();
+        this.usersRepository = new UserRepository();
 
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ") // Server's date format
@@ -44,8 +50,6 @@ public class MovieAPI {
                 .build();
 
         webServiceAPI = retrofit.create(WebServiceAPI.class);
-//        tokenRepository = new TokenRepository();
-//        usersRepository = new UsersRepository();
     }
 
 

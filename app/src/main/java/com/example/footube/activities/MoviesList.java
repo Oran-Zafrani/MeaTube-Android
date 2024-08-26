@@ -169,7 +169,7 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
                 // Create an Intent to start the new activity
                 if (user != null) {
                     Intent addMovieIntent = new Intent(this, AddMovie.class);
-                    addMovieIntent.putExtra("user", user);
+//                    addMovieIntent.putExtra("user", user);
                     startActivityForResult(addMovieIntent, REQUEST_CODE_ADD_MOVIE);
                 } else {
                     Intent signInIntent = new Intent(MoviesList.this, SignIn.class);
