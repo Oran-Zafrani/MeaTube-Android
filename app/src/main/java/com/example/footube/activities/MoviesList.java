@@ -33,6 +33,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.footube.ViewModel.UserViewModel;
 import com.example.footube.listeners.MovieAdapter;
+import com.example.footube.localDB.LoggedInUser;
 import com.example.footube.managers.MoviesManager;
 import com.example.footube.R;
 import com.example.footube.BasicClasses.User;
@@ -85,25 +86,6 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         adapter = new MovieAdapter(MoviesManager.getInstance(this).getMovies(),this);
         recyclerView.setAdapter(adapter);
 
-        // Retrieve the User object from the Intent
-        Intent intent = getIntent();
-        user = (User) intent.getSerializableExtra("user");
-
-        //get user from the server
-        userViewModel.getUser("admin");
-        userViewModel.getUserLiveData().observe(this, userdata -> {
-            Log.d("passwordOfTheUser", userdata.getDisplayName().toString());
-//            if (isSuccess) {
-//                // Navigate to the next activity
-//                Intent intent = new Intent(this, SignIn.class);
-//                startActivity(intent);
-//            } else {
-//                // Show error message
-//                Toast.makeText(this, "Sign up failed. Try again later.",
-//                        Toast.LENGTH_SHORT).show();
-//            }
-        });
-
         // Initialize the views
         signInButton = findViewById(R.id.signin);
         userImage = findViewById(R.id.user_image);
@@ -111,21 +93,40 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         userName = findViewById(R.id.user_name);
 
 
-        // Load users from JSON
-        UserManager userManager = UserManager.getInstance();
-        userManager.loadUsersFromJSON(this);
+        // Retrieve the User object from the Intent
+        Intent intent = getIntent();
+        //user = (User) intent.getSerializableExtra("user");
 
+        //get user from the server
+//        userViewModel.getUser("admin");
+        if (LoggedInUser.getInstance().getUser() != null)
+            userViewModel.getUser(LoggedInUser.getInstance().getUser().getUsername());
+        userViewModel.getUserLiveData().observe(this, userdata -> {
+            Log.d("passwordOfTheUser", userdata.getDisplayName().toString());
+            user = userdata;
+            Log.d("passwordOfTheUser12", user.getPassword().toString());
 
-        // Set visibility based on whether the user is present
-        if (user != null) {
+            // Set visibility based on whether the user is present
             signInButton.setVisibility(View.GONE);
             userImage.setVisibility(View.VISIBLE);
             userImageCard.setVisibility(View.VISIBLE);
             userName.setVisibility(View.VISIBLE);
-
             userName.setText(user.getDisplayName());
             setImage(user.getImage());
-        } else {
+        });
+
+
+
+        // Load users from JSON
+        //UserManager userManager = UserManager.getInstance();
+        //userManager.loadUsersFromJSON(this);
+
+
+
+//        if (user != null) {
+
+
+//        } else {
             signInButton.setVisibility(View.VISIBLE);
             userImage.setVisibility(View.GONE);
             userImageCard.setVisibility(View.GONE);
@@ -138,7 +139,7 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
                     startActivity(signInIntent);
                 }
             });
-        }
+//        }
 
         SearchButton = findViewById(R.id.searchbutton);
         SearchEditText = findViewById(R.id.searchedittext);

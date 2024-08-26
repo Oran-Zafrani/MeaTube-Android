@@ -1,5 +1,7 @@
 package com.example.footube.ViewModel;
 
+import android.widget.EditText;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -15,7 +17,7 @@ public class UserViewModel extends ViewModel {
     public UserViewModel(){
         repository = new UserRepository();
         //signUpResult = repository.getSignUpResult();
-        //authenticateResult = repository.getAuthenticateResult();
+        authenticateResult = repository.getAuthenticateResult();
         userLiveData = repository.getUserData();
     }
 
@@ -32,6 +34,19 @@ public class UserViewModel extends ViewModel {
     }
 
     public LiveData<User> getUserLiveData(){
+        return userLiveData;
+    }
+
+    public LiveData<Boolean> getAuthenticateResult() {
+        return authenticateResult;
+    }
+
+    public void authenticate(String username, String password) {
+        repository.authenticate(username, password);
+    }
+
+    public LiveData<User> getLoggedInUser(String username) {
+        repository.getUser(username);
         return userLiveData;
     }
 

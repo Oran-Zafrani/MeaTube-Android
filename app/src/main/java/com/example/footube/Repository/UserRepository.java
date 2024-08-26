@@ -1,6 +1,7 @@
 package com.example.footube.Repository;
 
 import android.app.Application;
+import android.widget.EditText;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -44,5 +45,13 @@ public class UserRepository extends Application {
 
     public LiveData<User> getUserData() {
         return this.userData;
+    }
+
+    public LiveData<Boolean> getAuthenticateResult() {
+        return this.authenticateResult;
+    }
+
+    public void authenticate(String username, String password) {
+        api.authenticate(username, password);
     }
 }

@@ -8,12 +8,16 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.footube.BasicClasses.User;
 import com.example.footube.MyApplication;
 import com.example.footube.R;
+import com.example.footube.Repository.TokenRepository;
 import com.example.footube.dao.UserDao;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import com.example.footube.BasicClasses.Token;
+import com.example.footube.requests.LoginRequest;
+
 
 public class UserAPI {
     private MutableLiveData<Boolean> signUpResult;
@@ -108,4 +112,29 @@ public class UserAPI {
         });
     }
 
+    public void authenticate(String username, String password) {
+        LoginRequest loginRequest = new LoginRequest(username, password);
+        Call<Token> call = webServiceAPI.authenticateUser(loginRequest);
+        call.enqueue(new Callback<Token>() {
+            @Override
+            public void onResponse(Call<Token> call, Response<Token> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(MyApplication.context, "User Not Found!"
+                            , Toast.LENGTH_SHORT).show();
+                } else {
+                    TokenRepository tokenRepository = new TokenRepository();
+                    tokenRepository.delete();
+                    tokenRepository.add(response.body());
+                    authenticateResult.setValue(true);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Token> call, Throwable t) {
+                Toast.makeText(MyApplication.context, "Unable to connect to the server."
+                        , Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
 }

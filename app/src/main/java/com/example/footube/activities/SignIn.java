@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -14,14 +15,19 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.footube.R;
 import com.example.footube.BasicClasses.User;
+import com.example.footube.ViewModel.UserViewModel;
+import com.example.footube.localDB.LoggedInUser;
 import com.example.footube.managers.UserManager;
 
 public class SignIn extends AppCompatActivity {
     private static final String PREFS_NAME = "AppPrefs";
     private static final String PREF_DARK_MODE = "dark_mode";
+    private UserViewModel userViewModel;
     UserManager userManager = UserManager.getInstance(); // Get the singleton instance
     TextView linkToSignUp;
     TextView linkToSigninguest;
@@ -41,6 +47,9 @@ public class SignIn extends AppCompatActivity {
                 startActivity(SignUpIntent);
             }
         });
+
+        //define view models
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         //Sign in as a guess
         Intent Signinguest = new Intent(this, MoviesList.class);
@@ -67,20 +76,41 @@ public class SignIn extends AppCompatActivity {
                 String user = username.getText().toString();
                 String pass = password.getText().toString();
 
-                if (userManager.correctSignIn(user, pass)) {
-                    User userInstance = userManager.getUser(user);
-                    MoviesListIntent.putExtra("user", userInstance);
+                userViewModel.authenticate(user, pass);
+                userViewModel.getAuthenticateResult().observe(SignIn.this, isSuccess -> {
+                    if (isSuccess) {
+                        userViewModel.getLoggedInUser(user).observe(SignIn.this, userData -> {
+                            LoggedInUser.getInstance().setUser(userData);
 
-                    username.setText("");
-                    password.setText("");
-                    errorTextView.setVisibility(View.GONE);
-                    username.requestFocus();
-                    username.setSelection(username.getText().length());
+                            username.setText("");
+                            password.setText("");
+                            errorTextView.setVisibility(View.GONE);
+                            username.requestFocus();
+                            username.setSelection(username.getText().length());
 
-                    startActivity(MoviesListIntent);
-                } else {
-                    errorTextView.setVisibility(View.VISIBLE);
-                }
+//                            Log.d("tokenTOUser", LoggedInUser.getInstance().getUser().getDisplayName());
+                            startActivity(MoviesListIntent);
+                        });
+                    } else {
+                        errorTextView.setVisibility(View.VISIBLE);
+//                Toast.makeText(SignIn.this, "Failed to Sign In please try again later..", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+//                if (userManager.correctSignIn(user, pass)) {
+//                    User userInstance = userManager.getUser(user);
+//                    MoviesListIntent.putExtra("user", userInstance);
+//
+//                    username.setText("");
+//                    password.setText("");
+//                    errorTextView.setVisibility(View.GONE);
+//                    username.requestFocus();
+//                    username.setSelection(username.getText().length());
+//
+//                    startActivity(MoviesListIntent);
+//                } else {
+//                    errorTextView.setVisibility(View.VISIBLE);
+//                }
 
             }
         });

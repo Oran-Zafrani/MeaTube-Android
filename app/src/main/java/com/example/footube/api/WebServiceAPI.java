@@ -1,6 +1,9 @@
 package com.example.footube.api;
 
+import com.example.footube.BasicClasses.Token;
 import com.example.footube.BasicClasses.User;
+import com.example.footube.requests.LoginRequest;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -19,4 +22,6 @@ public interface WebServiceAPI {
     @GET("users/username/{username}")
     Call<User> getUser(@Path("username") String username);
 
+    @POST("login")
+    Call<Token> authenticateUser(@Body LoginRequest loginRequest);
 }
