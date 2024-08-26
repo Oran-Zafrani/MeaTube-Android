@@ -115,9 +115,11 @@ public class UserProfile extends AppCompatActivity implements MovieAdapter.OnMov
         edituser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent editUserIntent = new Intent(this, EditUser.class);
+                Intent editUserIntent = new Intent(UserProfile.this, EditUser.class);
+                startActivity(editUserIntent);
             }
         });
+
 
     }
 
