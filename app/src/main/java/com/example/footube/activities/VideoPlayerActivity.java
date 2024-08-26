@@ -21,15 +21,18 @@ import android.widget.VideoView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.footube.BasicClasses.Comment;
+import com.example.footube.ViewModel.UserViewModel;
 import com.example.footube.listeners.CommentsAdapter;
 import com.example.footube.designs.CustomMediaController;
 import com.example.footube.BasicClasses.Movie;
 import com.example.footube.listeners.MovieAdapter;
+import com.example.footube.localDB.LoggedInUser;
 import com.example.footube.managers.MoviesManager;
 import com.example.footube.R;
 import com.example.footube.BasicClasses.User;
@@ -74,7 +77,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
     private String loggedInUserName;
     private TextView textNoComments;
     private ConstraintLayout commentsLayout;
-    private ImageButton userImage;
+    private ImageView userImage;
+    private UserViewModel userViewModel;
     private boolean isLiked = false;
     private boolean isUnliked = false;
 
@@ -103,13 +107,16 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         uploadUserImage = findViewById(R.id.uploader_image);
         NumberOfComments = findViewById(R.id.commentCountTextView);
 
+        //create view models
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         // Get the logged user data
         isGuest = getIntent().getIntExtra("Guest", -1);
         // Check if the user is a guest
         if (isGuest == 0){  // If the user is not a guest
-            loggedInUserName = getIntent().getStringExtra("username");
-            loggedInUser = UserManager.getInstance().getUser(loggedInUserName);
+            //loggedInUserName = getIntent().getStringExtra("username");
+            //loggedInUser = UserManager.getInstance().getUser(loggedInUserName);
+            loggedInUser = LoggedInUser.getInstance().getUser();
         }else if (isGuest == 1) { // If the user is a guest
             loggedInUser = new User("Guest","Guest", "", "", "");
             loggedInUserName = loggedInUser.getUsername();
@@ -122,26 +129,30 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         movie.AddView();
         TViews.setText(MovieAdapter.formatViews(movie.getViews()) + " Views");
 
-        if (movie != null && UserManager.getInstance().getUser(movie.getCreator())!= null) {
-            setupVideoPlayer(movie.getMovieUri());
-            videoTitle.setText(movie.getName());
-            videoCreator.setText(movie.getChannel());
-            videoDescription.setText(movie.getDescription());
-            setupCommentsRecyclerView();
-            numberOfLikes.setText(MovieAdapter.formatViews(movie.getLikes()));
-            numberOfUnlikes.setText(MovieAdapter.formatViews(movie.getUnlikes()));
-            uploadUserImage.setImageBitmap(MoviesList.base64ToBitmap(UserManager.getInstance().getUser(movie.getCreator()).getImage()));
-            if (loggedInUser != null){
-                PrivateLikesLogic();
-            }
-            TextView uploadTimeTextView = findViewById(R.id.upload_time);
-            String relativeTime = movie.getRelativeTime();
-            uploadTimeTextView.setText(relativeTime);
-            if (!Objects.equals(loggedInUserName, movie.getCreator())){
-                beditmovie.setVisibility(View.GONE);
-            }
+        if (movie != null){
+            userViewModel.getUser(movie.getCreator());
+            userViewModel.getUserLiveData().observe(this, userdata -> {
+                if (userdata != null) {
+                    setupVideoPlayer(movie.getMovieUri());
+                    videoTitle.setText(movie.getName());
+                    videoCreator.setText(movie.getChannel());
+                    videoDescription.setText(movie.getDescription());
+                    setupCommentsRecyclerView();
+                    numberOfLikes.setText(MovieAdapter.formatViews(movie.getLikes()));
+                    numberOfUnlikes.setText(MovieAdapter.formatViews(movie.getUnlikes()));
+                    uploadUserImage.setImageBitmap(MoviesList.base64ToBitmap(userdata.getImage()));
+                    if (loggedInUser != null){
+                        //PrivateLikesLogic();
+                    }
+                    TextView uploadTimeTextView = findViewById(R.id.upload_time);
+                    String relativeTime = movie.getRelativeTime();
+                    uploadTimeTextView.setText(relativeTime);
+                    if (!Objects.equals(loggedInUserName, movie.getCreator())){
+                        beditmovie.setVisibility(View.GONE);
+                    }
+                }
+            });
         }
-
 
 
 
@@ -175,7 +186,9 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         //go to video of the user
         userImage = findViewById(R.id.uploader_image);
         Intent UserMoviesListIntent = new Intent(this, UserProfile.class);
-        UserMoviesListIntent.putExtra("username", loggedInUserName);
+        UserMoviesListIntent.putExtra("movie_creator",movie.getCreator());
+        //UserMoviesListIntent.putExtra("username", loggedInUserName);
+
         userImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

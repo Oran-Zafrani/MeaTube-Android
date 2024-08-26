@@ -16,6 +16,12 @@ public class LoggedInUser {
         return instance;
     }
 
+    public static boolean thereIsUser(){
+        if (instance == null)
+            return false;
+        return true;
+    }
+
     public void setUser(User user) {
         this.user = user;
     }
