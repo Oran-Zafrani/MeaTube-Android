@@ -172,16 +172,6 @@ public class AddMovie extends AppCompatActivity {
 
             movieViewModel.reload(); // Ensure data is reloaded after the movie is added
 
-//            Toast.makeText(this, "Movie added successfully!", Toast.LENGTH_SHORT).show();
-
-
-            //clear the input fields and reset the VideoView
-            editTextMovieName.setText("");
-            editTextMovieDescription.setText("");
-            editTextMovieCategory.setText("");
-            videoViewUploadedMovie.setVideoURI(null); // Clear the video
-
-
             //close the activity
             finish();
         }

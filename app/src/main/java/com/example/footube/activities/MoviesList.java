@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -33,6 +34,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.footube.BasicClasses.Movie;
 import com.example.footube.ViewModel.MovieViewModel;
 import com.example.footube.ViewModel.UserViewModel;
 import com.example.footube.listeners.MovieAdapter;
@@ -45,6 +47,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
 public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovieClickListener {
@@ -88,6 +91,13 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Create and set the adapter
+        movieViewModel.getMovies();
+        movieViewModel.getMoviesLiveData().observe(this, movies -> {
+            Log.d("adapters", movies.toString());
+            adapter = new MovieAdapter((List<Movie>) movies, this);
+            recyclerView.setAdapter(adapter);
+        });
+
         adapter = new MovieAdapter(MoviesManager.getInstance(this).getMovies(),this);
         recyclerView.setAdapter(adapter);
 
@@ -257,7 +267,6 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
                 // Stop the refresh animation
                 swipeRefreshLayout.setRefreshing(false);
 
-
                 // Update my data (e.g., notify your adapter of data changes)
                 // myAdapter.notifyDataSetChanged();
             }
@@ -267,6 +276,13 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
     @Override
     protected void onResume() {
         super.onResume();
+        // update the adapter
+        movieViewModel.getMovies();
+        movieViewModel.getMoviesLiveData().observe(this, movies -> {
+            Log.d("adapters", movies.toString());
+            adapter = new MovieAdapter((List<Movie>) movies, this);
+            recyclerView.setAdapter(adapter);
+        });
         // Update the RecyclerView with the latest movies
         adapter.notifyDataSetChanged();
         adapter.filter("");
@@ -275,6 +291,15 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        // update the adapter
+        movieViewModel.getMovies();
+        movieViewModel.getMoviesLiveData().observe(this, movies -> {
+            Log.d("adapters", movies.toString());
+            adapter = new MovieAdapter((List<Movie>) movies, this);
+            recyclerView.setAdapter(adapter);
+        });
+
         if (requestCode == REQUEST_CODE_ADD_MOVIE && resultCode == RESULT_OK) {
             // Update the RecyclerView with the latest movies
             adapter.notifyDataSetChanged();

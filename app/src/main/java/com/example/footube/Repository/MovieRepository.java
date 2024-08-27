@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
 import com.example.footube.BasicClasses.Movie;
+import com.example.footube.BasicClasses.User;
 import com.example.footube.MyApplication;
 import com.example.footube.api.MovieAPI;
 import com.example.footube.dao.MovieDao;
@@ -17,6 +18,7 @@ import java.util.List;
 public class MovieRepository {
     private MovieDao dao;
     private MovieListData movieListData;
+    private MutableLiveData<List<Movie>> moviesData = new MutableLiveData<>();
     private MutableLiveData<Movie> movieMutableLiveData;
     private MovieAPI api;
     private MutableLiveData<List<Movie>> FeedData;
@@ -30,7 +32,7 @@ public class MovieRepository {
         movieListData = new MovieListData();
         movieMutableLiveData = new MutableLiveData<>();
         FeedData = new MutableLiveData<>();
-        api = new MovieAPI(movieListData, dao, FeedData);
+        api = new MovieAPI(movieListData, dao);
     }
 
     public void addMovie(Movie newMovie) {
@@ -44,6 +46,15 @@ public class MovieRepository {
     public LiveData<List<Movie>> getAll() {
         return movieListData;
     }
+
+    public void getMovies() {
+        api.getMovies();
+    }
+
+    public LiveData<List<Movie>> getMoviesData() {
+        return this.moviesData;
+    }
+
 
     class MovieListData extends MutableLiveData<List<Movie>> {
 
