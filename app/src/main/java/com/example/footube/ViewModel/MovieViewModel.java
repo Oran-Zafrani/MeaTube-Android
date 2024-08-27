@@ -11,18 +11,26 @@ import java.util.List;
 
 public class MovieViewModel extends ViewModel {
     private MovieRepository repository;
-    private LiveData<List<Movie>> Movies;
+    private LiveData<List<Movie>> movies;
     private LiveData<List<Movie>> Feed;
     private LiveData<Movie> movie;
 
     public MovieViewModel() {
         repository = new MovieRepository();
-//        Movies = repository.getAll();
+        movies = repository.getAll();
 //        movie = repository.getMovieData();
 //        Feed = repository.getFeedData();
     }
 
     public void addMovie(Movie newMovie) {
         repository.addMovie(newMovie);
+    }
+
+    public void reload() {
+        repository.reload();
+    }
+
+    public LiveData<List<Movie>> get() {
+        return movies;
     }
 }

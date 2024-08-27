@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -27,6 +28,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.footube.BasicClasses.Movie;
 import com.example.footube.ViewModel.MovieViewModel;
 import com.example.footube.ViewModel.UserViewModel;
+import com.example.footube.listeners.MovieAdapter;
 import com.example.footube.localDB.LoggedInUser;
 import com.example.footube.managers.MoviesManager;
 import com.example.footube.R;
@@ -35,6 +37,8 @@ import com.example.footube.BasicClasses.User;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddMovie extends AppCompatActivity {
 
@@ -44,6 +48,7 @@ public class AddMovie extends AppCompatActivity {
     private EditText editTextMovieCategory;
     private VideoView videoViewUploadedMovie;
     private Uri videoUri;
+    private MovieAdapter adapter;
     private MovieViewModel movieViewModel;
     private UserViewModel userViewModel;
 
@@ -51,6 +56,22 @@ public class AddMovie extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_movie);
+
+        //define movieadapter
+//        List<Movie> movies = new ArrayList<>(); // An empty list or populated list of movies
+//
+//        MovieAdapter.OnMovieClickListener listener = new MovieAdapter.OnMovieClickListener() {
+//            @Override
+//            public void onMovieClick(int position) {
+//                // Handle the movie click event
+//                // For example, you might want to open the movie detail page
+//                Movie clickedMovie = movies.get(position);
+//                Toast.makeText(AddMovie.this, "Clicked on: " + clickedMovie.getName(), Toast.LENGTH_SHORT).show();
+//            }
+//        };
+//
+//        adapter = new MovieAdapter(movies, listener);
+
 
         Intent intent = getIntent();
 //        User user = (User) intent.getSerializableExtra("user");
@@ -134,6 +155,14 @@ public class AddMovie extends AppCompatActivity {
             // Add the movie to MoviesManager
             //MoviesManager.getInstance(this).addMovie(newMovie);
             movieViewModel.addMovie(newMovie);
+            movieViewModel.reload();
+            movieViewModel.get().observe(this, movies -> {
+                Log.d("newMovies",movies.toString());
+            });
+//            movieViewModel.get().observe(this, movies -> {
+//                adapter.setMovie(movies);
+//            });
+
             Toast.makeText(this, "Movie added successfully!", Toast.LENGTH_SHORT).show();
 
 

@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import androidx.annotation.NonNull;
@@ -31,6 +33,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.footube.ViewModel.MovieViewModel;
 import com.example.footube.ViewModel.UserViewModel;
 import com.example.footube.listeners.MovieAdapter;
 import com.example.footube.localDB.LoggedInUser;
@@ -63,6 +66,7 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
     private ImageButton SearchButton;
     private EditText SearchEditText;
     private UserViewModel userViewModel;
+    private MovieViewModel movieViewModel;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
@@ -70,12 +74,13 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movies_list);
 
+
         //set dark mode if relevant
         applyThemeBasedOnPreference();
 
         //create view models
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-
+        movieViewModel = new ViewModelProvider(this).get(MovieViewModel.class);
 
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         // Initialize RecyclerView

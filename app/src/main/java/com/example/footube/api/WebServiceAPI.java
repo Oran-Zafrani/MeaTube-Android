@@ -5,6 +5,8 @@ import com.example.footube.BasicClasses.Token;
 import com.example.footube.BasicClasses.User;
 import com.example.footube.requests.LoginRequest;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -34,4 +36,6 @@ public interface WebServiceAPI {
     //Movies
     @POST("videos")
     Call<Void> createMovie(@Body Movie movie, @Header("Authorization")String token);
+    @GET("videos")
+    Call<List<Movie>> getMovies(@Header("Authorization") String token);
 }

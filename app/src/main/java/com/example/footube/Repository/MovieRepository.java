@@ -1,5 +1,6 @@
 package com.example.footube.Repository;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
@@ -8,6 +9,7 @@ import com.example.footube.MyApplication;
 import com.example.footube.api.MovieAPI;
 import com.example.footube.dao.MovieDao;
 import com.example.footube.localDB.AppDB;
+import com.example.footube.tasks.GetMoviesTask;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -33,6 +35,14 @@ public class MovieRepository {
 
     public void addMovie(Movie newMovie) {
         api.addMovie(newMovie);
+    }
+
+    public void reload() {
+        new GetMoviesTask(movieListData, dao,api).execute();
+    }
+
+    public LiveData<List<Movie>> getAll() {
+        return movieListData;
     }
 
     class MovieListData extends MutableLiveData<List<Movie>> {
