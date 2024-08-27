@@ -1,9 +1,12 @@
 package com.example.footube.api;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 
+import okhttp3.OkHttpClient;
+import java.util.concurrent.TimeUnit;
 import com.example.footube.BasicClasses.Movie;
 import com.example.footube.BasicClasses.User;
 import com.example.footube.MyApplication;
@@ -43,10 +46,29 @@ public class MovieAPI {
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ") // Server's date format
                 .create();
 
+
+// Step 2: Create an OkHttpClient.Builder instance
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+// Step 3: Set the timeouts
+        builder.readTimeout(60, TimeUnit.SECONDS);
+        builder.connectTimeout(60, TimeUnit.SECONDS);
+
+// Step 4: Build the OkHttpClient instance
+        OkHttpClient okHttpClient = builder.build();
+
+// Step 5: Use the OkHttpClient instance when building the Retrofit instance
         retrofit = new Retrofit.Builder()
                 .baseUrl(MyApplication.context.getString(R.string.BaseUrl))
                 .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(okHttpClient) // Use the OkHttpClient with increased timeout
                 .build();
+
+        //OLD RETROFIT
+//        retrofit = new Retrofit.Builder()
+//                .baseUrl(MyApplication.context.getString(R.string.BaseUrl))
+//                .addConverterFactory(GsonConverterFactory.create(gson))
+//                .build();
 
         webServiceAPI = retrofit.create(WebServiceAPI.class);
     }
@@ -86,19 +108,41 @@ public class MovieAPI {
         call.enqueue(new Callback<List<Movie>>() {
             @Override
             public void onResponse(Call<List<Movie>> call, Response<List<Movie>> response) {
-
-                new Thread(() -> {
-                    dao.clear();
-                    dao.insert(response.body().toArray(new Movie[0]));
-                    movieListData.postValue(dao.index());
-                }).start();
+                if (response.isSuccessful()) {
+                    // The request is successful
+                    List<Movie> movies = response.body();
+                    // Now you can use the list of movies
+                    System.out.println(movies);
+                } else {
+                    // The request failed
+                    System.out.println("Request failed. Response Code: " + response.code());
+                }
             }
 
             @Override
             public void onFailure(Call<List<Movie>> call, Throwable t) {
-                Toast.makeText(MyApplication.context, "Unable to connect to the server."
-                        , Toast.LENGTH_SHORT).show();
+                // The request failed completely
+                System.out.println("Request failed with error: " + t.getMessage());
             }
         });
+
+
+//        call.enqueue(new Callback<List<Movie>>() {
+//            @Override
+//            public void onResponse(Call<List<Movie>> call, Response<List<Movie>> response) {
+//
+//                new Thread(() -> {
+//                    dao.clear();
+//                    dao.insert(response.body().toArray(new Movie[0]));
+//                    movieListData.postValue(dao.index());
+//                }).start();
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Movie>> call, Throwable t) {
+//                Toast.makeText(MyApplication.context, "Unable to connect to the server."
+//                        , Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 }
