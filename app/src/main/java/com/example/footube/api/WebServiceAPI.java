@@ -37,5 +37,5 @@ public interface WebServiceAPI {
     @POST("videos")
     Call<Void> createMovie(@Body Movie movie, @Header("Authorization")String token);
     @GET("videos")
-    Call<List<Movie>> getMovies(@Header("Authorization") String token);
+    Call<List<Movie>> getMovies();
 }

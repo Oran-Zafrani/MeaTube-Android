@@ -30,7 +30,7 @@ public class MovieRepository {
         movieListData = new MovieListData();
         movieMutableLiveData = new MutableLiveData<>();
         FeedData = new MutableLiveData<>();
-        api = new MovieAPI(movieListData, dao);
+        api = new MovieAPI(movieListData, dao, FeedData);
     }
 
     public void addMovie(Movie newMovie) {

@@ -11,7 +11,6 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -23,6 +22,7 @@ import android.widget.VideoView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.footube.BasicClasses.Movie;
@@ -30,14 +30,12 @@ import com.example.footube.ViewModel.MovieViewModel;
 import com.example.footube.ViewModel.UserViewModel;
 import com.example.footube.listeners.MovieAdapter;
 import com.example.footube.localDB.LoggedInUser;
-import com.example.footube.managers.MoviesManager;
 import com.example.footube.R;
 import com.example.footube.BasicClasses.User;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 public class AddMovie extends AppCompatActivity {
@@ -152,18 +150,29 @@ public class AddMovie extends AppCompatActivity {
 
             newMovie.setMovieImage(bitmapToBase64(thumbnail));
 
-            // Add the movie to MoviesManager
-            //MoviesManager.getInstance(this).addMovie(newMovie);
             movieViewModel.addMovie(newMovie);
-            movieViewModel.reload();
-            movieViewModel.get().observe(this, movies -> {
-                Log.d("newMovies",movies.toString());
-            });
-//            movieViewModel.get().observe(this, movies -> {
-//                adapter.setMovie(movies);
-//            });
 
-            Toast.makeText(this, "Movie added successfully!", Toast.LENGTH_SHORT).show();
+            // Observe the LiveData to get the updated list of movies
+            movieViewModel.getMovieLiveData().observe(this, new Observer<List<Movie>>() {
+                @Override
+                public void onChanged(List<Movie> movies) {
+                    Log.d("newMovies", movies.toString());
+                    Toast.makeText(AddMovie.this, "Movie added successfully!", Toast.LENGTH_SHORT).show();
+
+                    // Clear the input fields and reset the VideoView
+                    editTextMovieName.setText("");
+                    editTextMovieDescription.setText("");
+                    editTextMovieCategory.setText("");
+                    videoViewUploadedMovie.setVideoURI(null); // Clear the video
+
+                    // Finish the activity after adding the movie
+                    finish();
+                }
+            });
+
+            movieViewModel.reload(); // Ensure data is reloaded after the movie is added
+
+//            Toast.makeText(this, "Movie added successfully!", Toast.LENGTH_SHORT).show();
 
 
             //clear the input fields and reset the VideoView
