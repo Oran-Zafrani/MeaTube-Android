@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
+
     private static List<Movie> movies;
     private List<Movie> filteredMovies;
     private OnMovieClickListener onMovieClickListener;
@@ -39,7 +40,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         this.movies = movies;
         this.filteredMovies = new ArrayList<>(movies);
         this.onMovieClickListener = listener;
+    }
 
+    public void setMovies(List<Movie> movies) {
+        this.movies = movies;
+        notifyDataSetChanged();
     }
 
     @NonNull

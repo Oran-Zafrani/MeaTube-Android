@@ -93,13 +93,12 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         // Create and set the adapter
         movieViewModel.reload();
         movieViewModel.getMovies().observe(this, movies -> {
-            Log.d("adapters453", movies.toString());
             adapter = new MovieAdapter(movies, this);
             recyclerView.setAdapter(adapter);
         });
 
-        adapter = new MovieAdapter(MoviesManager.getInstance(this).getMovies(),this);
-        recyclerView.setAdapter(adapter);
+//        adapter = new MovieAdapter(MoviesManager.getInstance(this).getMovies(),this);
+//        recyclerView.setAdapter(adapter);
 
         // Initialize the views
         signInButton = findViewById(R.id.signin);
@@ -239,8 +238,9 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                movieViewModel.reload();
                 // Perform the refresh operation
-                refreshData();
+//                refreshData();
             }
         });
 
@@ -277,11 +277,10 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
     protected void onResume() {
         super.onResume();
         // update the adapter
-        movieViewModel.getMovies();
-        movieViewModel.getMoviesLiveData().observe(this, movies -> {
-            Log.d("adapters", movies.toString());
-            adapter = new MovieAdapter((List<Movie>) movies, this);
-            recyclerView.setAdapter(adapter);
+        movieViewModel.reload();
+        movieViewModel.getMovies().observe(this, movies -> {
+            adapter.setMovies(movies);
+//            recyclerView.setAdapter(adapter);
         });
         // Update the RecyclerView with the latest movies
         adapter.notifyDataSetChanged();
@@ -293,12 +292,11 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         super.onActivityResult(requestCode, resultCode, data);
 
         // update the adapter
-//        movieViewModel.getMovies();
-//        movieViewModel.getMoviesLiveData().observe(this, movies -> {
-//            Log.d("adapters", movies.toString());
-//            adapter = new MovieAdapter((List<Movie>) movies, this);
+        movieViewModel.reload();
+        movieViewModel.getMovies().observe(this, movies -> {
+            adapter.setMovies(movies);
 //            recyclerView.setAdapter(adapter);
-//        });
+        });
 
         if (requestCode == REQUEST_CODE_ADD_MOVIE && resultCode == RESULT_OK) {
             // Update the RecyclerView with the latest movies
