@@ -58,27 +58,6 @@ public class MovieAPI {
 
     public void get() {
         Call<List<Movie>> call = webServiceAPI.getMovies();
-//        call.enqueue(new Callback<List<Movie>>() {
-//            @Override
-//            public void onResponse(Call<List<Movie>> call, Response<List<Movie>> response) {
-//                if (response.isSuccessful()) {
-//                    // The request is successful
-//                    List<Movie> movies = response.body();
-//                    // Now you can use the list of movies
-//                    System.out.println(movies);
-//                } else {
-//                    // The request failed
-//                    System.out.println("Request failed. Response Code: " + response.code());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Movie>> call, Throwable t) {
-//                // The request failed completely
-//                System.out.println("Request failed with error: " + t.getMessage());
-//            }
-//        });
-
 
         call.enqueue(new Callback<List<Movie>>() {
             @Override
@@ -129,7 +108,7 @@ public class MovieAPI {
                         dao.clear();
                         dao.insert(response.body());
                         movieListData.postValue(dao.index());
-                        Log.d("`res18760`", response.body().toString());
+//                        Log.d("`res18760`", response.body().toString());
                     }).start();
                 } else {
                     Toast.makeText(MyApplication.context, "Unable to retrieve movies."

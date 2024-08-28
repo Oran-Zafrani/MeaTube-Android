@@ -91,10 +91,10 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Create and set the adapter
-        movieViewModel.getMovies();
-        movieViewModel.getMoviesLiveData().observe(this, movies -> {
-            Log.d("adapters", movies.toString());
-            adapter = new MovieAdapter((List<Movie>) movies, this);
+        movieViewModel.reload();
+        movieViewModel.getMovies().observe(this, movies -> {
+            Log.d("adapters453", movies.toString());
+            adapter = new MovieAdapter(movies, this);
             recyclerView.setAdapter(adapter);
         });
 
@@ -293,12 +293,12 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         super.onActivityResult(requestCode, resultCode, data);
 
         // update the adapter
-        movieViewModel.getMovies();
-        movieViewModel.getMoviesLiveData().observe(this, movies -> {
-            Log.d("adapters", movies.toString());
-            adapter = new MovieAdapter((List<Movie>) movies, this);
-            recyclerView.setAdapter(adapter);
-        });
+//        movieViewModel.getMovies();
+//        movieViewModel.getMoviesLiveData().observe(this, movies -> {
+//            Log.d("adapters", movies.toString());
+//            adapter = new MovieAdapter((List<Movie>) movies, this);
+//            recyclerView.setAdapter(adapter);
+//        });
 
         if (requestCode == REQUEST_CODE_ADD_MOVIE && resultCode == RESULT_OK) {
             // Update the RecyclerView with the latest movies

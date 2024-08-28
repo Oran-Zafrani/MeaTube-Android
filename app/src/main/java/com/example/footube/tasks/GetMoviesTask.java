@@ -26,14 +26,6 @@ public class GetMoviesTask extends AsyncTask<Void, Void, Void> {
         try {
             // Fetch movies from the API
             api.get();
-//            List<Movie> movies = api.get();
-            // Update the database with the new movies
-//            if (movies != null && !movies.isEmpty()) {
-//                dao.insertAll(movies);
-//            }
-
-            // Post the fetched movies to the LiveData object
-//            movieListData.postValue(movies);
 
         } catch (Exception e) {
             // Handle any errors during fetching, parsing, or updating the database

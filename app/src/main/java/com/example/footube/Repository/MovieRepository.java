@@ -57,22 +57,19 @@ public class MovieRepository {
 
 
     class MovieListData extends MutableLiveData<List<Movie>> {
-
         public MovieListData() {
             super();
+            // Optionally, you could fetch data here
             setValue(new LinkedList<Movie>());
-
         }
 
         @Override
         protected void onActive() {
             super.onActive();
-
             new Thread(() -> {
-//                MovieListData.movieValue(dao.index());
+                postValue(dao.index()); // Fetch the data from the database
             }).start();
-
         }
-
     }
+
 }

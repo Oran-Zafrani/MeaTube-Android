@@ -39,8 +39,8 @@ public class MovieViewModel extends ViewModel {
 //        return this.Feed;
 //    }
 
-    public void getMovies() {
-        repository.getMovies();
+    public LiveData<List<Movie>> getMovies() {
+        return movies;
     }
 
     public LiveData<List<Movie>> getMoviesLiveData() {
