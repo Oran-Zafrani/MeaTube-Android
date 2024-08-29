@@ -15,6 +15,7 @@ import com.example.footube.MyApplication;
 import com.example.footube.R;
 import com.example.footube.Repository.TokenRepository;
 import com.example.footube.dao.MovieDao;
+import com.example.footube.listeners.MovieAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -65,8 +66,11 @@ public class MovieAPI {
 
                 new Thread(() -> {
                     dao.clear();
-                    dao.insert(Arrays.asList(response.body().toArray(new Movie[0])));
-                    movieListData.postValue(dao.index());
+                    dao.insert(response.body().toArray(new Movie[0]));
+                    Log.d("MovieAPI", "Movies in RESPONSE: " + response.body().size());
+                    List<Movie> moviesFromDb = dao.index();
+                    Log.d("MovieAPI", "Movies in DB: " + moviesFromDb.size());
+                    movieListData.postValue(moviesFromDb);
                 }).start();
             }
 
@@ -86,7 +90,8 @@ public class MovieAPI {
                 if (!response.isSuccessful()) {
                     Toast.makeText(MyApplication.context, "Unable to add the video, try later :)", Toast.LENGTH_SHORT).show();
                 } else {
-                    new Thread(() -> dao.insert(Collections.singletonList(newMovie))).start();
+                    // Insert the movie directly without using Collections.singletonList
+                    new Thread(() -> dao.insert(newMovie)).start();
                 }
             }
 
@@ -106,8 +111,10 @@ public class MovieAPI {
                 if (response.isSuccessful() && response.body() != null) {
                     new Thread(() -> {
                         dao.clear();
-                        dao.insert(response.body());
-                        movieListData.postValue(dao.index());
+                        dao.insert(response.body().toArray(new Movie[0]));
+                        List<Movie> moviesFromDb = dao.index();
+                        Log.d("MovieAPI", "Movies in DB: " + moviesFromDb.size());
+                        movieListData.postValue(moviesFromDb);
 //                        Log.d("`res18760`", response.body().toString());
                     }).start();
                 } else {

@@ -13,15 +13,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.TimeZone;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Entity
 public class Movie implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @PrimaryKey
-    @NonNull
-    private String id;
+    private String _id;
+
+    @PrimaryKey(autoGenerate = true)
+    private int movieId;
     private String title;
     private String description;
     private String category;
@@ -52,14 +54,22 @@ public class Movie implements Serializable {
             this.uploadTime = convertStringToDate(uploadtime);
         }
         this.commentsLink = new ArrayList<Comment>();
-        this.id = String.valueOf((int) (System.currentTimeMillis() / 1000L));
+//        this.id = (int) (System.currentTimeMillis() / 1000L);
     }
 
     // Empty constructor required by Room
     public Movie() {
-        this.id = String.valueOf((int) (System.currentTimeMillis() / 1000L));
+//        this._id = (int) (System.currentTimeMillis() / 1000L);
         this.uploadTime = Calendar.getInstance().getTime();
         this.commentsLink = new ArrayList<>();
+    }
+
+    public int getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(int movieId) {
+        this.movieId = movieId;
     }
 
     public String getVideoFile() {
@@ -223,11 +233,11 @@ public class Movie implements Serializable {
     }
 
     public String getId() {
-        return id;
+        return _id;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this._id = id;
     }
 
     public void setMovieUri(String movie) {

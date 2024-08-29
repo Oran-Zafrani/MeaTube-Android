@@ -90,12 +90,13 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Create and set the adapter
         movieViewModel.reload();
+        // Create and set the adapter
         movieViewModel.getMovies().observe(this, movies -> {
             adapter = new MovieAdapter(movies, this);
             recyclerView.setAdapter(adapter);
         });
+
 
 //        adapter = new MovieAdapter(MoviesManager.getInstance(this).getMovies(),this);
 //        recyclerView.setAdapter(adapter);
@@ -239,6 +240,12 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
             @Override
             public void onRefresh() {
                 movieViewModel.reload();
+                movieViewModel.getMovies().observe(MoviesList.this, movies -> {
+                    adapter.setMovies(movies);
+                    recyclerView.setAdapter(adapter);
+                    swipeRefreshLayout.setRefreshing(false);
+                });
+
                 // Perform the refresh operation
 //                refreshData();
             }
@@ -280,7 +287,6 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         movieViewModel.reload();
         movieViewModel.getMovies().observe(this, movies -> {
             adapter.setMovies(movies);
-//            recyclerView.setAdapter(adapter);
         });
         // Update the RecyclerView with the latest movies
         adapter.notifyDataSetChanged();
@@ -290,12 +296,12 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d("yaaaaa", "hellooooo");
 
         // update the adapter
         movieViewModel.reload();
         movieViewModel.getMovies().observe(this, movies -> {
             adapter.setMovies(movies);
-//            recyclerView.setAdapter(adapter);
         });
 
         if (requestCode == REQUEST_CODE_ADD_MOVIE && resultCode == RESULT_OK) {

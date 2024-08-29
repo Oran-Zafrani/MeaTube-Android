@@ -17,11 +17,11 @@ public interface MovieDao {
         @Query("SELECT * FROM movie")
         List<Movie> index();
 
-        @Query("SELECT * FROM movie WHERE id = :id")
+        @Query("SELECT * FROM movie WHERE _id = :id")
         Movie get(String id);
 
-        @Insert(onConflict = OnConflictStrategy.REPLACE)
-        void insert(List<Movie> movies);
+        @Insert(entity = Movie.class)
+        void insert(Movie... movies);
         @Update
         void update(Movie... movies);
 
