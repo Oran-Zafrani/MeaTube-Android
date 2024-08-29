@@ -153,24 +153,35 @@ public class AddMovie extends AppCompatActivity {
             movieViewModel.addMovie(newMovie);
 
             // Observe the LiveData to get the updated list of movies
-            movieViewModel.getMovieLiveData().observe(this, new Observer<List<Movie>>() {
-                @Override
-                public void onChanged(List<Movie> movies) {
-                    Log.d("newMovies", movies.toString());
-                    Toast.makeText(AddMovie.this, "Movie added successfully!", Toast.LENGTH_SHORT).show();
+//            movieViewModel.getMovieLiveData().observe(this, new Observer<List<Movie>>() {
+//                @Override
+//                public void onChanged(List<Movie> movies) {
+//                    Log.d("newMovies", movies.toString());
+//                    Toast.makeText(AddMovie.this, "Movie added successfully!", Toast.LENGTH_SHORT).show();
+//
+//                    // Clear the input fields and reset the VideoView
+//                    editTextMovieName.setText("");
+//                    editTextMovieDescription.setText("");
+//                    editTextMovieCategory.setText("");
+//                    videoViewUploadedMovie.setVideoURI(null); // Clear the video
+//
+//                    // Finish the activity after adding the movie
+//                    finish();
+//                }
+//            });
 
-                    // Clear the input fields and reset the VideoView
-                    editTextMovieName.setText("");
-                    editTextMovieDescription.setText("");
-                    editTextMovieCategory.setText("");
-                    videoViewUploadedMovie.setVideoURI(null); // Clear the video
+            Toast.makeText(AddMovie.this, "Movie added successfully!", Toast.LENGTH_SHORT).show();
 
-                    // Finish the activity after adding the movie
-                    finish();
-                }
-            });
+            // Clear the input fields and reset the VideoView
+            editTextMovieName.setText("");
+            editTextMovieDescription.setText("");
+            editTextMovieCategory.setText("");
+            videoViewUploadedMovie.setVideoURI(null); // Clear the video
 
-            movieViewModel.reload(); // Ensure data is reloaded after the movie is added
+            // Finish the activity after adding the movie
+            finish();
+
+//            movieViewModel.reload(); // Ensure data is reloaded after the movie is added
 
             //close the activity
             finish();

@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 import com.example.footube.BasicClasses.Movie;
+import com.example.footube.BasicClasses.User;
 import com.example.footube.MyApplication;
 import com.example.footube.R;
 import com.example.footube.Repository.TokenRepository;
@@ -29,15 +30,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MovieAPI {
     private MutableLiveData<List<Movie>> movieListData;
+    private MutableLiveData<Movie> movieData;
     private MovieDao dao;
     private Retrofit retrofit;
     private WebServiceAPI webServiceAPI;
-    private TokenRepository tokenRepository;
+    private final TokenRepository tokenRepository = new TokenRepository();
 
-    public MovieAPI(MutableLiveData<List<Movie>> movieListData, MovieDao dao) {
+    public MovieAPI(MutableLiveData<List<Movie>> movieListData, MovieDao dao, MutableLiveData<Movie> movieData) {
         this.movieListData = movieListData;
         this.dao = dao;
-        this.tokenRepository = new TokenRepository();
+//        this.tokenRepository = new TokenRepository();
+        this.movieData = movieData;
 
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
@@ -126,6 +129,29 @@ public class MovieAPI {
             @Override
             public void onFailure(Call<List<Movie>> call, Throwable t) {
                 Toast.makeText(MyApplication.context, "Unable to connect to the server."
+                        , Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void getMovie(String id) {
+
+        Call<Movie> call = webServiceAPI.getMovie(id, tokenRepository.get());
+        call.enqueue(new Callback<Movie>() {
+            @Override
+            public void onResponse(Call<Movie> call, Response<Movie> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(MyApplication.context, "Unable to get movie information"
+                            , Toast.LENGTH_SHORT).show();
+                } else {
+                    new Thread(() -> dao.insert(response.body())).start();
+                    movieData.postValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Movie> call, Throwable t) {
+                Toast.makeText(MyApplication.context, "Unable to connect the server."
                         , Toast.LENGTH_SHORT).show();
             }
         });

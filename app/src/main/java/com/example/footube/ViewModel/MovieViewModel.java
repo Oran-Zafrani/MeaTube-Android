@@ -19,7 +19,7 @@ public class MovieViewModel extends ViewModel {
         repository = new MovieRepository();
         movies = repository.getAll();
         moviesLiveData = repository.getMoviesData();
-//        movie = repository.getMovieData();
+        movie = repository.getMovieData();
 //        Feed = repository.getFeedData();
     }
 
@@ -31,8 +31,8 @@ public class MovieViewModel extends ViewModel {
         repository.reload();
     }
 
-    public LiveData<List<Movie>> getMovieLiveData() {
-        return movies;
+    public LiveData<Movie> getMovieLiveData() {
+        return movie;
     }
 
 //    public void getvideosData() {
@@ -41,6 +41,10 @@ public class MovieViewModel extends ViewModel {
 
     public LiveData<List<Movie>> getMovies() {
         return movies;
+    }
+
+    public void getMovie(String id) {
+        repository.getMovie(id);
     }
 
     public LiveData<List<Movie>> getMoviesLiveData() {

@@ -33,7 +33,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     private OnMovieClickListener onMovieClickListener;
 
     public interface OnMovieClickListener {
-        void onMovieClick(int position);
+        void onMovieClick(String Id);
     }
 
     public MovieAdapter(List<Movie> movies, OnMovieClickListener listener) {
@@ -176,7 +176,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
                 public void onClick(View v) {
                     int position = getAdapterPosition();
                     if (listener != null && position != RecyclerView.NO_POSITION) {
-                        listener.onMovieClick(position);
+                        listener.onMovieClick(movies.get(position).getId());
                     }
                 }
             });

@@ -19,7 +19,7 @@ public class MovieRepository {
     private MovieDao dao;
     private MovieListData movieListData;
     private MutableLiveData<List<Movie>> moviesData = new MutableLiveData<>();
-    private MutableLiveData<Movie> movieMutableLiveData;
+    private MutableLiveData<Movie> movieMutableLiveData = new MutableLiveData<>();
     private MovieAPI api;
     private MutableLiveData<List<Movie>> FeedData;
 
@@ -30,9 +30,8 @@ public class MovieRepository {
                 .build();
         this.dao = db.movieDao();
         movieListData = new MovieListData();
-        movieMutableLiveData = new MutableLiveData<>();
         FeedData = new MutableLiveData<>();
-        api = new MovieAPI(movieListData, dao);
+        api = new MovieAPI(movieListData, dao, movieMutableLiveData);
     }
 
     public void addMovie(Movie newMovie) {
@@ -53,6 +52,14 @@ public class MovieRepository {
 
     public LiveData<List<Movie>> getMoviesData() {
         return this.moviesData;
+    }
+
+    public void getMovie(String id) {
+        api.getMovie(id);
+    }
+
+    public LiveData<Movie> getMovieData() {
+        return this.movieMutableLiveData;
     }
 
 

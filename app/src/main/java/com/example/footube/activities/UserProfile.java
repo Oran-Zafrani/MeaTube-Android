@@ -123,7 +123,7 @@ public class UserProfile extends AppCompatActivity implements MovieAdapter.OnMov
 
     }
 
-    public void onMovieClick(int position) {
+    public void onMovieClick(String position) {
         Intent movieDetailIntent = new Intent(this, VideoPlayerActivity.class);
         movieDetailIntent.putExtra("movie_index", position);
         if (user != null && !Objects.equals(user.getUsername(), "Guest")) {

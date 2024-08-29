@@ -296,7 +296,6 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("yaaaaa", "hellooooo");
 
         // update the adapter
         movieViewModel.reload();
@@ -381,7 +380,7 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
     }
 
 
-    public void onMovieClick(int position) {
+    public void onMovieClick(String position) {
         Intent movieDetailIntent = new Intent(this, VideoPlayerActivity.class);
         movieDetailIntent.putExtra("movie_index", position);
         if(user != null && !Objects.equals(user.getUsername(), "Guest")){

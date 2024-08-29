@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.footube.BasicClasses.Comment;
+import com.example.footube.ViewModel.MovieViewModel;
 import com.example.footube.ViewModel.UserViewModel;
 import com.example.footube.listeners.CommentsAdapter;
 import com.example.footube.designs.CustomMediaController;
@@ -66,7 +67,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
     private Movie movie;
     private MoviesManager movies;
     private UserManager users;
-    private int position;
+    private String position;
     private int Views = 0;
     private int isGuest;
     private User loggedInUser;
@@ -79,6 +80,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
     private ConstraintLayout commentsLayout;
     private ImageView userImage;
     private UserViewModel userViewModel;
+    private MovieViewModel movieViewModel;
     private boolean isLiked = false;
     private boolean isUnliked = false;
 
@@ -109,6 +111,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
 
         //create view models
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        movieViewModel = new ViewModelProvider(this).get(MovieViewModel.class);
 
         // Get the logged user data
         isGuest = getIntent().getIntExtra("Guest", -1);
@@ -124,10 +127,22 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
 
         // Get the movie data
         movies = MoviesManager.getInstance(this);
-        position = getIntent().getIntExtra("movie_index", -1);
-        movie = movies.getMovie(position);
-        movie.AddView();
-        TViews.setText(MovieAdapter.formatViews(movie.getViews()) + " Views");
+        position =  getIntent().getStringExtra("movie_index");
+        Log.d("hjhgfd11", position);
+
+        //define the movie
+        movieViewModel.getMovie(position);
+        movieViewModel.getMovieLiveData().observe(this, movieData -> {
+            if (movieData == null)
+                Log.d("hjhgfd11", "movieData.getName()");
+            else {
+                Log.d("hjhgfd", movieData.getName());
+                movie = movieData;
+                movie.AddView();
+                TViews.setText(MovieAdapter.formatViews(movie.getViews()) + " Views");
+            }
+        });
+
 
         if (movie != null){
             userViewModel.getUser(movie.getCreator());
@@ -151,6 +166,19 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
                         beditmovie.setVisibility(View.GONE);
                     }
                 }
+
+                //go to video of the user
+                userImage = findViewById(R.id.uploader_image);
+                Intent UserMoviesListIntent = new Intent(this, UserProfile.class);
+                UserMoviesListIntent.putExtra("movie_creator",movie.getCreator());
+                //UserMoviesListIntent.putExtra("username", loggedInUserName);
+
+                userImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(UserMoviesListIntent);
+                    }
+                });
             });
         }
 
@@ -183,18 +211,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         getTheme().resolveAttribute(R.attr.Unlike_Like_Color_Text, typedValue_Unlike_Like_Color_Text, true);
 
 
-        //go to video of the user
-        userImage = findViewById(R.id.uploader_image);
-        Intent UserMoviesListIntent = new Intent(this, UserProfile.class);
-        UserMoviesListIntent.putExtra("movie_creator",movie.getCreator());
-        //UserMoviesListIntent.putExtra("username", loggedInUserName);
 
-        userImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(UserMoviesListIntent);
-            }
-        });
 
 
         likeButton.setOnClickListener(new View.OnClickListener() {
@@ -466,7 +483,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
     }
 
     @Override
-    public void onMovieClick(int position) {
+    public void onMovieClick(String position) {
         Intent movieDetailIntent = new Intent(this, VideoPlayerActivity.class);
         movieDetailIntent.putExtra("movie_index", position);
         if(loggedInUser != null && !Objects.equals(loggedInUser.getUsername(), "Guest")){
