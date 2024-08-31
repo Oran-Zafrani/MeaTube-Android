@@ -17,6 +17,7 @@ import com.example.footube.R;
 import com.example.footube.Repository.TokenRepository;
 import com.example.footube.dao.MovieDao;
 import com.example.footube.listeners.MovieAdapter;
+import com.example.footube.localDB.LoggedInUser;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -34,10 +35,11 @@ public class MovieAPI {
     private MovieDao dao;
     private Retrofit retrofit;
     private WebServiceAPI webServiceAPI;
-    private final TokenRepository tokenRepository = new TokenRepository();
+    private TokenRepository tokenRepository;
 
     public MovieAPI(MutableLiveData<List<Movie>> movieListData, MovieDao dao, MutableLiveData<Movie> movieData) {
         this.movieListData = movieListData;
+        this.tokenRepository = new TokenRepository();
         this.dao = dao;
 //        this.tokenRepository = new TokenRepository();
         this.movieData = movieData;
@@ -135,7 +137,6 @@ public class MovieAPI {
     }
 
     public void getMovie(String id) {
-
         Call<Movie> call = webServiceAPI.getMovie(id, tokenRepository.get());
         call.enqueue(new Callback<Movie>() {
             @Override

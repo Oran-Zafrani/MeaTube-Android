@@ -39,5 +39,5 @@ public interface WebServiceAPI {
     @GET("videos")
     Call<List<Movie>> getMovies();
     @GET("videos/{id}")
-    Call<Movie> getMovie(@Path("id") String id ,@Header("weakAuthMiddleware") String token);
+    Call<Movie> getMovie(@Path("id") String id ,@Header("Authorization") String token);
 }

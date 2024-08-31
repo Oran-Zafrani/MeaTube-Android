@@ -1,6 +1,5 @@
 package com.example.footube.BasicClasses;
 
-import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -13,7 +12,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.TimeZone;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Entity
@@ -34,9 +32,11 @@ public class Movie implements Serializable {
     private int views;
     private int likes;
     private int dislikes;
-    private int comments;
-    private List<Comment> commentsLink;
+    private int numOfComments;
+    private List<Comment> comments;
     private String channel;
+    private boolean userLiked;
+    private boolean userDisliked;
 
     public Movie(String channel,String creator, String name, String description, String category, String movie, String uploadtime) {
         this.channel = channel;
@@ -53,7 +53,7 @@ public class Movie implements Serializable {
         }else {
             this.uploadTime = convertStringToDate(uploadtime);
         }
-        this.commentsLink = new ArrayList<Comment>();
+        this.comments = new ArrayList<Comment>();
 //        this.id = (int) (System.currentTimeMillis() / 1000L);
     }
 
@@ -61,7 +61,7 @@ public class Movie implements Serializable {
     public Movie() {
 //        this._id = (int) (System.currentTimeMillis() / 1000L);
         this.uploadTime = Calendar.getInstance().getTime();
-        this.commentsLink = new ArrayList<>();
+        this.comments = new ArrayList<>();
     }
 
     public int getMovieId() {
@@ -112,20 +112,20 @@ public class Movie implements Serializable {
         this.dislikes = dislikes;
     }
 
-    public int getComments() {
+    public int getNumOfComments() {
+        return numOfComments;
+    }
+
+    public void setNumOfComments(int numOfComments) {
+        this.numOfComments = numOfComments;
+    }
+
+    public List<Comment> getComments() {
         return comments;
     }
 
-    public void setComments(int comments) {
+    public void setComments(List<Comment> comments) {
         this.comments = comments;
-    }
-
-    public List<Comment> getCommentsLink() {
-        return commentsLink;
-    }
-
-    public void setCommentsLink(List<Comment> commentsLink) {
-        this.commentsLink = commentsLink;
     }
 
     public void setChannel(String channel) {
@@ -165,11 +165,11 @@ public class Movie implements Serializable {
     }
 
     public void AddComment(Comment comment){
-        this.commentsLink.add(comment);
+        this.comments.add(comment);
     }
 
     public List<Comment> GetComments(){
-        return this.commentsLink;
+        return this.comments;
     }
 
     public String getCreator() {
@@ -235,6 +235,21 @@ public class Movie implements Serializable {
     public String getId() {
         return _id;
     }
+    public boolean isUserLiked() {
+        return userLiked;
+    }
+
+    public void setUserLiked(boolean userLiked) {
+        this.userLiked = userLiked;
+    }
+
+    public boolean isUserDisliked() {
+        return userDisliked;
+    }
+
+    public void setUserDisliked(boolean userDisliked) {
+        this.userDisliked = userDisliked;
+    }
 
     public void setId(String id) {
         this._id = id;
@@ -250,8 +265,8 @@ public class Movie implements Serializable {
 
     public String commentsstring(){
         String s="{";
-        for (int i = 0; i < this.commentsLink.size(); i++) {
-            s+="{"+this.commentsLink.get(i).getUsername() + "," + this.commentsLink.get(i).getComment() + "}";
+        for (int i = 0; i < this.comments.size(); i++) {
+            s+="{"+this.comments.get(i).getUsername() + "," + this.comments.get(i).getComment() + "}";
         }
         s+="}";
         return s;
@@ -286,9 +301,9 @@ public class Movie implements Serializable {
     }
 
     public boolean[] getiscreator(String username){
-        boolean[] iscreator = new boolean[commentsLink.size()+1];
-        for (int i = 0; i < commentsLink.size(); i++) {
-            iscreator[i] = Objects.equals(commentsLink.get(i).getUsername(), username);
+        boolean[] iscreator = new boolean[comments.size()+1];
+        for (int i = 0; i < comments.size(); i++) {
+            iscreator[i] = Objects.equals(comments.get(i).getUsername(), username);
         }
         return iscreator;
     }

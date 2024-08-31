@@ -23,8 +23,14 @@ public class TokenRepository {
     }
 
     public String get() {
-        return "Bearer " + dao.getToken().getToken();
+        Token token = dao.getToken(); // Retrieve the token from the database
+        if (token == null) {
+            return null;
+//            throw new IllegalStateException("Token is not available in the database.");
+        }
+        return "Bearer " + token.getToken();
     }
+
 
     public void delete() {
         dao.deleteAllTokens();

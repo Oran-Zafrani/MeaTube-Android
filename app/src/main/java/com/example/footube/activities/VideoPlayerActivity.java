@@ -126,25 +126,17 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         }
 
         // Get the movie data
-        movies = MoviesManager.getInstance(this);
+//        movies = MoviesManager.getInstance(this);
         position =  getIntent().getStringExtra("movie_index");
         Log.d("hjhgfd11", position);
 
         //define the movie
         movieViewModel.getMovie(position);
         movieViewModel.getMovieLiveData().observe(this, movieData -> {
-            if (movieData == null)
-                Log.d("hjhgfd11", "movieData.getName()");
-            else {
-                Log.d("hjhgfd", movieData.getName());
-                movie = movieData;
-                movie.AddView();
-                TViews.setText(MovieAdapter.formatViews(movie.getViews()) + " Views");
-            }
-        });
+            movie = movieData;
+//            movie.AddView();
+            TViews.setText(MovieAdapter.formatViews(movie.getViews()) + " Views");
 
-
-        if (movie != null){
             userViewModel.getUser(movie.getCreator());
             userViewModel.getUserLiveData().observe(this, userdata -> {
                 if (userdata != null) {
@@ -180,7 +172,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
                     }
                 });
             });
-        }
+        });
 
 
 
@@ -325,7 +317,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         });
 
         //upload comments
-        UploadMovies();
+//        UploadMovies();
 
         //If no comments - to continue
 //        if (commentsAdapter.getItemCount() == 0){
