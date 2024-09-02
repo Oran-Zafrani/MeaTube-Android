@@ -58,4 +58,8 @@ public class MovieViewModel extends ViewModel {
     public LiveData<List<Movie>> getMoviesByUserNameLiveData() {
         return movies;
     }
+
+    public void deleteMovie(String id) {
+        repository.deleteMovie(id);
+    }
 }

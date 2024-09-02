@@ -19,6 +19,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
@@ -60,6 +61,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
     private ImageView shareButton;
     private ImageView uploadUserImage;
     private Button beditmovie;
+    private Button deletemovie;
     private TextView numberOfLikes;
     private TextView numberOfUnlikes;
     private CommentsAdapter commentsAdapter;
@@ -103,6 +105,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         numberOfLikes = findViewById(R.id.number_of_likes);
         numberOfUnlikes = findViewById(R.id.number_of_unlikes);
         beditmovie = findViewById(R.id.editmovie);
+        deletemovie = findViewById(R.id.deletemovie);
         TViews = findViewById(R.id.views);
         textNoComments = findViewById(R.id.NoComments);
         commentsLayout = findViewById(R.id.commentsSection);
@@ -120,6 +123,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
             //loggedInUserName = getIntent().getStringExtra("username");
             //loggedInUser = UserManager.getInstance().getUser(loggedInUserName);
             loggedInUser = LoggedInUser.getInstance().getUser();
+            loggedInUserName = loggedInUser.getUsername();
         }else if (isGuest == 1) { // If the user is a guest
             loggedInUser = new User("Guest","Guest", "", "", "");
             loggedInUserName = loggedInUser.getUsername();
@@ -155,7 +159,9 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
                     String relativeTime = movie.getRelativeTime();
                     uploadTimeTextView.setText(relativeTime);
                     if (!Objects.equals(loggedInUserName, movie.getCreator())){
+                        Log.d("whahfdd", loggedInUserName + ":" + movie.getCreator());
                         beditmovie.setVisibility(View.GONE);
+                        deletemovie.setVisibility(View.GONE);
                     }
                 }
 
@@ -310,9 +316,26 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
             public void onClick(View v) {
                 Intent EditMovieInIntent = new Intent(VideoPlayerActivity.this, EditMovie.class);
                 EditMovieInIntent.putExtra("movie_index", position);
-                EditMovieInIntent.putExtra("user", loggedInUser);
+                EditMovieInIntent.putExtra("user", loggedInUserName);
                 finish();
                 startActivity(EditMovieInIntent);
+            }
+        });
+
+        deletemovie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Show confirmation dialog
+                new AlertDialog.Builder(v.getContext())
+                        .setMessage("Are you sure you want to delete the video?")
+                        .setPositiveButton("Yes", (dialog, which) -> {
+                            // Perform the delete operation
+                            movieViewModel.deleteMovie(movie.getId());
+                            movieViewModel.reload();
+                            finish();
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
             }
         });
 
@@ -443,8 +466,10 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         editTextComment = findViewById(R.id.editTextComment);
         buttonAddComment = findViewById(R.id.buttonAddComment);
         beditmovie = findViewById(R.id.editmovie);
+        deletemovie = findViewById(R.id.deletemovie);
 
         beditmovie.setVisibility(View.GONE);
+        deletemovie.setVisibility(View.GONE);
         buttonAddComment.setVisibility(View.GONE);
         editTextComment.setVisibility(View.GONE);
     }
@@ -453,8 +478,10 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         editTextComment = findViewById(R.id.editTextComment);
         buttonAddComment = findViewById(R.id.buttonAddComment);
         beditmovie = findViewById(R.id.editmovie);
+        deletemovie = findViewById(R.id.deletemovie);
 
         beditmovie.setVisibility(View.VISIBLE);
+        deletemovie.setVisibility(View.VISIBLE);
         buttonAddComment.setVisibility(View.VISIBLE);
         editTextComment.setVisibility(View.VISIBLE);
     }

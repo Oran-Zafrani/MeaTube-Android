@@ -66,6 +66,10 @@ public class MovieRepository {
         api.getMoviesByUserName(loggedInUserName);
     }
 
+    public void deleteMovie(String id) {
+        api.deleteMovie(id);
+    }
+
 
     class MovieListData extends MutableLiveData<List<Movie>> {
         public MovieListData() {

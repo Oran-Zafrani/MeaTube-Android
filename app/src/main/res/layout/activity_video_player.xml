@@ -207,6 +207,19 @@
         app:layout_constraintTop_toBottomOf="@id/likeUnlikeContainer"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <Button
+        android:id="@+id/deletemovie"
+        android:layout_width="73dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="Delete"
+        android:backgroundTint="@color/red"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@id/editmovie"
+        app:layout_constraintTop_toBottomOf="@id/likeUnlikeContainer"/>
+
     <TextView
         android:id="@+id/commentCountTextView"
         android:layout_width="wrap_content"

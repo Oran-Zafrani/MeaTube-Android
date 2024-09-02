@@ -179,4 +179,29 @@ public class MovieAPI {
             }
         });
     }
+
+    public void deleteMovie(String id) {
+        Call<Void> call = webServiceAPI.deleteMovie(id, tokenRepository.get());
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (!response.isSuccessful()) {
+                    dao.delete();
+                    Toast.makeText(MyApplication.context, "Unable to delete your user, try later :)"
+                            , Toast.LENGTH_SHORT).show();
+                } else {
+                    //new Thread(() -> dao.delete(username)).start();
+//                    signUpResult.setValue(true);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(MyApplication.context, "Unable to connect to the server.", Toast.LENGTH_SHORT).show();
+                Log.e("UserAPI", "Failed to connect to the server: ", t);
+            }
+
+        });
+    }
 }
