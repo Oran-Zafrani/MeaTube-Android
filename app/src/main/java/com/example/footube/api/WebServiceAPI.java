@@ -40,4 +40,7 @@ public interface WebServiceAPI {
     Call<List<Movie>> getMovies();
     @GET("videos/{id}")
     Call<Movie> getMovie(@Path("id") String id ,@Header("Authorization") String token);
+
+    @GET("videos/username/{username}")
+    Call<List<Movie>> getMoviesByUserName(@Path("username") String username);
 }

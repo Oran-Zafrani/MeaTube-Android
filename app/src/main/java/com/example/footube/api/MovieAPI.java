@@ -157,4 +157,26 @@ public class MovieAPI {
             }
         });
     }
+
+    public void getMoviesByUserName(String loggedInUserName) {
+        Call<List<Movie>> call = webServiceAPI.getMoviesByUserName(loggedInUserName);
+        call.enqueue(new Callback<List<Movie>>() {
+            @Override
+            public void onResponse(Call<List<Movie>> call, Response<List<Movie>> response) {
+                new Thread(() -> {
+                    dao.clear();
+                    dao.insert(response.body().toArray(new Movie[0]));
+                    List<Movie> moviesFromDb = dao.index();
+                    movieListData.postValue(moviesFromDb);
+                }).start();
+            }
+
+            @Override
+            public void onFailure(Call<List<Movie>> call, Throwable t) {
+                Toast.makeText(MyApplication.context, "Unable to connect the server."
+                        , Toast.LENGTH_SHORT).show();
+                Log.d("errorbyusermname", t.toString());
+            }
+        });
+    }
 }

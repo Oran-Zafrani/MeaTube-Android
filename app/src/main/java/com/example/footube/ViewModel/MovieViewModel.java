@@ -50,4 +50,12 @@ public class MovieViewModel extends ViewModel {
     public LiveData<List<Movie>> getMoviesLiveData() {
         return moviesLiveData;
     }
+
+    public void getMoviesByUserName(String loggedInUserName) {
+        repository.getMoviesByUserName(loggedInUserName);
+    }
+
+    public LiveData<List<Movie>> getMoviesByUserNameLiveData() {
+        return movies;
+    }
 }

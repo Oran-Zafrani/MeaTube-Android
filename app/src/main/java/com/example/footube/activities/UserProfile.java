@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.footube.BasicClasses.User;
 import com.example.footube.R;
+import com.example.footube.ViewModel.MovieViewModel;
 import com.example.footube.ViewModel.UserViewModel;
 import com.example.footube.listeners.MovieAdapter;
 import com.example.footube.localDB.LoggedInUser;
@@ -31,6 +32,7 @@ public class UserProfile extends AppCompatActivity implements MovieAdapter.OnMov
     private Button deleteuser;
     private Button edituser;
     private UserViewModel userviewModel;
+    private MovieViewModel movieViewModel;
     private User user;
     private String loggedInUserName;
     private TextView userName;
@@ -43,8 +45,9 @@ public class UserProfile extends AppCompatActivity implements MovieAdapter.OnMov
 
         String movieCreator = getIntent().getStringExtra("movie_creator");
 
-        // Define user view model
+        // Define user and movie view model
         userviewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        movieViewModel = new ViewModelProvider(this).get(MovieViewModel.class);
 
         // Define delete button
         deleteuser = findViewById(R.id.btn_delete_user);
@@ -91,8 +94,11 @@ public class UserProfile extends AppCompatActivity implements MovieAdapter.OnMov
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Create and set the adapter
-        adapter = new MovieAdapter(MoviesManager.getInstance(this).getMovies(), this);
-        recyclerView.setAdapter(adapter);
+        movieViewModel.getMoviesByUserName(loggedInUserName);
+        movieViewModel.getMoviesByUserNameLiveData().observe(UserProfile.this, movies -> {
+            adapter = new MovieAdapter(movies, this);
+            recyclerView.setAdapter(adapter);
+        });
 
         deleteuser.setOnClickListener(new View.OnClickListener() {
             @Override

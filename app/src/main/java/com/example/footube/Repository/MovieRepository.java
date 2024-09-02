@@ -62,6 +62,10 @@ public class MovieRepository {
         return this.movieMutableLiveData;
     }
 
+    public void getMoviesByUserName(String loggedInUserName) {
+        api.getMoviesByUserName(loggedInUserName);
+    }
+
 
     class MovieListData extends MutableLiveData<List<Movie>> {
         public MovieListData() {
