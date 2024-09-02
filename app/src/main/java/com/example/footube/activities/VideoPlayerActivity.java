@@ -316,8 +316,8 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
             }
         });
 
-        //upload comments
-//        UploadMovies();
+        //upload movies
+        UploadMovies();
 
         //If no comments - to continue
 //        if (commentsAdapter.getItemCount() == 0){
@@ -331,20 +331,28 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
 
     private void UploadMovies(){
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+
         // Initialize RecyclerView
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        movieViewModel.reload();
         // Create and set the adapter
-        adapter = new MovieAdapter(MoviesManager.getInstance(this).getMovies(),this);
-        recyclerView.setAdapter(adapter);
+        movieViewModel.getMovies().observe(this, movies -> {
+            adapter = new MovieAdapter(movies, this);
+            recyclerView.setAdapter(adapter);
+        });
 
         // Set up the refresh listener
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Perform the refresh operation
-                refreshData();
+                movieViewModel.reload();
+                movieViewModel.getMovies().observe(VideoPlayerActivity.this, movies -> {
+                    adapter.setMovies(movies);
+                    recyclerView.setAdapter(adapter);
+                    swipeRefreshLayout.setRefreshing(false);
+                });
             }
         });
     }

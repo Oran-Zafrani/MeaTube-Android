@@ -35,8 +35,8 @@ public class Movie implements Serializable {
     private int numOfComments;
     private List<Comment> comments;
     private String channel;
-    private boolean userLiked;
-    private boolean userDisliked;
+    private boolean userLiked = false;
+    private boolean userDisliked = false;
 
     public Movie(String channel,String creator, String name, String description, String category, String movie, String uploadtime) {
         this.channel = channel;
