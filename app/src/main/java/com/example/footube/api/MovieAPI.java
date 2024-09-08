@@ -204,4 +204,28 @@ public class MovieAPI {
 
         });
     }
+
+    public void updateMovie(Movie updateMovie) {
+        Log.d("errorupdatemovie2222",updateMovie.getId());
+        Call<Movie> call = webServiceAPI.updateMovie(updateMovie.getId(),tokenRepository.get(), updateMovie);
+        call.enqueue(new Callback<Movie>() {
+            @Override
+            public void onResponse(Call<Movie> call, Response<Movie> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(MyApplication.context, "Unable to update user try later"
+                            , Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(MyApplication.context, "Movie updated successfully!", Toast.LENGTH_SHORT).show();
+                    new Thread(() -> dao.update(response.body())).start();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Movie> call, Throwable t) {
+                Log.d("errorupdatemovie",t.toString());
+                Toast.makeText(MyApplication.context, "Unable to connect to the server."
+                        , Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }

@@ -21,9 +21,13 @@ import android.widget.VideoView;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.footube.ViewModel.MovieViewModel;
+import com.example.footube.ViewModel.UserViewModel;
 import com.example.footube.designs.CustomMediaController;
 import com.example.footube.BasicClasses.Movie;
+import com.example.footube.localDB.LoggedInUser;
 import com.example.footube.managers.MoviesManager;
 import com.example.footube.R;
 import com.example.footube.BasicClasses.User;
@@ -42,11 +46,13 @@ public class EditMovie extends AppCompatActivity {
     private MoviesManager movies;
     private User user;
     private String userName;
-    private int position;
+    private String movieId;
     private Uri videoUri;
     private EditText moviename;
     private EditText moviedecription;
     private EditText moviecategory;
+    private MovieViewModel movieViewModel;
+    private UserViewModel userViewModel;
     private TextView editor;
     private VideoView videoViewUploadedMovie;
     @Override
@@ -54,24 +60,32 @@ public class EditMovie extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_edit_movie);
-        movies = MoviesManager.getInstance(this);
-        position = getIntent().getIntExtra("movie_index", -1);
-        movie = movies.getMovie(position);
-        user = (User) getIntent().getSerializableExtra("user");
-        userName = user.getUsername();
-        user = UserManager.getInstance().getUser(userName);
 
-        moviename = findViewById(R.id.editTextMovieName);
-        moviedecription = findViewById(R.id.editTextMovieDescription);
-        moviecategory = findViewById(R.id.editTextMovieCategory);
-        editor = findViewById(R.id.editor);
-        videoViewUploadedMovie = findViewById(R.id.videoViewUploadedMovie);
-//
-        moviename.setText(movie.getName());
-        moviedecription.setText(movie.getDescription());
-        moviecategory.setText(movie.getCategory());
-        editor.setText("Editor: " + userName);
-        setupVideoPlayer(movie.getMovieUri());
+
+        //create view models
+        movieViewModel = new ViewModelProvider(this).get(MovieViewModel.class);
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+
+        movieId = getIntent().getStringExtra("movie_index");
+        movieViewModel.getMovie(movieId);
+        movieViewModel.getMovieLiveData().observe(this, movieData -> {
+            movie = movieData;
+
+            user = LoggedInUser.getInstance().getUser();
+            userName = user.getUsername();
+
+            moviename = findViewById(R.id.editTextMovieName);
+            moviedecription = findViewById(R.id.editTextMovieDescription);
+            moviecategory = findViewById(R.id.editTextMovieCategory);
+            editor = findViewById(R.id.editor);
+            videoViewUploadedMovie = findViewById(R.id.videoViewUploadedMovie);
+    //
+            moviename.setText(movie.getName());
+            moviedecription.setText(movie.getDescription());
+            moviecategory.setText(movie.getCategory());
+            editor.setText("Editor: " + userName);
+            setupVideoPlayer(movie.getMovieUri());
+        });
 
         Button buttonUploadMovie = findViewById(R.id.buttonUploadMovie);
         buttonUploadMovie.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +99,8 @@ public class EditMovie extends AppCompatActivity {
         buttonaddMovie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("updatemovieid", "movie.getId()");
+                Log.d("updatemovieid", movie.getId());
                 addMovieToManager();
                 finish();
             }
@@ -94,8 +110,8 @@ public class EditMovie extends AppCompatActivity {
 
     private void addMovieToManager() {
         Intent intent = getIntent();
-        User user = (User) intent.getSerializableExtra("user");
-        String username = user.getUsername();
+        User user = LoggedInUser.getInstance().getUser();
+        String username = userName;
         String movieName = moviename.getText().toString();
         String movieDescription = moviedecription.getText().toString();
         String movieCategory = moviecategory.getText().toString();
@@ -146,8 +162,9 @@ public class EditMovie extends AppCompatActivity {
         Log.d("update movie", newMovie.getName());
 
         // Add the movie to MoviesManager
-        MoviesManager.getInstance(this).UpdateMovie(movie, newMovie);
-        Toast.makeText(this, "Movie update successfully!", Toast.LENGTH_SHORT).show();
+//        MoviesManager.getInstance(this).UpdateMovie(movie, newMovie);
+        newMovie.setId(movieId);
+        movieViewModel.updateMovie(newMovie);
 
 
         // Optionally, clear the input fields and reset the VideoView

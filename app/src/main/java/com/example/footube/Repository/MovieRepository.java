@@ -70,6 +70,10 @@ public class MovieRepository {
         api.deleteMovie(id);
     }
 
+    public void updateMovie(Movie updateMovie) {
+        api.updateMovie(updateMovie);
+    }
+
 
     class MovieListData extends MutableLiveData<List<Movie>> {
         public MovieListData() {

@@ -132,7 +132,6 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
         // Get the movie data
 //        movies = MoviesManager.getInstance(this);
         position =  getIntent().getStringExtra("movie_index");
-        Log.d("hjhgfd11", position);
 
         //define the movie
         movieViewModel.getMovie(position);
@@ -315,7 +314,7 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
             @Override
             public void onClick(View v) {
                 Intent EditMovieInIntent = new Intent(VideoPlayerActivity.this, EditMovie.class);
-                EditMovieInIntent.putExtra("movie_index", position);
+                EditMovieInIntent.putExtra("movie_index", movie.getId());
                 EditMovieInIntent.putExtra("user", loggedInUserName);
                 finish();
                 startActivity(EditMovieInIntent);

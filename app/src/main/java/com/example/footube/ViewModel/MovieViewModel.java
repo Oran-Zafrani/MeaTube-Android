@@ -62,4 +62,8 @@ public class MovieViewModel extends ViewModel {
     public void deleteMovie(String id) {
         repository.deleteMovie(id);
     }
+
+    public void updateMovie(Movie updateMovie) {
+        repository.updateMovie(updateMovie);
+    }
 }

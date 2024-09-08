@@ -44,4 +44,8 @@ public interface WebServiceAPI {
     Call<List<Movie>> getMoviesByUserName(@Path("username") String username);
     @DELETE("videos/{id}")
     Call<Void> deleteMovie(@Path("id") String id,@Header("Authorization") String token);
+    @PUT("videos/{id}")
+    Call<Movie> updateMovie(@Path("id") String id, @Header("Authorization") String token, @Body Movie updatedMovie);
+    @GET("search")
+    Call<List<Movie>> searchMovies();
 }
