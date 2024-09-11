@@ -172,7 +172,10 @@ public class MoviesList extends AppCompatActivity implements MovieAdapter.OnMovi
         SearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapter.filter(SearchEditText.getText().toString());
+                movieViewModel.search(SearchEditText.getText().toString());
+                movieViewModel.getMoviesLiveData().observe(MoviesList.this, moviesData -> {
+                    adapter.setMovies(moviesData);
+                });
             }
         });
 

@@ -234,12 +234,9 @@ public class VideoPlayerActivity extends AppCompatActivity implements CommentsAd
                         if (loggedInUser.searchunlike(movie)) {
                             loggedInUser.RemoveUnLike(movie);
                         }
-                        loggedInUser.AddLike(movie);
-                        if (isUnliked) {
-                            isUnliked = false;
-                            unlikeButton.setImageResource(typedValue_Unlike.resourceId);
-                            movie.setUnlikes(movie.getUnlikes() - 1);
-                        }
+//                        loggedInUser.AddLike(movie);
+                        movieViewModel.addLike(movie.getId());
+//                        if (iqa
                     }
                     numberOfLikes.setText(MovieAdapter.formatViews(movie.getLikes()));
                     numberOfUnlikes.setText(MovieAdapter.formatViews(movie.getUnlikes()));

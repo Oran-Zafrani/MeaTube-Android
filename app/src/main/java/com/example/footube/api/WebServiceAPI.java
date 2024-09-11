@@ -47,5 +47,10 @@ public interface WebServiceAPI {
     @PUT("videos/{id}")
     Call<Movie> updateMovie(@Path("id") String id, @Header("Authorization") String token, @Body Movie updatedMovie);
     @GET("search")
-    Call<List<Movie>> searchMovies();
+    Call<List<Movie>> searchMovies(@Header("search_text") String searchText);
+
+
+    //Likes
+    @POST("videos/{id}/likes")
+    Call<Void> addLike(@Path("id") String id, @Header("Authorization")String token);
 }

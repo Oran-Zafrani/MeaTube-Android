@@ -52,13 +52,11 @@ public class UserAPI {
                     new Thread(() -> dao.insert(newuser)).start();
                     signUpResult.setValue(true);
                 }
-
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(MyApplication.context, "Unable to connect to the server.", Toast.LENGTH_SHORT).show();
-                Log.e("UserAPI", "Failed to connect to the server: ", t);
             }
 
         });

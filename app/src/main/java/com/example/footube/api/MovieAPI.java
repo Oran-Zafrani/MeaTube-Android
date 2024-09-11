@@ -206,7 +206,6 @@ public class MovieAPI {
     }
 
     public void updateMovie(Movie updateMovie) {
-        Log.d("errorupdatemovie2222",updateMovie.getId());
         Call<Movie> call = webServiceAPI.updateMovie(updateMovie.getId(),tokenRepository.get(), updateMovie);
         call.enqueue(new Callback<Movie>() {
             @Override
@@ -225,6 +224,51 @@ public class MovieAPI {
                 Log.d("errorupdatemovie",t.toString());
                 Toast.makeText(MyApplication.context, "Unable to connect to the server."
                         , Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void search(String searchText) {
+        Call<List<Movie>> call = webServiceAPI.searchMovies(searchText);
+
+        call.enqueue(new Callback<List<Movie>>() {
+            @Override
+            public void onResponse(Call<List<Movie>> call, Response<List<Movie>> response) {
+
+                new Thread(() -> {
+                    Log.d("MovieAPI1", "Movies in RESPONSE: " + response.body().size());
+                    dao.clear();
+                    dao.insert(response.body().toArray(new Movie[0]));
+                    List<Movie> moviesFromDb = dao.index();
+                    Log.d("MovieAPI", "Movies in DB: " + moviesFromDb.size());
+                    movieListData.postValue(moviesFromDb);
+                }).start();
+            }
+
+            @Override
+            public void onFailure(Call<List<Movie>> call, Throwable t) {
+                Toast.makeText(MyApplication.context, "Unable to connect to the server."
+                        , Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void addLike(String videoId) {
+        Call<Void> call = webServiceAPI.addLike(videoId, tokenRepository.get());
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(MyApplication.context, "Unable to add the Like, try later :)", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Insert the movie directly without using Collections.singletonList
+//                    new Thread(() -> dao.insert(newMovie)).start();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(MyApplication.context, "Unable to connect to the server.", Toast.LENGTH_SHORT).show();
             }
         });
     }

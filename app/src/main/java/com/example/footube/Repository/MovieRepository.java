@@ -74,6 +74,14 @@ public class MovieRepository {
         api.updateMovie(updateMovie);
     }
 
+    public void search(String searchText) {
+        api.search(searchText);
+    }
+
+    public void addLike(String videoId) {
+        api.addLike(videoId);
+    }
+
 
     class MovieListData extends MutableLiveData<List<Movie>> {
         public MovieListData() {

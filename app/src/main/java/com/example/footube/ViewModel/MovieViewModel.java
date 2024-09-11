@@ -66,4 +66,12 @@ public class MovieViewModel extends ViewModel {
     public void updateMovie(Movie updateMovie) {
         repository.updateMovie(updateMovie);
     }
+
+    public void search(String searchText) {
+        repository.search(searchText);
+    }
+
+    public void addLike(String videoId) {
+        repository.addLike(videoId);
+    }
 }

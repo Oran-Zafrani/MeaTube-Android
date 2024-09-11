@@ -13,10 +13,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.footube.BasicClasses.Movie;
 import com.example.footube.R;
+import com.example.footube.ViewModel.MovieViewModel;
+import com.example.footube.ViewModel.UserViewModel;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
